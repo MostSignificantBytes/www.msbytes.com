@@ -140,7 +140,7 @@ const Footer = class extends React.Component {
                     </div>
                 </div>
                 <div className="content has-text-centered">
-                    <p className="copyright">MSB SAS &copy; 2017 - 2022</p>
+                    <p className="copyright">MSB SAS &copy; 2017 - 2026</p>
                 </div>
             </footer>
         );
