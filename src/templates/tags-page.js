@@ -1,10 +1,10 @@
 import * as React from "react";
 import PropTypes from "prop-types";
 import { kebabCase } from "lodash";
-import { Helmet } from "react-helmet";
 import { Link, graphql } from "gatsby";
 
 import Layout from "../components/Layout";
+import SeoHead from "../components/SeoHead";
 
 // eslint-disable-next-line
 export const TagsPageTemplate = ({
@@ -16,7 +16,6 @@ export const TagsPageTemplate = ({
 }) => {
     return (
         <section className="section">
-            <Helmet title={pageTitle + " - " + siteTitle} />
             <div className="container content">
                 <div className="columns">
                     <div
@@ -97,3 +96,11 @@ export const tagsPageQuery = graphql`query TagsPage($id: String!, $language: Str
     }
   }
 }`;
+
+export const Head = ({ data, pageContext }) => (
+    <SeoHead
+        language={pageContext.language}
+        path={pageContext.slug}
+        title={data.markdownRemark.frontmatter.title + " - " + data.site.siteMetadata.title}
+    />
+);

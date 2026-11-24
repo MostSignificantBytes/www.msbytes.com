@@ -1,7 +1,7 @@
 import * as React from "react";
-import { Helmet } from "react-helmet";
 import { Link, graphql } from "gatsby";
 import Layout from "../components/Layout";
+import SeoHead from "../components/SeoHead";
 
 class TagRoute extends React.Component {
     render() {
@@ -23,7 +23,6 @@ class TagRoute extends React.Component {
         return (
             <Layout>
                 <section className="section">
-                    <Helmet title={`${tag} | ${title}`} />
                     <div className="container content">
                         <div className="columns">
                             <div
@@ -70,3 +69,11 @@ export const tagPageQuery = graphql`query TagPage($tag: String, $language: Strin
     }
   }
 }`;
+
+export const Head = ({ data, pageContext, location }) => (
+    <SeoHead
+        language={pageContext.language}
+        path={location.pathname}
+        title={`${pageContext.tag} | ${data.site.siteMetadata.title}`}
+    />
+);

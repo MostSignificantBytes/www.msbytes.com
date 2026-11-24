@@ -1,6 +1,7 @@
 import * as React from "react";
 
 import Layout from "../components/Layout";
+import SeoHead from "../components/SeoHead";
 
 const NotFoundPage = () => (
     <Layout>
@@ -18,3 +19,5 @@ const NotFoundPage = () => (
 );
 
 export default NotFoundPage;
+
+export const Head = () => <SeoHead language="fr" path="/" />;

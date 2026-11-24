@@ -4,7 +4,6 @@ module.exports = {
         description: "Most Significant Bytes - Network Neat Work",
     },
     plugins: [
-        "gatsby-plugin-react-helmet",
         {
             resolve: "gatsby-plugin-sass",
             options: {

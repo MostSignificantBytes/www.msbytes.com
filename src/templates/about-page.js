@@ -2,6 +2,7 @@ import React from "react";
 import PropTypes from "prop-types";
 import { graphql } from "gatsby";
 import Layout from "../components/Layout";
+import SeoHead from "../components/SeoHead";
 import Content, { HTMLContent } from "../components/Content";
 
 // eslint-disable-next-line
@@ -73,3 +74,7 @@ export const aboutPageQuery = graphql`
         }
     }
 `;
+
+export const Head = ({ pageContext }) => (
+    <SeoHead language={pageContext.language} path={pageContext.slug} />
+);

@@ -2,6 +2,7 @@ import React from "react";
 import PropTypes from "prop-types";
 import { graphql } from "gatsby";
 import Layout from "../components/Layout";
+import SeoHead from "../components/SeoHead";
 
 // eslint-disable-next-line
 export const ThanksPageTemplate = ({ title, text }) => {
@@ -63,3 +64,7 @@ export const thanksPageQuery = graphql`
         }
     }
 `;
+
+export const Head = ({ pageContext }) => (
+    <SeoHead language={pageContext.language} path={pageContext.slug} />
+);

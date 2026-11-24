@@ -5,6 +5,7 @@ import { graphql } from "gatsby";
 import { navigate } from "gatsby-link";
 
 import Layout from "../components/Layout";
+import SeoHead from "../components/SeoHead";
 
 // eslint-disable-next-line
 export const ContactPageTemplate = ({
@@ -194,3 +195,7 @@ export const pageQuery = graphql`
         }
     }
 `;
+
+export const Head = ({ pageContext }) => (
+    <SeoHead language={pageContext.language} path={pageContext.slug} />
+);
