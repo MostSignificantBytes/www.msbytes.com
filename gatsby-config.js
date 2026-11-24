@@ -94,10 +94,14 @@ module.exports = {
             resolve: "gatsby-plugin-decap-cms",
             options: {
                 modulePath: `${__dirname}/src/cms/cms.js`,
+                // Connexion par compte GitHub (backend github de config.yml) : le widget
+                // Netlify Identity n'est plus chargé (correction C02).
+                enableIdentityWidget: false,
+                // cms.js appelle CMS.init() pour choisir la branche (master ou recette).
+                manualInit: true,
                 // React 19 ne fournit plus de fichiers UMD : gatsby-plugin-decap-cms 4.0.4
                 // chargeait React, ReactDOM et Decap CMS en scripts externes (UMD).
-                // On les intègre au bundle /admin/cms.js ; seul le widget Netlify Identity
-                // reste un script externe.
+                // On les intègre au bundle /admin/cms.js.
                 customizeWebpackConfig: (config) => {
                     const bundled = ["react", "react-dom", "decap-cms-app"];
                     config.externals = config.externals.filter(

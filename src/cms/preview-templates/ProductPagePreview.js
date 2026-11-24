@@ -3,7 +3,10 @@ import { ProductPageTemplate } from '../../templates/product-page'
 
 const ProductPagePreview = ({ entry, getAsset }) => {
     const entryBlurbs = entry.getIn(['data', 'intro', 'blurbs'])
-    const blurbs = entryBlurbs ? entryBlurbs.toJS() : []
+    const blurbs = (entryBlurbs ? entryBlurbs.toJS() : []).map((blurb) => ({
+        ...blurb,
+        image: blurb.image && getAsset(blurb.image),
+    }))
 
     const entryTestimonials = entry.getIn(['data', 'testimonials'])
     const testimonials = entryTestimonials ? entryTestimonials.toJS() : []
@@ -13,6 +16,7 @@ const ProductPagePreview = ({ entry, getAsset }) => {
 
     return (
         <ProductPageTemplate
+            language={entry.getIn(['data', 'language'])}
             image={getAsset(entry.getIn(['data', 'image']))}
             title={entry.getIn(['data', 'title'])}
             intro={{ 
@@ -41,7 +45,8 @@ const ProductPagePreview = ({ entry, getAsset }) => {
             skills={{
                 heading: entry.getIn(['data', 'skills', 'heading']),
                 image: {
-                    image: getAsset(entry.getIn(['data', 'main', 'image', 'image'])),
+                    image: getAsset(entry.getIn(['data', 'skills', 'image', 'image'])),
+                    alt: entry.getIn(['data', 'skills', 'image', 'alt']),
                 },
                 description: entry.getIn(['data', 'skills', 'description']),
                 list: skillsList,

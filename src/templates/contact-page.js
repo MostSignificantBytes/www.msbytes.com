@@ -175,7 +175,7 @@ class ContactPage extends React.Component {
 
     render() {
         return (
-            <Layout>
+            <Layout path={this.props.pageContext.slug}>
                 <ContactPageTemplate
                     language={this.frontmatter.language}
                     slug={this.frontmatter.slug}

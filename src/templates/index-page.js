@@ -23,6 +23,7 @@ export const IndexPageTemplate = ({
     latestStories,
     keepReading,
     ourBlog,
+    preview = false,
 }) => {
     const heroImage = getImage(image) || image;
 
@@ -63,7 +64,12 @@ export const IndexPageTemplate = ({
                                         <h3 className="has-text-weight-semibold is-size-2">
                                             {latestStories}
                                         </h3>
-                                        <BlogRoll language={language} keepReading={keepReading}/>
+                                        {preview ? (
+                                            // Aperçu du back-office : la liste des articles est calculée au build
+                                            <p><em>(Liste des derniers articles)</em></p>
+                                        ) : (
+                                            <BlogRoll language={language} keepReading={keepReading}/>
+                                        )}
                                         <div className="column is-12 has-text-centered">
                                             <Link className="btn" to={(language === 'fr' ? '' : '/' + language) + "/blog/"}>
                                                 {ourBlog}
@@ -95,13 +101,14 @@ IndexPageTemplate.propTypes = {
     latestStories: PropTypes.string,
     keepReading: PropTypes.string,
     ourBlog: PropTypes.string,
+    preview: PropTypes.bool,
 };
 
-const IndexPage = ({ data }) => {
+const IndexPage = ({ data, pageContext }) => {
     const { frontmatter } = data.markdownRemark;
 
     return (
-        <Layout>
+        <Layout path={pageContext.slug}>
             <IndexPageTemplate
                 language={frontmatter.language}
                 slug={frontmatter.slug}

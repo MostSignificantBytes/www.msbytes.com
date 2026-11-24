@@ -36,11 +36,8 @@ exports.createPages = ({ actions, graphql }) => {
             const id = edge.node.id
             const language = edge.node.frontmatter.language
             const templateKey = edge.node.frontmatter.templateKey
-            const slug = slugHandler(
-                language,
-                templateKey,
-                edge.node.frontmatter.slug
-            )
+            // Chemin calculé dans onCreateNode (slug du frontmatter, ou emplacement du fichier)
+            const slug = edge.node.fields.slug
             createPage({
                 path: slug,
                 tags: edge.node.frontmatter.tags,
@@ -89,17 +86,36 @@ exports.createPages = ({ actions, graphql }) => {
     })
 }
 
-exports.onCreateNode = ({ node, actions, getNode }) => {
+// Chemin « + » déduit de l'emplacement du fichier lorsque le frontmatter n'a pas de slug
+// (cas d'un article créé par le back-office, correction C05) :
+// src/pages/fr/blog/2026-12-01-x.md → "+blog+2026-12-01-x" ; src/pages/en/index.md → "+".
+const slugFromFile = (relativePath) => {
+    const parts = relativePath.replace(/\.md$/, '').split('/').slice(1) // retire le dossier de langue
+    if (parts[parts.length - 1] === 'index') parts.pop()
+    return '+' + parts.join('+')
+}
+
+exports.onCreateNode = ({ node, actions, getNode, reporter }) => {
     const { createNodeField } = actions
     if (node.internal.type === `MarkdownRemark`) {
+        const file = getNode(node.parent)
+        const where = file && file.relativePath ? file.relativePath : node.id
+        const { language, templateKey } = node.frontmatter
+        if (!language) {
+            reporter.panicOnBuild(
+                `Le fichier ${where} n'a pas de champ « language » (fr ou en) dans son en-tête : la page ne peut pas être générée.`
+            )
+            return
+        }
+        const slug = node.frontmatter.slug || (file && file.relativePath ? slugFromFile(file.relativePath) : null)
+        if (!slug) {
+            reporter.panicOnBuild(`Impossible de déterminer le chemin du fichier ${where} (champ « slug » absent).`)
+            return
+        }
         createNodeField({
             name: `slug`,
             node,
-            value: slugHandler(
-                node.frontmatter.language,
-                node.frontmatter.templateKey,
-                node.frontmatter.slug
-            ),
+            value: slugHandler(language, templateKey, slug),
         })
     }
 }
