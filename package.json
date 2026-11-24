@@ -37,16 +37,17 @@
     "gatsby-transformer-sharp": "^5.16.0",
     "graphql": "^16.15.0",
     "lodash": "^4.17.21",
-    "lodash-webpack-plugin": "^0.11.6",
     "prop-types": "^15.8.1",
     "react": "^19.3.1",
     "react-dom": "^19.3.1",
     "react-google-recaptcha": "^3.1.0",
-    "react-google-recaptcha-enterprise": "^1.0.3",
     "sass": "^1.59.2",
     "uuid": "^9.0.0"
   },
   "engines": {
     "node": ">=24"
+  },
+  "devDependencies": {
+    "prettier": "^3.10.1"
   }
 }
