@@ -18,7 +18,7 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "dependencies": {
-    "bulma": ">=0.9.4",
+    "bulma": "0.9.4",
     "decap-cms-app": "^3.18.0",
     "gatsby": "^5.16.1",
     "gatsby-plugin-decap-cms": "^4.0.4",
