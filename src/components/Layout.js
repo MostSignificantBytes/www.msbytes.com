@@ -1,6 +1,6 @@
 import Footer from "../components/Footer";
 import Navbar from "../components/Navbar";
-import slugHandler from "../api/slugHandler";
+import slugHandler from "../utils/slugHandler";
 import "./all.sass";
 
 // La langue et le chemin de la page sont lus dans les props du gabarit enfant

@@ -1,6 +1,6 @@
 const _ = require('lodash')
 const path = require('path')
-const slugHandler = require('./src/api/slugHandler')
+const slugHandler = require('./src/utils/slugHandler')
 const { createFilePath } = require('gatsby-source-filesystem')
 
 exports.createPages = ({ actions, graphql }) => {
