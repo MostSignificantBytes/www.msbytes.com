@@ -48,6 +48,7 @@
     "node": ">=24"
   },
   "devDependencies": {
+    "@netlify/plugin-sitemap": "^0.8.1",
     "prettier": "^3.10.1"
   }
 }
