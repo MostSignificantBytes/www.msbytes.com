@@ -3,12 +3,8 @@
   command = "npm run build"
 
 [build.environment]
-  NODE_VERSION = "14.15.0"
-  YARN_VERSION = "1.22.4"
-  YARN_FLAGS = "--no-ignore-optional"
+  NODE_VERSION = "24"
 
-[[plugins]]
-  package = "@netlify/plugin-gatsby"
 [[plugins]]
   package = "@netlify/plugin-lighthouse"
   [plugins.inputs]
@@ -21,9 +17,7 @@
     './public/404/*',
     './public/admin/*',
     './public/offline-plugin-app-shell-fallback/*',
-    './public/reports/*',
-    # Only build sitemap for the default language to avoid duplicates
-    './public/fr/*'
+    './public/reports/*'
   ]
 [[plugins]]
   package = "@netlify/plugin-a11y"

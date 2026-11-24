@@ -1,9 +1,9 @@
-import React from "react";
 import PropTypes from "prop-types";
 import { Link, graphql } from "gatsby";
 import { getImage } from "gatsby-plugin-image";
 
 import Layout from "../components/Layout";
+import SeoHead from "../components/SeoHead";
 import Features from "../components/Features";
 import BlogRoll from "../components/BlogRoll";
 import FullWidthImage from "../components/FullWidthImage";
@@ -173,3 +173,7 @@ export const pageQuery = graphql`
         }
     }
 `;
+
+export const Head = ({ pageContext }) => (
+    <SeoHead language={pageContext.language} path={pageContext.slug} />
+);

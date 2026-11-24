@@ -1,10 +1,14 @@
 import React from "react";
-import ReCAPTCHA from "react-google-recaptcha-enterprise";
+import ReCAPTCHA from "react-google-recaptcha";
 import PropTypes from "prop-types";
-import { graphql } from "gatsby";
-import { navigate } from "gatsby-link";
+import { graphql, navigate } from "gatsby";
 
 import Layout from "../components/Layout";
+import SeoHead from "../components/SeoHead";
+
+// Clé de site reCAPTCHA v2 (« case à cocher ») : variable d'environnement lue au build.
+// Sur Netlify : GATSBY_SITE_RECAPTCHA_KEY ; en local : fichier .env.development (non versionné).
+const RECAPTCHA_SITE_KEY = process.env.GATSBY_SITE_RECAPTCHA_KEY;
 
 // eslint-disable-next-line
 export const ContactPageTemplate = ({
@@ -15,15 +19,14 @@ export const ContactPageTemplate = ({
     email,
     message,
     send,
+    error,
+    privacy,
+    hasError,
+    token,
     handleSubmit,
     handleChange,
+    handleReCAPTCHA,
 }) => {
-    const [disableSubmitButton, setDisableSubmitButton] = React.useState(true);
-
-    function handleReCAPTCHA() {
-        setDisableSubmitButton(false);
-    }
-
     return (
         <section className="section">
             <div className="container">
@@ -35,6 +38,7 @@ export const ContactPageTemplate = ({
                         action={(language === 'fr' ? '' : '/' + language) + "/contact/thanks/"}
                         data-netlify="true"
                         data-netlify-honeypot="bot-field"
+                        data-netlify-recaptcha="true"
                         onSubmit={handleSubmit}
                     >
                         {/* The `form-name` hidden field is required to support form submissions without JavaScript */}
@@ -89,9 +93,15 @@ export const ContactPageTemplate = ({
                                 />
                             </div>
                         </div>
-                        <ReCAPTCHA sitekey="6LcD8PgfAAAAANLnYT04Au6f29fzQjfxOBCYxVgC" onChange={handleReCAPTCHA}/>
+                        {RECAPTCHA_SITE_KEY ? (
+                            <ReCAPTCHA sitekey={RECAPTCHA_SITE_KEY} onChange={handleReCAPTCHA} />
+                        ) : null}
+                        {hasError ? (
+                            <p className="help is-danger" role="alert">{error}</p>
+                        ) : null}
+                        <p className="help">{privacy}</p>
                         <div className="field">
-                            <button className="button is-link" type="submit" disabled={disableSubmitButton}>
+                            <button className="button is-link" type="submit" disabled={!token}>
                                 {send}
                             </button>
                         </div>
@@ -110,8 +120,13 @@ ContactPageTemplate.propTypes = {
     email: PropTypes.string,
     message: PropTypes.string,
     send: PropTypes.string,
-    handleSubmit: PropTypes.object,
-    handleChange: PropTypes.object,
+    error: PropTypes.string,
+    privacy: PropTypes.string,
+    hasError: PropTypes.bool,
+    token: PropTypes.string,
+    handleSubmit: PropTypes.func,
+    handleChange: PropTypes.func,
+    handleReCAPTCHA: PropTypes.func,
 };
 
 function encode(data) {
@@ -120,30 +135,42 @@ function encode(data) {
         .join("&");
 }
 
-export default class ContactPage extends React.Component {
+class ContactPage extends React.Component {
     constructor(props) {
         super(props);
-        this.state = { isValidated: false };
+        this.state = { fields: {}, token: null, hasError: false };
         this.frontmatter = this.props.data.markdownRemark.frontmatter;
     };
 
     handleChange = (e) => {
-        this.setState({ [e.target.name]: e.target.value });
+        this.setState({ fields: { ...this.state.fields, [e.target.name]: e.target.value } });
+    };
+
+    // Jeton reCAPTCHA (null lorsqu'il expire) : le bouton « Envoyer » n'est actif qu'avec un jeton valide.
+    handleReCAPTCHA = (token) => {
+        this.setState({ token: token || null });
     };
 
     handleSubmit = (e) => {
         e.preventDefault();
         const form = e.target;
+        this.setState({ hasError: false });
         fetch("/", {
             method: "POST",
             headers: { "Content-Type": "application/x-www-form-urlencoded" },
             body: encode({
                 "form-name": form.getAttribute("name"),
-                ...this.state,
+                ...this.state.fields,
+                "g-recaptcha-response": this.state.token,
             }),
         })
-            .then(() => navigate(form.getAttribute("action")))
-            .catch((error) => alert(error));
+            .then((response) => {
+                if (!response.ok) {
+                    throw new Error(response.status);
+                }
+                navigate(form.getAttribute("action"));
+            })
+            .catch(() => this.setState({ hasError: true }));
     };
 
     render() {
@@ -157,13 +184,20 @@ export default class ContactPage extends React.Component {
                     email={this.frontmatter.email}
                     message={this.frontmatter.message}
                     send={this.frontmatter.send}
+                    error={this.frontmatter.error}
+                    privacy={this.frontmatter.privacy}
+                    hasError={this.state.hasError}
+                    token={this.state.token}
                     handleSubmit={this.handleSubmit}
                     handleChange={this.handleChange}
+                    handleReCAPTCHA={this.handleReCAPTCHA}
                 />
             </Layout>
         );
     };
 };
+
+export default ContactPage;
 
 ContactPage.propTypes = {
     data: PropTypes.shape({
@@ -190,7 +224,13 @@ export const pageQuery = graphql`
                 email
                 message
                 send
+                error
+                privacy
             }
         }
     }
 `;
+
+export const Head = ({ pageContext }) => (
+    <SeoHead language={pageContext.language} path={pageContext.slug} />
+);

@@ -1,9 +1,8 @@
-import React from "react";
 import PropTypes from "prop-types";
 import { kebabCase } from "lodash";
-import { Helmet } from "react-helmet";
 import { graphql, Link } from "gatsby";
 import Layout from "../components/Layout";
+import SeoHead from "../components/SeoHead";
 import Content, { HTMLContent } from "../components/Content";
 
 // eslint-disable-next-line
@@ -13,7 +12,6 @@ export const BlogPostTemplate = ({
     description,
     tags,
     title,
-    helmet,
     language,
     slug,
 }) => {
@@ -21,7 +19,6 @@ export const BlogPostTemplate = ({
 
     return (
         <section className="section">
-            {helmet || ""}
             <div className="container content">
                 <div className="columns">
                     <div className="column is-10 is-offset-1">
@@ -54,7 +51,6 @@ BlogPostTemplate.propTypes = {
     contentComponent: PropTypes.func,
     description: PropTypes.string,
     title: PropTypes.string,
-    helmet: PropTypes.object,
     language: PropTypes.string,
     slug: PropTypes.string,
 };
@@ -68,15 +64,6 @@ const BlogPost = ({ data }) => {
                 content={post.html}
                 contentComponent={HTMLContent}
                 description={post.frontmatter.description}
-                helmet={
-                    <Helmet titleTemplate="%s | Blog">
-                        <title>{`${post.frontmatter.title}`}</title>
-                        <meta
-                            name="description"
-                            content={`${post.frontmatter.description}`}
-                        />
-                    </Helmet>
-                }
                 tags={post.frontmatter.tags}
                 title={post.frontmatter.title}
                 language={post.frontmatter.language}
@@ -95,12 +82,12 @@ BlogPost.propTypes = {
 export default BlogPost;
 
 export const pageQuery = graphql`
-    query BlogPostByID($id: String!) {
+    query BlogPostByID($id: String!, $language: String!) {
         markdownRemark(id: { eq: $id }) {
             id
             html
             frontmatter {
-                date(formatString: "MMMM DD, YYYY")
+                date(formatString: "MMMM DD, YYYY", locale: $language)
                 title
                 description
                 tags
@@ -110,3 +97,12 @@ export const pageQuery = graphql`
         }
     }
 `;
+
+export const Head = ({ data, pageContext }) => (
+    <SeoHead
+        language={pageContext.language}
+        path={pageContext.slug}
+        title={`${data.markdownRemark.frontmatter.title} | Blog`}
+        description={`${data.markdownRemark.frontmatter.description}`}
+    />
+);
