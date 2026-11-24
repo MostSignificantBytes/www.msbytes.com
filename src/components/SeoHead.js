@@ -1,4 +1,3 @@
-import * as React from "react";
 import { withPrefix } from "gatsby";
 import useSiteMetadata from "./SiteMetadata";
 
@@ -8,6 +7,8 @@ const HREFLANG_EN = ["en", "en-AU", "en-BZ", "en-CA", "en-CB", "en-GB", "en-IE",
 const HREFLANG_FR = ["fr", "fr-BE", "fr-CA", "fr-CH", "fr-FR", "fr-LU", "fr-MC"];
 
 // Balises <head> communes à toutes les pages (API Head de Gatsby, remplace react-helmet).
+// La langue de <html> est fixée par gatsby-ssr.js (pré-rendu) et gatsby-browser.js
+// (navigation côté client).
 // `path` est le chemin de la page (ex. "/en/activities/"), `language` vaut "fr" ou "en".
 const SeoHead = ({ language = "fr", path = "/", title, description, children }) => {
     const siteMetadata = useSiteMetadata();
@@ -21,7 +22,6 @@ const SeoHead = ({ language = "fr", path = "/", title, description, children }) 
 
     return (
         <>
-            <html lang={language} />
             <title>{pageTitle}</title>
             <meta name="description" content={pageDescription} />
 

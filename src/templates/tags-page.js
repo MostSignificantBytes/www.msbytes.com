@@ -1,4 +1,3 @@
-import * as React from "react";
 import PropTypes from "prop-types";
 import { kebabCase } from "lodash";
 import { Link, graphql } from "gatsby";
