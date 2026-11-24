@@ -39,11 +39,11 @@ BlogPageTemplate.propTypes = {
     image: PropTypes.oneOfType([PropTypes.object, PropTypes.string]),
 };
 
-const BlogPage = ({ data }) => {
+const BlogPage = ({ data, pageContext }) => {
     const { frontmatter } = data.markdownRemark;
 
     return (
-        <Layout>
+        <Layout path={pageContext.slug}>
             <BlogPageTemplate
                 language={frontmatter.language}
                 slug={frontmatter.slug}

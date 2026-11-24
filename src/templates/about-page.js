@@ -34,11 +34,11 @@ AboutPageTemplate.propTypes = {
     contentComponent: PropTypes.func,
 };
 
-const AboutPage = ({ data }) => {
+const AboutPage = ({ data, pageContext }) => {
     const { markdownRemark: post } = data;
 
     return (
-        <Layout>
+        <Layout path={pageContext.slug}>
             <AboutPageTemplate
                 language={post.frontmatter.language}
                 slug={post.frontmatter.slug}
