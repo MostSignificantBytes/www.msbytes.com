@@ -1,5 +1,5 @@
 import React from "react";
-import ReCAPTCHA from "react-google-recaptcha-enterprise";
+import ReCAPTCHA from "react-google-recaptcha";
 import PropTypes from "prop-types";
 import { graphql } from "gatsby";
 import { navigate } from "gatsby-link";
