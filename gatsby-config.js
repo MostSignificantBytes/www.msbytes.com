@@ -42,9 +42,10 @@ module.exports = {
             options: {
                 plugins: [
                     {
+                        // v2 : convertit aussi les images du frontmatter (fmImagesToRelative supprimé)
                         resolve: "gatsby-remark-relative-images",
                         options: {
-                            name: "uploads",
+                            staticFolderName: "static",
                         },
                     },
                     {

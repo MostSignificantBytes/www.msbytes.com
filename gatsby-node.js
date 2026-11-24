@@ -2,7 +2,6 @@ const _ = require('lodash')
 const path = require('path')
 const slugHandler = require('./src/api/slugHandler')
 const { createFilePath } = require('gatsby-source-filesystem')
-const { fmImagesToRelative } = require('gatsby-remark-relative-images')
 
 exports.createPages = ({ actions, graphql }) => {
     const { createPage, createRedirect } = actions
@@ -99,8 +98,6 @@ exports.createPages = ({ actions, graphql }) => {
 
 exports.onCreateNode = ({ node, actions, getNode }) => {
     const { createNodeField } = actions
-    fmImagesToRelative(node) // convert image paths for gatsby images
-
     if (node.internal.type === `MarkdownRemark`) {
         createNodeField({
             name: `slug`,
