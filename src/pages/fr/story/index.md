@@ -36,5 +36,3 @@ title: Notre histoire
 
 * Juin : troisième augmentation de capital, de 50 000 à 100 000 €
 * Juillet : acquisition de CSI Informatique à Alès
-
-### 2026
