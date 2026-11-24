@@ -7,7 +7,7 @@ title: Mentions légales et confidentialité
 ### Éditeur du site
 
 Most Significant Bytes SAS, société par actions simplifiée au capital de 100 000,00 €<br>
-Siège social : 10 rue Penthièvre, 75008 Paris<br>
+Siège social : 10 rue de Penthièvre, 75008 Paris<br>
 Immatriculée au registre du commerce et des sociétés de Paris sous le numéro 834 651 648<br>
 SIRET : 834 651 648 00018<br>
 N° de TVA intracommunautaire : FR60 834 651 648<br>
