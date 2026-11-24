@@ -7,7 +7,7 @@ title: Legal notice and privacy
 ### Website publisher
 
 Most Significant Bytes SAS, simplified joint-stock company (société par actions simplifiée) with a share capital of €100,000.00<br>
-Registered office: 10 rue Penthièvre, 75008 Paris, France<br>
+Registered office: 10 rue de Penthièvre, 75008 Paris, France<br>
 Registered with the Paris Trade and Companies Register (RCS) under number 834 651 648<br>
 SIRET: 834 651 648 00018<br>
 EU VAT number: FR60 834 651 648<br>
