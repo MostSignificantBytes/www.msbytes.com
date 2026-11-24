@@ -1,6 +1,7 @@
 ---
 templateKey: blog-post
 language: en
+identifier: new-website
 slug: +blog+2022-04-29-new-website
 title: New website
 date: 2022-04-29T21:29:56.158Z

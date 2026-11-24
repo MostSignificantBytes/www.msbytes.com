@@ -1,6 +1,7 @@
 ---
 templateKey: blog-post
 language: fr
+identifier: wifi-site-survey
 slug: +blog+2022-05-12-wifi-site-survey
 title: Audits Wi-Fi
 date: 2022-05-12T21:17:26.537Z
