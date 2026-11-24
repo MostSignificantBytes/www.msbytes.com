@@ -20,6 +20,7 @@ export const ContactPageTemplate = ({
     message,
     send,
     error,
+    privacy,
     hasError,
     token,
     handleSubmit,
@@ -98,6 +99,7 @@ export const ContactPageTemplate = ({
                         {hasError ? (
                             <p className="help is-danger" role="alert">{error}</p>
                         ) : null}
+                        <p className="help">{privacy}</p>
                         <div className="field">
                             <button className="button is-link" type="submit" disabled={!token}>
                                 {send}
@@ -119,6 +121,7 @@ ContactPageTemplate.propTypes = {
     message: PropTypes.string,
     send: PropTypes.string,
     error: PropTypes.string,
+    privacy: PropTypes.string,
     hasError: PropTypes.bool,
     token: PropTypes.string,
     handleSubmit: PropTypes.func,
@@ -182,6 +185,7 @@ export default class ContactPage extends React.Component {
                     message={this.frontmatter.message}
                     send={this.frontmatter.send}
                     error={this.frontmatter.error}
+                    privacy={this.frontmatter.privacy}
                     hasError={this.state.hasError}
                     token={this.state.token}
                     handleSubmit={this.handleSubmit}
@@ -219,6 +223,7 @@ export const pageQuery = graphql`
                 message
                 send
                 error
+                privacy
             }
         }
     }
