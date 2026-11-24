@@ -10,6 +10,7 @@ module.exports = [
             { href: '/en/blog/', title: 'Latest stories' },
             { href: '/en/contact/', title: 'Contact' },
         ],
+        legal: { href: '/en/legal/', title: 'Legal notice and privacy' },
         logo: 'MSB EN',
     },
     {
@@ -23,6 +24,7 @@ module.exports = [
             { href: '/blog/', title: 'Dernières nouvelles' },
             { href: '/contact/', title: 'Contact' },
         ],
+        legal: { href: '/legal/', title: 'Mentions légales et confidentialité' },
         logo: 'MSB FR',
     },
 ]

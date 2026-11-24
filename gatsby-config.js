@@ -1,10 +1,29 @@
 module.exports = {
+    // Transformation JSX moderne (recommandée par React 19)
+    jsxRuntime: "automatic",
     siteMetadata: {
         title: "MSB",
         description: "Most Significant Bytes - Network Neat Work",
     },
+    // En-têtes HTTP appliqués par l'adaptateur Netlify (remplace le fichier _headers)
+    headers: [
+        {
+            source: "/static/*",
+            headers: [
+                { key: "Cache-Control", value: "public, max-age=31536000, immutable" },
+            ],
+        },
+        {
+            source: "/*",
+            headers: [
+                { key: "Strict-Transport-Security", value: "max-age=31536000" },
+                { key: "X-Content-Type-Options", value: "nosniff" },
+                { key: "Referrer-Policy", value: "strict-origin-when-cross-origin" },
+                { key: "X-Frame-Options", value: "DENY" },
+            ],
+        },
+    ],
     plugins: [
-        "gatsby-plugin-react-helmet",
         {
             resolve: "gatsby-plugin-sass",
             options: {
@@ -43,9 +62,10 @@ module.exports = {
             options: {
                 plugins: [
                     {
+                        // v2 : convertit aussi les images du frontmatter (fmImagesToRelative supprimé)
                         resolve: "gatsby-remark-relative-images",
                         options: {
-                            name: "uploads",
+                            staticFolderName: "static",
                         },
                     },
                     {
@@ -55,6 +75,10 @@ module.exports = {
                             // the content container as this plugin uses this as the
                             // base for generating different widths of each image.
                             maxWidth: 2048,
+                            // Avec gatsby-remark-relative-images 2.x, les images du corps des
+                            // articles sont désormais optimisées : pas de lien vers l'original,
+                            // comme avec la version Gatsby 4.
+                            linkImagesToOriginal: false,
                         },
                     },
                     {
@@ -67,9 +91,36 @@ module.exports = {
             },
         },
         {
-            resolve: "gatsby-plugin-netlify-cms",
+            resolve: "gatsby-plugin-decap-cms",
             options: {
                 modulePath: `${__dirname}/src/cms/cms.js`,
+                // React 19 ne fournit plus de fichiers UMD : gatsby-plugin-decap-cms 4.0.4
+                // chargeait React, ReactDOM et Decap CMS en scripts externes (UMD).
+                // On les intègre au bundle /admin/cms.js ; seul le widget Netlify Identity
+                // reste un script externe.
+                customizeWebpackConfig: (config) => {
+                    const bundled = ["react", "react-dom", "decap-cms-app"];
+                    config.externals = config.externals.filter(
+                        (external) => !bundled.some((name) => name in external)
+                    );
+                    config.plugins = config.plugins.map((plugin) => {
+                        const name = plugin && plugin.constructor && plugin.constructor.name;
+                        if (name === "CopyPlugin") {
+                            plugin.patterns = plugin.patterns.filter(
+                                (pattern) => !bundled.some((pkg) => pattern.from.includes(`/node_modules/${pkg}/`))
+                            );
+                        }
+                        if (name === "HtmlWebpackTagsPlugin") {
+                            return new plugin.constructor({
+                                tags: plugin.options.scripts
+                                    .map((script) => script.path)
+                                    .filter((path) => path === "netlify-identity.js"),
+                                append: false,
+                            });
+                        }
+                        return plugin;
+                    });
+                },
             },
         },
         {
@@ -143,6 +194,7 @@ module.exports = {
                 purgeOnly: ["/all.sass"], // applies purging only on the bulma css file
             },
         }, // must be after other CSS plugins
-        "gatsby-plugin-netlify", // make sure to keep it last in the array
+        // gatsby-plugin-netlify retiré : sur Netlify, Gatsby 5.12+ installe et utilise
+        // automatiquement l'adaptateur gatsby-adapter-netlify.
     ],
 };

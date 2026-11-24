@@ -140,7 +140,13 @@ const Footer = class extends React.Component {
                     </div>
                 </div>
                 <div className="content has-text-centered">
-                    <p className="copyright">MSB SAS &copy; 2017 - 2026</p>
+                    <p className="copyright">
+                        Most Significant Bytes SAS &copy; 2017 - {new Date().getFullYear()}
+                        <br />
+                        <Link className="has-text-white-ter" to={this.filteredData.legal.href}>
+                            {this.filteredData.legal.title}
+                        </Link>
+                    </p>
                 </div>
             </footer>
         );

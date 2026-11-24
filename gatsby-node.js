@@ -1,8 +1,7 @@
 const _ = require('lodash')
 const path = require('path')
-const slugHandler = require('./src/api/slugHandler')
+const slugHandler = require('./src/utils/slugHandler')
 const { createFilePath } = require('gatsby-source-filesystem')
-const { fmImagesToRelative } = require('gatsby-remark-relative-images')
 
 exports.createPages = ({ actions, graphql }) => {
     const { createPage, createRedirect } = actions
@@ -58,25 +57,17 @@ exports.createPages = ({ actions, graphql }) => {
             })
         })
 
-        // Tag pages:
-        let tags = []
-        let locales = []
-        var language
-        // Iterate through each post, putting all found tags into `tags`
+        // Tag pages: tags collected per language, without duplicates
+        const tags = {}
         posts.forEach((edge) => {
             if (_.get(edge, `node.frontmatter.tags`)) {
-                language = _.get(edge, `node.frontmatter.language`);
-                if(!tags[language]) {
-                    locales = locales.concat(language)
-                    tags[language] = []
-                }
-                tags[language] = tags[language].concat(edge.node.frontmatter.tags)
+                const language = _.get(edge, `node.frontmatter.language`)
+                tags[language] = (tags[language] || []).concat(edge.node.frontmatter.tags)
             }
         })
-        
-        // Eliminate duplicate tags
-        tags.forEach((localizedTags) => {
-            localizedTags = _.uniq(localizedTags)
+        const locales = Object.keys(tags)
+        locales.forEach((locale) => {
+            tags[locale] = _.uniq(tags[locale])
         })
 
         // Make tag pages
@@ -90,6 +81,7 @@ exports.createPages = ({ actions, graphql }) => {
                     context: {
                         tag: localizedTag,
                         language: locale,
+                        slug: tagPath,
                     },
                 })
             })
@@ -99,8 +91,6 @@ exports.createPages = ({ actions, graphql }) => {
 
 exports.onCreateNode = ({ node, actions, getNode }) => {
     const { createNodeField } = actions
-    fmImagesToRelative(node) // convert image paths for gatsby images
-
     if (node.internal.type === `MarkdownRemark`) {
         createNodeField({
             name: `slug`,

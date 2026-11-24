@@ -1,16 +1,21 @@
-import React from 'react'
 import { Link } from 'gatsby'
 
 import nav from '../data/navbar'
 
+// Chaque lien mène à la page courante dans sa propre langue :
+// français à la racine, anglais sous /en/.
 const LanguageSwitcher = ({ slug }) => {
 
-    let activeLanguage = slug.startsWith('/en/') ? 'en' : 'fr'
-    let url = slug.startsWith('/en/') ? slug.replace('/en/', '/') : slug.replace('/', '/en/')
+    const activeLanguage = slug.startsWith('/en/') ? 'en' : 'fr'
+    const frenchPath = activeLanguage === 'en' ? slug.replace('/en/', '/') : slug
+    const urls = {
+        fr: frenchPath,
+        en: '/en' + frenchPath,
+    }
 
     return (
         nav.map(item => (
-            <Link className={`navbar-item${activeLanguage === item.language ? ' is-active' : ''}`} key={item.language} to={url}>
+            <Link className={`navbar-item${activeLanguage === item.language ? ' is-active' : ''}`} key={item.language} to={urls[item.language]}>
                 {item.language}
             </Link>
         ))
