@@ -55,6 +55,10 @@ module.exports = {
                             // the content container as this plugin uses this as the
                             // base for generating different widths of each image.
                             maxWidth: 2048,
+                            // Avec gatsby-remark-relative-images 2.x, les images du corps des
+                            // articles sont désormais optimisées : pas de lien vers l'original,
+                            // comme avec la version Gatsby 4.
+                            linkImagesToOriginal: false,
                         },
                     },
                     {
