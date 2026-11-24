@@ -47,7 +47,7 @@ class BlogRollTemplate extends React.Component {
                                         </Link>
                                         <span> &bull; </span>
                                         <span className="subtitle is-size-5 is-block">
-                                            {post.frontmatter.date}
+                                            {post.frontmatter.language === 'fr' ? post.frontmatter.dateFR : post.frontmatter.date}
                                         </span>
                                     </p>
                                 </header>
@@ -98,6 +98,7 @@ export default function BlogRoll(data) {
           title
           templateKey
           date(formatString: "MMMM DD, YYYY")
+          dateFR: date(formatString: "D MMMM YYYY", locale: "fr")
           featuredpost
           featuredimage {
             childImageSharp {

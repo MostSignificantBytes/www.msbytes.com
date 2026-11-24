@@ -1,54 +1,27 @@
 import * as React from "react";
-import { kebabCase } from "lodash";
 import Footer from "../components/Footer";
 import Navbar from "../components/Navbar";
+import slugHandler from "../api/slugHandler";
 import "./all.sass";
 
-const TemplateWrapper = ({ children }) => {
-    var language = children.props.language;
-    if(!language) {
-        language = 'fr'
-    }
+// La langue et le chemin de la page sont lus dans les props du gabarit enfant
+// (language, slug du frontmatter). Les pages sans frontmatter (404, pages de tag)
+// les transmettent directement à Layout (props language et path).
+const TemplateWrapper = ({ children, language, path }) => {
+    const pageLanguage = language || (children.props && children.props.language) || "fr";
 
-    var slug;
-    if (children.props.slug) {
-
-        slug = children.props.slug;
-
-        var slugParts = slug.split('+');
-        var slugHandled;
-
-        slugParts.forEach((slugPart) => {
-            slugPart = kebabCase(slugPart);
-        })
-        
-        slugHandled = slugParts.join('/');
-
-        if (slugHandled !== '/') {
-            slugHandled = slugHandled + '/';
-        }
-
-        if (language !== 'fr') {
-            slugHandled = '/' + language + slugHandled;
-        }
-
-        slug = slugHandled;
-
-    } else if (!slug && children._owner) {
-
-        slug = children._owner.key;
-
-    } else if(!slug) {
-
-        slug = '/';
-
+    let pagePath = path;
+    if (!pagePath) {
+        pagePath = children.props && children.props.slug
+            ? slugHandler(pageLanguage, null, children.props.slug)
+            : "/";
     }
 
     return (
         <div>
-            <Navbar language={language} slug={slug}/>
+            <Navbar language={pageLanguage} slug={pagePath}/>
             <div>{children}</div>
-            <Footer language={language}/>
+            <Footer language={pageLanguage}/>
         </div>
     );
 };

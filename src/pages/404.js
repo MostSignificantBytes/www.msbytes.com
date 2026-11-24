@@ -7,12 +7,12 @@ const NotFoundPage = () => (
     <Layout>
         <div>
             <h1 className="has-text-centered is-size-1">404</h1>
-            <div class="columns is-size-1">
-                <div class="column"></div>
-                <div class="column">
+            <div className="columns is-size-1">
+                <div className="column"></div>
+                <div className="column">
                     <img src="/img/404.jpg" alt="404" />
                 </div>
-                <div class="column"></div>
+                <div className="column"></div>
             </div>
         </div>
     </Layout>

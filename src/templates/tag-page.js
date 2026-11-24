@@ -3,6 +3,18 @@ import { Link, graphql } from "gatsby";
 import Layout from "../components/Layout";
 import SeoHead from "../components/SeoHead";
 
+// Libellés de la page de tag, par langue
+const labels = {
+    fr: {
+        header: (count, tag) => `${count} article${count > 1 ? "s" : ""} avec le tag « ${tag} »`,
+        allTags: "Voir tous les tags",
+    },
+    en: {
+        header: (count, tag) => `${count} post${count === 1 ? "" : "s"} tagged with “${tag}”`,
+        allTags: "Browse all tags",
+    },
+};
+
 class TagRoute extends React.Component {
     render() {
         const posts = this.props.data.allMarkdownRemark.edges;
@@ -13,15 +25,13 @@ class TagRoute extends React.Component {
                 </Link>
             </li>
         ));
-        const tag = this.props.pageContext.tag;
-        const title = this.props.data.site.siteMetadata.title;
+        const { tag, language } = this.props.pageContext;
+        const text = labels[language] || labels.fr;
         const totalCount = this.props.data.allMarkdownRemark.totalCount;
-        const tagHeader = `${totalCount} post${
-            totalCount === 1 ? "" : "s"
-        } tagged with “${tag}”`;
+        const tagHeader = text.header(totalCount, tag);
 
         return (
-            <Layout>
+            <Layout language={language} path={this.props.pageContext.slug}>
                 <section className="section">
                     <div className="container content">
                         <div className="columns">
@@ -32,7 +42,7 @@ class TagRoute extends React.Component {
                                 <h3 className="title is-size-4 is-bold-light">{tagHeader}</h3>
                                 <ul className="taglist">{postLinks}</ul>
                                 <p>
-                                    <Link to="/tags/">Browse all tags</Link>
+                                    <Link to={(language === "fr" ? "" : "/" + language) + "/tags/"}>{text.allTags}</Link>
                                 </p>
                             </div>
                         </div>
@@ -70,10 +80,10 @@ export const tagPageQuery = graphql`query TagPage($tag: String, $language: Strin
   }
 }`;
 
-export const Head = ({ data, pageContext, location }) => (
+export const Head = ({ data, pageContext }) => (
     <SeoHead
         language={pageContext.language}
-        path={location.pathname}
+        path={pageContext.slug}
         title={`${pageContext.tag} | ${data.site.siteMetadata.title}`}
     />
 );

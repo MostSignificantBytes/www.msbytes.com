@@ -1,16 +1,9 @@
-// keep node.js syntax as this function is used both by client and node
-const _ = require('lodash')
-
-module.exports = slugHandler = (language, templateKey, slug) => {
-
-    var slugParts = slug.split('+');
-    var slugHandled;
-
-    slugParts.forEach((slugPart) => {
-        slugPart = _.kebabCase(slugPart);
-    })
-    
-    slugHandled = slugParts.join('/');
+// Calcul du chemin d'une page à partir du frontmatter (syntaxe CommonJS :
+// fonction utilisée à la fois par gatsby-node.js et par les composants).
+// Exemples : ("fr", "+") → "/" ; ("en", "+blog+2022-06-15-osi-model") → "/en/blog/2022-06-15-osi-model/".
+// Les segments ne sont pas normalisés (pas de kebabCase) : les URL publiées restent inchangées.
+const slugHandler = (language, templateKey, slug) => {
+    let slugHandled = slug.split('+').join('/');
 
     if (slugHandled !== '/') {
         slugHandled = slugHandled + '/';
@@ -21,4 +14,6 @@ module.exports = slugHandler = (language, templateKey, slug) => {
     }
 
     return slugHandled;
-}
+};
+
+module.exports = slugHandler;
