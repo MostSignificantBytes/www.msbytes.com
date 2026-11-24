@@ -70,6 +70,33 @@ module.exports = {
             resolve: "gatsby-plugin-decap-cms",
             options: {
                 modulePath: `${__dirname}/src/cms/cms.js`,
+                // React 19 ne fournit plus de fichiers UMD : gatsby-plugin-decap-cms 4.0.4
+                // chargeait React, ReactDOM et Decap CMS en scripts externes (UMD).
+                // On les intègre au bundle /admin/cms.js ; seul le widget Netlify Identity
+                // reste un script externe.
+                customizeWebpackConfig: (config) => {
+                    const bundled = ["react", "react-dom", "decap-cms-app"];
+                    config.externals = config.externals.filter(
+                        (external) => !bundled.some((name) => name in external)
+                    );
+                    config.plugins = config.plugins.map((plugin) => {
+                        const name = plugin && plugin.constructor && plugin.constructor.name;
+                        if (name === "CopyPlugin") {
+                            plugin.patterns = plugin.patterns.filter(
+                                (pattern) => !bundled.some((pkg) => pattern.from.includes(`/node_modules/${pkg}/`))
+                            );
+                        }
+                        if (name === "HtmlWebpackTagsPlugin") {
+                            return new plugin.constructor({
+                                tags: plugin.options.scripts
+                                    .map((script) => script.path)
+                                    .filter((path) => path === "netlify-identity.js"),
+                                append: false,
+                            });
+                        }
+                        return plugin;
+                    });
+                },
             },
         },
         {
