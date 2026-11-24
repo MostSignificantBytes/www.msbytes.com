@@ -1,0 +1,11 @@
+# Dependabot (format v2) : alertes et mises à jour de sécurité npm uniquement.
+# open-pull-requests-limit: 0 désactive les mises à jour de version courantes ;
+# les pull requests de sécurité restent créées si « Dependabot security updates »
+# est activé dans GitHub (Settings > Code security).
+version: 2
+updates:
+  - package-ecosystem: "npm"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    open-pull-requests-limit: 0
