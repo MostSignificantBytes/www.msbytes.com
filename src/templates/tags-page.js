@@ -72,45 +72,28 @@ TagsPage.propTypes = {
 
 export default TagsPage;
 
-export const tagsPageQuery = graphql`
-    query TagsPage($id: String!, $language: String!) {
-        site {
-            siteMetadata {
-                title
-            }
-        }
-        markdownRemark(
-            id: {
-                eq: $id
-            }
-            frontmatter: {
-                language: {
-                    eq: $language
-                }
-            }
-        ) {
-            html
-            id
-            frontmatter {
-                language
-                slug
-                title
-            }
-        }
-        allMarkdownRemark(
-            limit: 1000, 
-            filter: {
-                frontmatter: {
-                    language: {
-                        eq: $language
-                    }
-                }
-            }
-        ) {
-            group(field: frontmatter___tags) {
-                fieldValue
-                totalCount
-            }
-        }
+export const tagsPageQuery = graphql`query TagsPage($id: String!, $language: String!) {
+  site {
+    siteMetadata {
+      title
     }
-`;
+  }
+  markdownRemark(id: {eq: $id}, frontmatter: {language: {eq: $language}}) {
+    html
+    id
+    frontmatter {
+      language
+      slug
+      title
+    }
+  }
+  allMarkdownRemark(
+    limit: 1000
+    filter: {frontmatter: {language: {eq: $language}}}
+  ) {
+    group(field: {frontmatter: {tags: SELECT}}) {
+      fieldValue
+      totalCount
+    }
+  }
+}`;
