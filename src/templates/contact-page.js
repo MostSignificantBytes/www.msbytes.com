@@ -1,8 +1,7 @@
 import React from "react";
 import ReCAPTCHA from "react-google-recaptcha";
 import PropTypes from "prop-types";
-import { graphql } from "gatsby";
-import { navigate } from "gatsby-link";
+import { graphql, navigate } from "gatsby";
 
 import Layout from "../components/Layout";
 import SeoHead from "../components/SeoHead";
