@@ -7,3 +7,4 @@ name: Your name
 email: Email
 message: Message
 send: Send
+error: "Your message could not be sent. Please try again or write to contact@msbytes.com."
