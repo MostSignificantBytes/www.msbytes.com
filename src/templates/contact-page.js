@@ -135,7 +135,7 @@ function encode(data) {
         .join("&");
 }
 
-export default class ContactPage extends React.Component {
+class ContactPage extends React.Component {
     constructor(props) {
         super(props);
         this.state = { fields: {}, token: null, hasError: false };
@@ -196,6 +196,8 @@ export default class ContactPage extends React.Component {
         );
     };
 };
+
+export default ContactPage;
 
 ContactPage.propTypes = {
     data: PropTypes.shape({
