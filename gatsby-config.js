@@ -1,4 +1,6 @@
 module.exports = {
+    // Transformation JSX moderne (recommandée par React 19)
+    jsxRuntime: "automatic",
     siteMetadata: {
         title: "MSB",
         description: "Most Significant Bytes - Network Neat Work",

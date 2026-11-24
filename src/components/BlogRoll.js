@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { Link, graphql, StaticQuery } from 'gatsby'
+import { Link, graphql, useStaticQuery } from 'gatsby'
 import PreviewCompatibleImage from './PreviewCompatibleImage'
 
 class BlogRollTemplate extends React.Component {
@@ -76,12 +76,8 @@ BlogRoll.propTypes = {
 }
 
 
-export default function BlogRoll(data) {
-    var language = data.language;
-    var keepReading = data.keepReading;
-    return (
-        <StaticQuery
-            query={graphql`query BlogRollQuery {
+export default function BlogRoll({ language, keepReading }) {
+    const data = useStaticQuery(graphql`query BlogRollQuery {
   allMarkdownRemark(
     sort: {frontmatter: {date: DESC}}
     filter: {frontmatter: {templateKey: {eq: "blog-post"}}}
@@ -109,8 +105,6 @@ export default function BlogRoll(data) {
       }
     }
   }
-}`}
-            render={(data, count) => <BlogRollTemplate data={data} count={count} language={language} keepReading={keepReading}/>}
-        />
-    );
+}`)
+    return <BlogRollTemplate data={data} language={language} keepReading={keepReading}/>
 }
