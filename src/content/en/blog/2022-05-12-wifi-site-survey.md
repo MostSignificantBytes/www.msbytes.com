@@ -3,7 +3,7 @@ templateKey: blog-post
 language: en
 slug: +blog+2022-05-12-wifi-site-survey
 identifier: wifi-site-survey
-title: Wi-Fi site surveys test
+title: Wi-Fi site surveys
 date: 2022-05-12T21:17:26.537Z
 description: Measure, plan, deploy and measure again. This is how we set up robust Wi-Fi infrastructures.
 featuredpost: false
