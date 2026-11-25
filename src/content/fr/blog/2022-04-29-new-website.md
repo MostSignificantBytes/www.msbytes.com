@@ -6,7 +6,7 @@ slug: +blog+2022-04-29-new-website
 title: Nouveau site web
 date: 2022-04-29T21:29:56.158Z
 description: Bienvenue sur notre nouveau site web !
-featuredpost: true
+featuredpost: false
 featuredimage: /img/20220525_pixabay_coding_1.jpg
 tags:
   - jamstack
