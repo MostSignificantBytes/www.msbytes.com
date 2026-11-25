@@ -25,11 +25,11 @@ ThanksPageTemplate.propTypes = {
     text: PropTypes.string.isRequired,
 };
 
-const ThanksPage = ({ data }) => {
+const ThanksPage = ({ data, pageContext }) => {
     const { markdownRemark: post } = data;
 
     return (
-        <Layout>
+        <Layout path={pageContext.slug}>
             <ThanksPageTemplate
                 slug={post.frontmatter.slug}
                 language={post.frontmatter.language}

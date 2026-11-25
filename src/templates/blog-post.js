@@ -55,11 +55,11 @@ BlogPostTemplate.propTypes = {
     slug: PropTypes.string,
 };
 
-const BlogPost = ({ data }) => {
+const BlogPost = ({ data, pageContext }) => {
     const { markdownRemark: post } = data;
 
     return (
-        <Layout>
+        <Layout path={pageContext.slug}>
             <BlogPostTemplate
                 content={post.html}
                 contentComponent={HTMLContent}

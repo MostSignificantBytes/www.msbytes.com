@@ -134,11 +134,11 @@ ProductPageTemplate.propTypes = {
     }),
 };
 
-const ProductPage = ({ data }) => {
+const ProductPage = ({ data, pageContext }) => {
     const { frontmatter } = data.markdownRemark;
 
     return (
-        <Layout>
+        <Layout path={pageContext.slug}>
             <ProductPageTemplate
                 language={frontmatter.language}
                 slug={frontmatter.slug}

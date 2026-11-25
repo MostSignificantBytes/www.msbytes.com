@@ -46,13 +46,13 @@ TagsPageTemplate.propTypes = {
     group: PropTypes.object.isRequired,
 };
 
-const TagsPage = ({ data }) => {
+const TagsPage = ({ data, pageContext }) => {
     const { site: website } = data;
     const { markdownRemark: post } = data;
     const { allMarkdownRemark: tags } = data;
 
     return (
-        <Layout>
+        <Layout path={pageContext.slug}>
             <TagsPageTemplate
                 language={post.frontmatter.language}
                 slug={post.frontmatter.slug}

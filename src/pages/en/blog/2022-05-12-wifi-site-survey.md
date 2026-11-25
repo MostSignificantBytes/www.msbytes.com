@@ -1,6 +1,7 @@
 ---
 templateKey: blog-post
 language: en
+identifier: wifi-site-survey
 slug: +blog+2022-05-12-wifi-site-survey
 title: Wi-Fi site surveys
 date: 2022-05-12T21:17:26.537Z

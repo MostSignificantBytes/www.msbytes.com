@@ -6,7 +6,7 @@ Site Web institutionnel de **Most Significant Bytes (MSB SAS)** : présentation 
 - Bilingue : français à la racine (`/`), anglais sous `/en/`.
 - Contenus en Markdown dans `src/pages/{fr,en}/`, médias dans `static/img/`.
 - Hébergement **Netlify** : production sur `master`, recette sur `recette`, aperçus des pull requests.
-- Back-office **Decap CMS 3** sous `/admin/` (pas encore activé).
+- Back-office **Decap CMS 3** sous `/admin/` : connexion par compte GitHub, chaque modification est un brouillon (pull request) publié par l'administrateur.
 
 La documentation complète (spécifications, installation, exploitation, mise en production, recette) est tenue dans le projet « Site web MSB » (dossier `documentation/`, références MSB-WEB-xxx).
 
@@ -55,7 +55,7 @@ Vérification locale avant chaque push : `npm run build && npm run serve`.
 | Chemin | Rôle |
 |---|---|
 | `gatsby-config.js` | Métadonnées, plugins, en-têtes HTTP (appliqués par l'adaptateur Netlify) |
-| `gatsby-node.js` | Création des pages et des pages de tag |
+| `gatsby-node.js` | Chemin des pages (slug du frontmatter, à défaut emplacement du fichier), création des pages et des pages de tag |
 | `gatsby-ssr.js`, `gatsby-browser.js` | Langue de `<html>` (pré-rendu et navigation) |
 | `src/pages/{fr,en}/` | Contenus Markdown ; `src/pages/404.js` : page d'erreur |
 | `src/templates/` | Gabarits de page (requêtes GraphQL et export `Head`) |
@@ -73,6 +73,18 @@ Vérification locale avant chaque push : `npm run build && npm run serve`.
 - Variables d'environnement (console Netlify) : `SITE_RECAPTCHA_KEY`, `SITE_RECAPTCHA_SECRET` (secrète, portée Runtime), `GATSBY_SITE_RECAPTCHA_KEY` (portée Builds).
 - Circuit : branche de travail → pull request vers `recette` (aperçu Netlify) → recette → fusion sur `master` (production).
 - Formulaire : Netlify Forms (formulaire `contact`), notifications par e-mail paramétrées dans la console Netlify.
+
+## Back-office (Decap CMS)
+
+- Adresse : https://www.msbytes.com/admin/ (recette : `https://recette--<site>.netlify.app/admin/`).
+- Connexion « Login with GitHub » : le compte doit avoir un accès en écriture au dépôt. Authentification par le fournisseur OAuth GitHub de Netlify (application OAuth GitHub dont l'URL de rappel est `https://api.netlify.com/auth/done`, déclarée dans Netlify > Project configuration > Access & security > OAuth).
+- Circuit de validation (`publish_mode: editorial_workflow`) : un brouillon crée une branche `cms/…` et une pull request avec son aperçu Netlify ; l'administrateur publie depuis l'onglet Workflow.
+- Branche visée : `master` en production ; `recette` lorsque le back-office est ouvert depuis l'adresse de recette (voir `src/cms/cms.js`).
+- Articles : le nom du fichier est `AAAA-MM-JJ-<identifiant>.md` ; l'adresse de l'article en est déduite (`/blog/AAAA-MM-JJ-<identifiant>/`). Utiliser le même identifiant et la même date pour les versions française et anglaise.
+- Accès : tout compte GitHub ayant le droit d'écriture (rôle « Write ») sur le dépôt peut se connecter. Ajouter ou retirer un rédacteur dans GitHub > dépôt > Settings > Collaborators and teams.
+- Publication : la branche `master` est protégée par une règle GitHub (Settings > Rules > Rulesets, « Protection de master ») : fusion uniquement par pull request approuvée, suppression et réécriture d'historique interdites. Les administrateurs du dépôt peuvent passer outre (publication depuis le back-office, push direct des contenus). Un rédacteur peut préparer et soumettre un brouillon (« Ready ») mais pas le publier : l'administrateur publie depuis l'onglet Workflow.
+- Coût : chaque publication déclenche un déploiement de production Netlify (15 crédits sur les 300 crédits mensuels de l'offre gratuite) ; les brouillons (aperçus) et la branche `recette` ne consomment pas de crédits de déploiement. Regrouper les modifications avant de publier.
+- Test en local sans authentification : `npx decap-server` dans le dossier du dépôt, puis `npm run develop` et http://localhost:8000/admin/ (les modifications sont écrites directement dans les fichiers locaux).
 
 ## Licence
 
