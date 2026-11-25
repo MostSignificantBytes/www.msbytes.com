@@ -2,7 +2,7 @@
 // 1. purge des styles inutilisés de Bulma (comme gatsby-plugin-purgecss), d'après le HTML et les scripts générés ;
 // 2. plan du site publié aussi sous /sitemap.xml ;
 // 3. médias publiés aussi sous /img/ ;
-// 4. copie du back-office Decap CMS (paquet npm decap-cms) dans dist/admin, sans dépendre d'un CDN.
+// 4. copie du back-office Sveltia CMS (paquet npm @sveltia/cms, version figée) dans dist/admin (décision D3).
 import fs from 'node:fs'
 import path from 'node:path'
 import { PurgeCSS } from 'purgecss'
@@ -43,14 +43,13 @@ const MEDIA = path.join('src', 'assets', 'img')
 fs.mkdirSync(path.join(DIST, 'img'), { recursive: true })
 for (const name of fs.readdirSync(MEDIA)) fs.copyFileSync(path.join(MEDIA, name), path.join(DIST, 'img', name))
 
-// 4. Decap CMS
-const decap = path.join('node_modules', 'decap-cms', 'dist')
+// 4. Sveltia CMS : script principal et modules chargés à la demande (dossier chunks/, lu à côté du script)
+const sveltia = path.join('node_modules', '@sveltia', 'cms', 'dist')
 const admin = path.join(DIST, 'admin')
-let copied = 0
-for (const name of fs.readdirSync(decap)) {
-    if (/(^|\.)decap-cms\.js$/.test(name) || name.endsWith('.wasm')) {
-        fs.copyFileSync(path.join(decap, name), path.join(admin, name))
-        copied++
-    }
-}
-console.log(`Back-office : ${copied} fichiers de Decap CMS copiés dans ${admin}`)
+fs.copyFileSync(path.join(sveltia, 'sveltia-cms.js'), path.join(admin, 'sveltia-cms.js'))
+fs.cpSync(path.join(sveltia, 'chunks'), path.join(admin, 'chunks'), {
+    recursive: true,
+    filter: (src) => !src.endsWith('.map'),
+})
+const version = JSON.parse(fs.readFileSync(path.join('node_modules', '@sveltia', 'cms', 'package.json'))).version
+console.log(`Back-office : Sveltia CMS ${version} copié dans ${admin}`)

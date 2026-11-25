@@ -1,4 +1,4 @@
-# Back-office Decap CMS (https://www.msbytes.com/admin/).
+# Back-office Sveltia CMS (https://www.msbytes.com/admin/).
 # Connexion par compte GitHub (fournisseur OAuth de Netlify), circuit de validation :
 # chaque modification est un brouillon (branche cms/… et pull request) publié par l'administrateur.
 # Fichier généré : voir documentation (corrections C02 à C10). Sur l'adresse de recette, public/admin/init.js
@@ -16,10 +16,13 @@ backend:
     deleteMedia: Suppression du média « {{path}} »
     openAuthoring: '{{message}}'
 publish_mode: editorial_workflow
-local_backend: true
 site_url: https://www.msbytes.com
 display_url: https://www.msbytes.com
-logo_url: https://www.msbytes.com/img/apple-touch-icon.png
+app_title: Back-office MSB
+logo:
+  src: /img/apple-touch-icon.png
+output:
+  omit_empty_optional_fields: true
 media_folder: src/assets/img
 public_folder: /img
 collections:
@@ -405,7 +408,7 @@ collections:
   filter:
     field: templateKey
     value: blog-post
-  summary: '{{title}} ({{year}}-{{month}}-{{day}})'
+  summary: "{{title}} ({{date | date('YYYY-MM-DD')}})"
   fields:
   - label: Gabarit
     name: templateKey
@@ -432,6 +435,7 @@ collections:
   - label: Date de publication
     name: date
     widget: datetime
+    output_utc: true
   - label: Chapeau (affiché sous le titre et lu par les moteurs de recherche)
     name: description
     widget: text
@@ -834,7 +838,7 @@ collections:
   filter:
     field: templateKey
     value: blog-post
-  summary: '{{title}} ({{year}}-{{month}}-{{day}})'
+  summary: "{{title}} ({{date | date('YYYY-MM-DD')}})"
   fields:
   - label: Gabarit
     name: templateKey
@@ -861,6 +865,7 @@ collections:
   - label: Date de publication
     name: date
     widget: datetime
+    output_utc: true
   - label: Chapeau (affiché sous le titre et lu par les moteurs de recherche)
     name: description
     widget: text

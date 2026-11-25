@@ -20,9 +20,9 @@
   "dependencies": {
     "@astrojs/markdown-remark": "^7.3.0",
     "@astrojs/sitemap": "^3.7.6",
+    "@sveltia/cms": "0.272.0",
     "astro": "^7.4.13",
     "bulma": "0.9.4",
-    "decap-cms": "^3.18.0",
     "lodash": "^4.17.21",
     "sass": "^1.59.2"
   },
