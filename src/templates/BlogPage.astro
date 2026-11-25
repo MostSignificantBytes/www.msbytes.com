@@ -6,13 +6,9 @@ import { media } from '../utils/site.js'
 const { page } = Astro.props
 const d = page.data
 ---
-<div>
-    <FullWidthImage img={media(d.image)} title={d.title} eager />
-    <section class="section">
-        <div class="container">
-            <div class="content">
-                <BlogRoll language={d.language} keepReading={d.keepReading} />
-            </div>
-        </div>
-    </section>
-</div>
+<FullWidthImage img={media(d.image)} title={d.title} eager />
+<section class="section">
+    <div class="container prose">
+        <BlogRoll language={d.language} keepReading={d.keepReading} />
+    </div>
+</section>

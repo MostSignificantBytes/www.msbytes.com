@@ -11,6 +11,8 @@ export default defineConfig({
     // URL terminées par « / », comme sous Gatsby (dossier/index.html)
     trailingSlash: 'always',
     build: { format: 'directory' },
+    // Styles des composants limités par une classe (.astro-xxxx), plus courte qu'un attribut
+    scopedStyleStrategy: 'class',
     // Liste des langues centralisée (src/utils/languages.mjs) ; les chemins sont calculés par slugHandler
     i18n: {
         locales: LANGUAGES,
@@ -32,16 +34,5 @@ export default defineConfig({
             remarkPlugins: [remarkExcerpt, remarkMediaPaths],
         }),
         syntaxHighlight: false,
-    },
-    vite: {
-        css: {
-            preprocessorOptions: {
-                sass: {
-                    // Bulma 0.9.4 utilise @import et la division « / » : avertissements Dart Sass masqués
-                    quietDeps: true,
-                    silenceDeprecations: ['import', 'slash-div', 'global-builtin', 'color-functions', 'if-function'],
-                },
-            },
-        },
     },
 })

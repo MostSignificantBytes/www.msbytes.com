@@ -12,20 +12,20 @@ const posts = await Promise.all(
     }))
 )
 ---
-<div class="columns is-multiline">
+<div class="cols cols-wrap">
     {posts.map(({ post, excerpt }) => (
-        <div class="is-parent column is-6">
-            <article class={`blog-list-item tile is-child box notification ${post.data.featuredpost ? 'is-featured' : ''}`}>
-                <header>
+        <div class="col col-6">
+            <article class={`post-card${post.data.featuredpost ? ' is-featured' : ''}`}>
+                <header class="post-card-header">
                     {post.data.featuredimage && (
-                        <div class="featured-thumbnail">
+                        <div class="post-card-thumbnail">
                             <PreviewImage image={post.data.featuredimage} alt={`featured image thumbnail for post ${post.data.title}`} width={120} quality={90} />
                         </div>
                     )}
-                    <p class="post-meta">
-                        <a class="title has-text-primary is-size-4" href={post.path}>{post.data.title}</a>
+                    <p>
+                        <a class="post-card-title" href={post.path}>{post.data.title}</a>
                         <span> &bull; </span>
-                        <span class="subtitle is-size-5 is-block">{formatDate(post.data.date, language)}</span>
+                        <time class="post-card-date" datetime={post.data.date?.toISOString().slice(0, 10)}>{formatDate(post.data.date, language)}</time>
                     </p>
                 </header>
                 <p>
@@ -38,3 +38,68 @@ const posts = await Promise.all(
         </div>
     ))}
 </div>
+<style>
+    .post-card {
+        background-color: var(--background-light);
+        border-radius: var(--radius);
+        box-shadow: var(--shadow);
+        color: var(--text-dark);
+        display: block;
+        margin: 0;
+        padding: 1.25rem 2.5rem 1.25rem 1.5rem;
+        position: relative;
+    }
+
+    .post-card.is-featured {
+        background-color: rgb(255 204 0 / 20%);
+    }
+
+    .post-card-header {
+        display: flex;
+        margin-bottom: 1em;
+    }
+
+    .post-card-thumbnail {
+        flex-basis: 35%;
+        margin: 0 1.5em 0 0;
+    }
+
+    .post-card-title {
+        color: var(--msb-blue);
+        font-size: 1.5rem;
+        font-weight: 600;
+        line-height: 1.125;
+        text-decoration: underline;
+        word-break: break-word;
+    }
+
+    .post-card-title:hover,
+    .post-card-title:focus {
+        color: var(--msb-blue-dark);
+    }
+
+    .post-card-date {
+        display: block;
+        font-size: 1.25rem;
+        line-height: 1.25;
+        word-break: break-word;
+    }
+
+    @media (min-width: 769px) and (max-width: 1023px) {
+        .post-card-thumbnail {
+            flex-basis: 50%;
+        }
+    }
+
+    @media (max-width: 768px) {
+        .post-card-header {
+            display: block;
+        }
+
+        .post-card-thumbnail {
+            margin: 0 0 1em;
+            max-width: 70%;
+            text-align: center;
+        }
+    }
+</style>

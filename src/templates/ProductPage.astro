@@ -10,45 +10,35 @@ import { media } from '../utils/site.js'
 const { page } = Astro.props
 const { title, image, intro, main, testimonials, full_image: fullImage, skills } = page.data
 ---
-<div class="content">
+<div class="prose">
     <FullWidthImage img={media(image)} title={title} imgPosition="bottom left" eager />
-    <section class="section section--gradient">
+    <section class="section">
         <div class="container">
             <div class="section">
-                <div class="columns">
-                    <div class="column is-7 is-offset-1">
-                        <h3 class="has-text-weight-semibold is-size-2">{intro.heading}</h3>
+                <div class="cols">
+                    <div class="col col-7 offset-1">
+                        <h2 class="activities-heading">{intro.heading}</h2>
                         <p>{intro.description}</p>
                     </div>
                 </div>
-                <div class="columns">
-                    <div class="column is-10 is-offset-1">
+                <div class="cols">
+                    <div class="col col-10 offset-1">
                         <Features gridItems={intro.blurbs} />
-                        <div class="columns">
-                            <div class="column is-7">
-                                <h3 class="has-text-weight-semibold is-size-3">{main.heading}</h3>
+                        <div class="cols">
+                            <div class="col col-7">
+                                <h2 class="activities-subheading">{main.heading}</h2>
                                 <p>{main.description}</p>
                             </div>
                         </div>
-                        <div class="tile is-ancestor">
-                            <div class="tile is-vertical">
-                                <div class="tile">
-                                    <div class="tile is-parent is-vertical">
-                                        <article class="tile is-child">
-                                            <PreviewImage image={main.image1.image} alt={main.image1.alt} width={526} quality={92} />
-                                        </article>
-                                    </div>
-                                    <div class="tile is-parent">
-                                        <article class="tile is-child">
-                                            <PreviewImage image={main.image2.image} alt={main.image2.alt} width={526} quality={92} />
-                                        </article>
-                                    </div>
-                                </div>
-                                <div class="tile is-parent">
-                                    <article class="tile is-child">
-                                        <PreviewImage image={main.image3.image} alt={main.image3.alt} quality={72} />
-                                    </article>
-                                </div>
+                        <div class="mosaic">
+                            <div class="mosaic-item">
+                                <PreviewImage image={main.image1.image} alt={main.image1.alt} width={526} quality={92} />
+                            </div>
+                            <div class="mosaic-item">
+                                <PreviewImage image={main.image2.image} alt={main.image2.alt} width={526} quality={92} />
+                            </div>
+                            <div class="mosaic-item mosaic-wide">
+                                <PreviewImage image={main.image3.image} alt={main.image3.alt} quality={72} />
                             </div>
                         </div>
                         <Testimonials testimonials={testimonials} />
@@ -58,22 +48,18 @@ const { title, image, intro, main, testimonials, full_image: fullImage, skills }
         </div>
     </section>
     <FullWidthImage img={media(fullImage)} imgPosition="bottom" />
-    <section class="section section--gradient">
+    <section class="section">
         <div class="container">
             <div class="section">
-                <div class="columns">
-                    <div class="column is-10 is-offset-1">
-                        <h2 class="has-text-weight-semibold is-size-2">{skills.heading}</h2>
-                        <div class="tile is-ancestor">
-                            <div class="tile is-vertical">
-                                <div class="tile is-parent">
-                                    <article class="tile is-child">
-                                        <PreviewImage image={skills.image.image} alt={skills.image.alt} quality={90} />
-                                    </article>
-                                </div>
+                <div class="cols">
+                    <div class="col col-10 offset-1">
+                        <h2 class="skills-heading">{skills.heading}</h2>
+                        <div class="mosaic">
+                            <div class="mosaic-item">
+                                <PreviewImage image={skills.image.image} alt={skills.image.alt} quality={90} />
                             </div>
                         </div>
-                        <p class="is-size-5">{skills.description}</p>
+                        <p class="skills-description">{skills.description}</p>
                         <Skills data={skills.list} />
                     </div>
                 </div>
@@ -81,3 +67,47 @@ const { title, image, intro, main, testimonials, full_image: fullImage, skills }
         </div>
     </section>
 </div>
+<style>
+    .activities-heading {
+        font-size: 2.5rem;
+        margin-bottom: 0.6666em;
+    }
+
+    .skills-heading {
+        font-size: 2.5rem;
+    }
+
+    .activities-subheading {
+        font-size: 2rem;
+        margin-bottom: 0.6666em;
+    }
+
+    /* Mosaïque : deux images côte à côte puis une image pleine largeur (empilées sur téléphone) */
+    .mosaic {
+        margin: calc(-1 * var(--gap)) calc(-1 * var(--gap)) var(--gap);
+    }
+
+    .mosaic:last-child {
+        margin-bottom: calc(-1 * var(--gap));
+    }
+
+    .mosaic-item {
+        flex: 1 1 0;
+        padding: var(--gap);
+    }
+
+    .mosaic-wide {
+        flex-basis: 100%;
+    }
+
+    @media (min-width: 769px) {
+        .mosaic {
+            display: flex;
+            flex-wrap: wrap;
+        }
+    }
+
+    .skills-description {
+        font-size: 1.25rem;
+    }
+</style>
