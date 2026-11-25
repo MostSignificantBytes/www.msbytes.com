@@ -1,9 +1,9 @@
 ---
 templateKey: blog-post
 language: en
-identifier: wifi-site-survey
 slug: +blog+2022-05-12-wifi-site-survey
-title: Wi-Fi site surveys
+identifier: wifi-site-survey
+title: Wi-Fi site surveys test
 date: 2022-05-12T21:17:26.537Z
 description: Measure, plan, deploy and measure again. This is how we set up robust Wi-Fi infrastructures.
 featuredpost: false
@@ -12,6 +12,7 @@ tags:
   - wi-fi
   - survey
 ---
+
 ![Wi-Fi planning survey](/img/audit_wi-fi.png)
 
 When it comes to Wi-Fi, buying an access point at the electronics store next door and installing it on the desk in the middle of the office works only for small spaces and still, there is no guarantees that it will work properly.
