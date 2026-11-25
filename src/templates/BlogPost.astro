@@ -13,7 +13,7 @@ const { Content } = await render(page)
             <div class="col col-10 offset-1">
                 <h1 class="post-title">{title}</h1>
                 <p>{description}</p>
-                <div><Content /></div>
+                <div class="markdown"><Content /></div>
                 {tags && tags.length > 0 && (
                     <div class="post-tags">
                         <h2>{labels[language].tags}</h2>

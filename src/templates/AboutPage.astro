@@ -10,7 +10,7 @@ const { Content } = await render(page)
             <div class="col col-10 offset-1">
                 <article class="section">
                     <h1 class="page-title">{page.data.title}</h1>
-                    <div class="prose"><Content /></div>
+                    <div class="prose markdown"><Content /></div>
                 </article>
             </div>
         </div>
@@ -24,5 +24,15 @@ const { Content } = await render(page)
         line-height: 1.125;
         margin-bottom: 1.5rem;
         word-break: break-word;
+    }
+
+    /* Intertitres de deuxième niveau affichés à la taille d'un troisième niveau (1,5em) */
+    .markdown :global(h2) {
+        font-size: 1.5em;
+        margin-bottom: 0.6666em;
+    }
+
+    .markdown :global(h2:not(:first-child)) {
+        margin-top: 1.3333em;
     }
 </style>

@@ -251,6 +251,11 @@ code, pre {
     text-align: inherit;
 }
 
+/* Liens des textes rédigés en Markdown : soulignés, pour ne pas être distingués par la seule couleur */
+.markdown a {
+    text-decoration: underline;
+}
+
 /* Liste de mots-clés (articles, pages des tags) */
 .prose .taglist {
     align-items: center;
