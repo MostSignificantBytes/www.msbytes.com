@@ -1,0 +1,52 @@
+---
+// Mise en page commune : en-tête HTML (référencement), barre de navigation, pied de page.
+import Navbar from '../components/Navbar.astro'
+import Footer from '../components/Footer.astro'
+import { SITE_URL, SITE_TITLE, SITE_DESCRIPTION } from '../utils/site.js'
+import { unprefixed, prefix } from '../utils/languages.mjs'
+import '../styles/all.sass'
+
+const { language = 'fr', path = '/', title, description } = Astro.props
+
+const HREFLANG = {
+    en: ['en', 'en-AU', 'en-BZ', 'en-CA', 'en-CB', 'en-GB', 'en-IE', 'en-JM', 'en-NZ', 'en-PH', 'en-TT', 'en-US', 'en-ZA', 'en-ZW'],
+    fr: ['fr', 'fr-BE', 'fr-CA', 'fr-CH', 'fr-FR', 'fr-LU', 'fr-MC'],
+}
+const ICONS = [48, 72, 96, 128, 192, 384, 512]
+
+const pageTitle = title || SITE_TITLE
+const pageDescription = description || SITE_DESCRIPTION
+const basePath = unprefixed(path)
+---
+<!DOCTYPE html>
+<html lang={language}>
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+        <meta name="theme-color" content="#003399" />
+        <meta name="description" content={pageDescription} />
+        <meta name="theme-color" content="#fff" />
+        <meta property="og:type" content="business.business" />
+        <meta property="og:title" content={SITE_TITLE} />
+        <meta property="og:url" content="/" />
+        <meta property="og:image" content="/img/og-image.png" />
+        <link rel="manifest" href="/manifest.webmanifest" crossorigin="anonymous" />
+        {ICONS.map((size) => <link rel="apple-touch-icon" sizes={`${size}x${size}`} href={`/img/maskable_icon_x${size}.png`} />)}
+        <title>{pageTitle}</title>
+        <link rel="canonical" href={SITE_URL + path} />
+        {Object.entries(HREFLANG).map(([lang, codes]) =>
+            codes.map((code) => <link rel="alternate" href={SITE_URL + prefix(lang) + basePath} hreflang={code} />)
+        )}
+        <link rel="apple-touch-icon" sizes="180x180" href="/img/apple-touch-icon.png" />
+        <link rel="icon" type="image/png" href="/img/favicon-32x32.png" sizes="32x32" />
+        <link rel="icon" type="image/png" href="/img/favicon-16x16.png" sizes="16x16" />
+        <link rel="mask-icon" href="/img/safari-pinned-tab.svg" color="#ff4400" />
+    </head>
+    <body>
+        <div>
+            <Navbar language={language} path={path} />
+            <div><slot /></div>
+            <Footer language={language} />
+        </div>
+    </body>
+</html>

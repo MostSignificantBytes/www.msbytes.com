@@ -1,0 +1,70 @@
+---
+// Pied de page : logo, liens du menu sur trois colonnes, réseaux sociaux, mentions légales.
+import navbar from '../data/navbar.js'
+import logo from '../assets/logoMSBclair.png?url'
+import linkedin from '../assets/social/linkedin.svg?url'
+import facebook from '../assets/social/facebook.svg?url'
+import instagram from '../assets/social/instagram.svg?url'
+import twitter from '../assets/social/twitter.svg?url'
+import github from '../assets/social/github.svg?url'
+
+const { language } = Astro.props
+const data = navbar.find((item) => item.language === language)
+const columns = [data.nav.slice(0, 2), data.nav.slice(2, 4), data.nav.slice(4, 6)]
+const icon = 'width:1em;height:1em'
+---
+<footer class="footer has-background-black has-text-white-ter">
+    <div class="content has-text-centered">
+        <img width="724px" height="309px" src={logo} alt="MSB" style="width:auto;max-height:10em" />
+    </div>
+    <div class="content has-text-centered has-background-black has-text-white-ter">
+        <div class="container has-background-black has-text-white-ter">
+            <div style="max-width:100vw" class="columns">
+                {columns.map((links, index) => (
+                    <div class="column is-3">
+                        <section class={index === 0 ? 'menu' : undefined}>
+                            <ul class="menu-list">
+                                {links.map((link) => (
+                                    <li><a class="navbar-item" href={link.href}>{link.title}</a></li>
+                                ))}
+                            </ul>
+                        </section>
+                    </div>
+                ))}
+                <div class="column is-3 social">
+                    <div class="columns">
+                        <div class="column">
+                            <a title="linkedin" href="https://fr.linkedin.com/company/msbytes"><img src={linkedin} alt="Linkedin" style={icon} /></a>
+                        </div>
+                        <div class="column"></div>
+                        <div class="column">
+                            <a title="github" href="https://github.com/MostSignificantBytes"><img src={github} alt="Github" style={icon} /></a>
+                        </div>
+                        <div class="column"></div>
+                        <div class="column">
+                            <a title="twitter" href="https://twitter.com/msbcompany"><img src={twitter} alt="Twitter" style={icon} /></a>
+                        </div>
+                    </div>
+                    <div class="columns">
+                        <div class="column"></div>
+                        <div class="column">
+                            <a title="instagram" href="https://www.instagram.com/mostsignificantbytes"><img src={instagram} alt="Instagram" style={icon} /></a>
+                        </div>
+                        <div class="column"></div>
+                        <div class="column">
+                            <a title="facebook" href="https://www.facebook.com/msbytes"><img class="fas fa-lg" src={facebook} alt="Facebook" style={icon} /></a>
+                        </div>
+                        <div class="column"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="content has-text-centered">
+        <p class="copyright">
+            Most Significant Bytes SAS &copy; 2017 - {new Date().getFullYear()}
+            <br />
+            <a class="has-text-white-ter" href={data.legal.href}>{data.legal.title}</a>
+        </p>
+    </div>
+</footer>

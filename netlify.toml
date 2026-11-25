@@ -1,22 +1,21 @@
 [build]
-  publish = "public"
+  publish = "dist"
   command = "npm run build"
 
 [build.environment]
   NODE_VERSION = "24"
 
-[[plugins]]
-  package = "@netlify/plugin-sitemap"
-  [plugins.inputs]
-  # URL de production (sinon le plugin utilise l'URL du site Netlify)
-  baseUrl = "https://www.msbytes.com"
-  # URL terminées par « / », comme les liens canonical des pages
-  trailingSlash = true
-  exclude = [
-    './public/404.html',
-    './public/404/*',
-    './public/admin/*',
-    './public/offline-plugin-app-shell-fallback/*',
-    './public/google*.html',
-    './public/_gatsby/**'
-  ]
+# Fichiers produits par Astro (noms avec empreinte) : cache de longue durée
+[[headers]]
+  for = "/_astro/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+# En-têtes de sécurité, toutes les pages
+[[headers]]
+  for = "/*"
+  [headers.values]
+    Strict-Transport-Security = "max-age=31536000"
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+    X-Frame-Options = "DENY"

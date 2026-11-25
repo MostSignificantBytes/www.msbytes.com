@@ -1,4 +1,5 @@
-module.exports = [
+// Menus de navigation et pied de page, par langue.
+export default [
     {
         language: 'en',
         path: '/en/',

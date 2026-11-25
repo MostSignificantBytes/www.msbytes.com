@@ -1,0 +1,26 @@
+---
+// Gabarit « tags-page » : liste des tags d'une langue avec le nombre d'articles.
+import { getPages, tagPath } from '../utils/site.js'
+const { page } = Astro.props
+const { language, title } = page.data
+const counts = new Map()
+for (const entry of await getPages()) {
+    if (entry.data.language !== language) continue
+    for (const tag of new Set(entry.data.tags || [])) counts.set(tag, (counts.get(tag) || 0) + 1)
+}
+const group = [...counts.entries()].sort(([a], [b]) => (a < b ? -1 : a > b ? 1 : 0))
+---
+<section class="section">
+    <div class="container content">
+        <div class="columns">
+            <div class="column is-10 is-offset-1" style="margin-bottom:6rem">
+                <h1 class="title is-size-2 is-bold-light">{title}</h1>
+                <ul class="taglist">
+                    {group.map(([tag, count]) => (
+                        <li><a href={tagPath(language, tag)}>{tag} ({count})</a></li>
+                    ))}
+                </ul>
+            </div>
+        </div>
+    </div>
+</section>

@@ -1,0 +1,15 @@
+---
+// Témoignages.
+const { testimonials = [] } = Astro.props
+---
+<div>
+    {testimonials.map((testimonial) => (
+        <article class="message">
+            <div class="message-body">
+                {testimonial.quote}
+                <br />
+                <cite> – {testimonial.author}</cite>
+            </div>
+        </article>
+    ))}
+</div>

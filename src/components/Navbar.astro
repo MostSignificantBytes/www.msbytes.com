@@ -1,0 +1,45 @@
+---
+// Barre de navigation : logo (accueil), menu (sans l'accueil), sélecteur de langue, menu mobile.
+import navbar from '../data/navbar.js'
+import LanguageSwitcher from './LanguageSwitcher.astro'
+import logo from '../assets/logoMSB.png?url'
+
+const { language, path } = Astro.props
+const data = navbar.find((item) => item.language === language)
+const items = data.nav.slice(1)
+---
+<nav class="navbar is-transparent" role="navigation" aria-label="main-navigation">
+    <div class="container">
+        <div class="navbar-brand">
+            <a class="navbar-item" title={data.logo} href={data.path} aria-current={path === data.path ? 'page' : undefined}>
+                <img width="776px" height="280px" src={logo} alt="MSB" style="width:auto" />
+            </a>
+            <div id="burger-menu" class="navbar-burger burger" data-target="navMenu" role="navigation" tabindex="0">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+        <div id="navMenu" class="navbar-menu">
+            <div class="navbar-start has-text-centered">
+                {items.map((item) => (
+                    <a class={`navbar-item${path === item.href ? ' is-active' : ''}`} href={item.href} aria-current={path === item.href ? 'page' : undefined}>{item.title}</a>
+                ))}
+            </div>
+            <div class="navbar-end has-text-centered">
+                <LanguageSwitcher path={path} />
+            </div>
+        </div>
+    </div>
+</nav>
+<script>
+    // Menu mobile : ouverture et fermeture au clic ou au clavier
+    const burger = document.getElementById('burger-menu')
+    const menu = document.getElementById('navMenu')
+    const toggle = () => {
+        burger.classList.toggle('is-active')
+        menu.classList.toggle('is-active')
+    }
+    burger.addEventListener('click', toggle)
+    burger.addEventListener('keypress', toggle)
+</script>

@@ -1,0 +1,19 @@
+---
+// Compétences : nom, description et liste d'éléments, en colonnes.
+const { data = [] } = Astro.props
+---
+<div class="columns is-multiline">
+    {data.map((skill) => (
+        <div class="column is-size-4">
+            <section class="section">
+                <h2 class="is-size-1 has-text-weight-bold has-text-primary has-text-centered">{skill.name}</h2>
+                <p class="has-text-weight-semibold">{skill.description}</p>
+                <ul>
+                    {(skill.items || []).map((item) => (
+                        <li class="is-size-5">{item}</li>
+                    ))}
+                </ul>
+            </section>
+        </div>
+    ))}
+</div>

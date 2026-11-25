@@ -1,0 +1,40 @@
+---
+// Liste des articles d'une langue (du plus récent au plus ancien) : vignette, titre, date, extrait.
+import { render } from 'astro:content'
+import PreviewImage from './PreviewImage.astro'
+import { getPosts, formatDate } from '../utils/site.js'
+
+const { language, keepReading } = Astro.props
+const posts = await Promise.all(
+    (await getPosts(language)).map(async (post) => ({
+        post,
+        excerpt: (await render(post)).remarkPluginFrontmatter.excerpt,
+    }))
+)
+---
+<div class="columns is-multiline">
+    {posts.map(({ post, excerpt }) => (
+        <div class="is-parent column is-6">
+            <article class={`blog-list-item tile is-child box notification ${post.data.featuredpost ? 'is-featured' : ''}`}>
+                <header>
+                    {post.data.featuredimage && (
+                        <div class="featured-thumbnail">
+                            <PreviewImage image={post.data.featuredimage} alt={`featured image thumbnail for post ${post.data.title}`} width={120} quality={90} />
+                        </div>
+                    )}
+                    <p class="post-meta">
+                        <a class="title has-text-primary is-size-4" href={post.path}>{post.data.title}</a>
+                        <span> &bull; </span>
+                        <span class="subtitle is-size-5 is-block">{formatDate(post.data.date, language)}</span>
+                    </p>
+                </header>
+                <p>
+                    {excerpt}
+                    <br />
+                    <br />
+                    <a class="button" href={post.path}>{keepReading} →</a>
+                </p>
+            </article>
+        </div>
+    ))}
+</div>
