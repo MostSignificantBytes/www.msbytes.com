@@ -1,0 +1,25 @@
+---
+// Page d'un tag : articles portant ce tag, du plus récent au plus ancien.
+import { getPages, prefix } from '../utils/site.js'
+import labels from '../utils/labels.js'
+const { tag, language } = Astro.props
+const posts = (await getPages())
+    .filter((entry) => entry.data.language === language && (entry.data.tags || []).includes(tag))
+    .sort((a, b) => (b.data.date?.getTime() ?? 0) - (a.data.date?.getTime() ?? 0))
+const text = labels[language] || labels.fr
+---
+<section class="section">
+    <div class="container content">
+        <div class="columns">
+            <div class="column is-10 is-offset-1" style="margin-bottom:6rem">
+                <h3 class="title is-size-4 is-bold-light">{text.tagHeader(posts.length, tag)}</h3>
+                <ul class="taglist">
+                    {posts.map((post) => (
+                        <li><a href={post.path}><h2 class="is-size-2">{post.data.title}</h2></a></li>
+                    ))}
+                </ul>
+                <p><a href={prefix(language) + '/tags/'}>{text.allTags}</a></p>
+            </div>
+        </div>
+    </div>
+</section>

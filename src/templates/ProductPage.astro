@@ -1,0 +1,83 @@
+---
+// Gabarit « product-page » : page Activités.
+import FullWidthImage from '../components/FullWidthImage.astro'
+import Features from '../components/Features.astro'
+import Testimonials from '../components/Testimonials.astro'
+import Skills from '../components/Skills.astro'
+import PreviewImage from '../components/PreviewImage.astro'
+import { media } from '../utils/site.js'
+
+const { page } = Astro.props
+const { title, image, intro, main, testimonials, full_image: fullImage, skills } = page.data
+---
+<div class="content">
+    <FullWidthImage img={media(image)} title={title} imgPosition="bottom left" eager />
+    <section class="section section--gradient">
+        <div class="container">
+            <div class="section">
+                <div class="columns">
+                    <div class="column is-7 is-offset-1">
+                        <h3 class="has-text-weight-semibold is-size-2">{intro.heading}</h3>
+                        <p>{intro.description}</p>
+                    </div>
+                </div>
+                <div class="columns">
+                    <div class="column is-10 is-offset-1">
+                        <Features gridItems={intro.blurbs} />
+                        <div class="columns">
+                            <div class="column is-7">
+                                <h3 class="has-text-weight-semibold is-size-3">{main.heading}</h3>
+                                <p>{main.description}</p>
+                            </div>
+                        </div>
+                        <div class="tile is-ancestor">
+                            <div class="tile is-vertical">
+                                <div class="tile">
+                                    <div class="tile is-parent is-vertical">
+                                        <article class="tile is-child">
+                                            <PreviewImage image={main.image1.image} alt={main.image1.alt} width={526} quality={92} />
+                                        </article>
+                                    </div>
+                                    <div class="tile is-parent">
+                                        <article class="tile is-child">
+                                            <PreviewImage image={main.image2.image} alt={main.image2.alt} width={526} quality={92} />
+                                        </article>
+                                    </div>
+                                </div>
+                                <div class="tile is-parent">
+                                    <article class="tile is-child">
+                                        <PreviewImage image={main.image3.image} alt={main.image3.alt} quality={72} />
+                                    </article>
+                                </div>
+                            </div>
+                        </div>
+                        <Testimonials testimonials={testimonials} />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <FullWidthImage img={media(fullImage)} imgPosition="bottom" />
+    <section class="section section--gradient">
+        <div class="container">
+            <div class="section">
+                <div class="columns">
+                    <div class="column is-10 is-offset-1">
+                        <h2 class="has-text-weight-semibold is-size-2">{skills.heading}</h2>
+                        <div class="tile is-ancestor">
+                            <div class="tile is-vertical">
+                                <div class="tile is-parent">
+                                    <article class="tile is-child">
+                                        <PreviewImage image={skills.image.image} alt={skills.image.alt} quality={90} />
+                                    </article>
+                                </div>
+                            </div>
+                        </div>
+                        <p class="is-size-5">{skills.description}</p>
+                        <Skills data={skills.list} />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>

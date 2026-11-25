@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+Sitemap: https://www.msbytes.com/sitemap.xml
+Host: https://www.msbytes.com
