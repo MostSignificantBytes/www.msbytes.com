@@ -7,7 +7,7 @@ title: Audits Wi-Fi
 date: 2022-05-12T21:17:26.537Z
 description: Mesurer, planifier, déployer et mesurer à nouveau. C'est comme ça qu'on installe des infrastructures Wi-Fi robustes.
 featuredpost: false
-featuredimage: /img/audit_wi-fi.png
+featuredimage: /img/logoMSBalerionFondJauneLarge.png
 tags:
   - wi-fi
   - audit
