@@ -1,0 +1,20 @@
+---
+// Image optimisée aux coins arrondis. `width` : largeur maximale (image contrainte) ;
+// sans `width`, l'image occupe toute la largeur disponible.
+import { Picture } from 'astro:assets'
+import { media } from '../utils/site.js'
+
+const { image, alt = '', width, quality = 80 } = Astro.props
+const img = media(image)
+const max = width ? Math.min(width, img.width) : null
+const widths = max
+    ? [max, max * 2].filter((w) => w <= img.width)
+    : [750, 1080, 1366, 1920].filter((w) => w < img.width).concat(Math.min(img.width, 1920))
+const sizes = max ? `(min-width: ${max}px) ${max}px, 100vw` : '100vw'
+const style = max
+    ? `border-radius:5px;display:inline-block;vertical-align:top;width:${max}px;max-width:100%;height:auto`
+    : 'border-radius:5px;display:block;width:100%;height:auto'
+---
+{img && (
+    <Picture src={img} alt={alt} formats={['webp']} widths={widths} sizes={sizes} quality={quality} style={style} />
+)}

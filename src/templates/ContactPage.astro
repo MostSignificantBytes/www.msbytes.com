@@ -1,0 +1,79 @@
+---
+// Gabarit « contact-page » : formulaire Netlify Forms protégé par reCAPTCHA v2 (« case à cocher »).
+// Clé de site lue au build dans GATSBY_SITE_RECAPTCHA_KEY (Netlify, ou fichier .env non versionné en local).
+import { prefix } from '../utils/site.js'
+const { page } = Astro.props
+const d = page.data
+const RECAPTCHA_SITE_KEY = import.meta.env.GATSBY_SITE_RECAPTCHA_KEY || process.env.GATSBY_SITE_RECAPTCHA_KEY
+---
+<section class="section">
+    <div class="container">
+        <div class="content">
+            <h1>{d.title}</h1>
+            <form
+                id="contact-form"
+                name="contact"
+                method="post"
+                action={prefix(d.language) + '/contact/thanks/'}
+                data-netlify="true"
+                data-netlify-honeypot="bot-field"
+                data-netlify-recaptcha="true"
+            >
+                <input type="hidden" name="form-name" value="contact" />
+                <div hidden>
+                    <label>Don’t fill this out: <input name="bot-field" /></label>
+                </div>
+                <div class="field">
+                    <label class="label" for="name">{d.name}</label>
+                    <div class="control">
+                        <input class="input" type="text" name="name" id="name" required />
+                    </div>
+                </div>
+                <div class="field">
+                    <label class="label" for="email">{d.email}</label>
+                    <div class="control">
+                        <input class="input" type="email" name="email" id="email" required />
+                    </div>
+                </div>
+                <div class="field">
+                    <label class="label" for="message">{d.message}</label>
+                    <div class="control">
+                        <textarea class="textarea" name="message" id="message" required></textarea>
+                    </div>
+                </div>
+                {RECAPTCHA_SITE_KEY && (
+                    <div class="g-recaptcha" data-sitekey={RECAPTCHA_SITE_KEY} data-callback="msbRecaptchaOk" data-expired-callback="msbRecaptchaExpired"></div>
+                )}
+                <p class="help is-danger" role="alert" id="contact-error" style="display:none">{d.error}</p>
+                <p class="help">{d.privacy}</p>
+                <div class="field">
+                    <button class="button is-link" type="submit" disabled>{d.send}</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</section>
+{RECAPTCHA_SITE_KEY && <script is:inline src="https://www.google.com/recaptcha/api.js" async defer></script>}
+<script>
+    // Le bouton « Envoyer » n'est actif qu'avec un jeton reCAPTCHA valide ; l'envoi passe par
+    // Netlify Forms (POST sur « / ») puis redirige vers la page Merci, ou affiche un message d'erreur.
+    const form = document.getElementById('contact-form')
+    const button = form.querySelector('button[type="submit"]')
+    const error = document.getElementById('contact-error')
+    window.msbRecaptchaOk = () => { button.disabled = false }
+    window.msbRecaptchaExpired = () => { button.disabled = true }
+    form.addEventListener('submit', (event) => {
+        event.preventDefault()
+        error.style.display = 'none'
+        fetch('/', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+            body: new URLSearchParams(new FormData(form)).toString(),
+        })
+            .then((response) => {
+                if (!response.ok) throw new Error(String(response.status))
+                window.location.href = form.getAttribute('action')
+            })
+            .catch(() => { error.style.display = '' })
+    })
+</script>

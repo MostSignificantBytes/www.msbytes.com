@@ -1,0 +1,66 @@
+---
+// Génération de toutes les pages : une page par fichier de contenu (adresse calculée par slugHandler)
+// et une page par tag et par langue.
+import Layout from '../layouts/Layout.astro'
+import IndexPage from '../templates/IndexPage.astro'
+import ProductPage from '../templates/ProductPage.astro'
+import AboutPage from '../templates/AboutPage.astro'
+import BlogPage from '../templates/BlogPage.astro'
+import BlogPost from '../templates/BlogPost.astro'
+import ContactPage from '../templates/ContactPage.astro'
+import ThanksPage from '../templates/ThanksPage.astro'
+import TagsPage from '../templates/TagsPage.astro'
+import TagPage from '../templates/TagPage.astro'
+import { getPages, tagPath, SITE_TITLE } from '../utils/site.js'
+
+export async function getStaticPaths() {
+    const pages = await getPages()
+    const routes = []
+    const seen = new Map()
+    const add = (path, props) => {
+        if (seen.has(path)) {
+            throw new Error(`Deux pages ont la même adresse ${path} : ${seen.get(path)} et ${props.source}`)
+        }
+        seen.set(path, props.source)
+        routes.push({ params: { path: path === '/' ? undefined : path.slice(1, -1) }, props: { ...props, path } })
+    }
+    for (const page of pages) {
+        add(page.path, { kind: 'page', page, source: page.id })
+    }
+    const tags = new Map()
+    for (const page of pages) {
+        for (const tag of page.data.tags || []) tags.set(tagPath(page.data.language, tag), { tag, language: page.data.language })
+    }
+    for (const [path, { tag, language }] of tags) {
+        add(path, { kind: 'tag', tag, language, source: `tag « ${tag} »` })
+    }
+    return routes
+}
+
+const TEMPLATES = {
+    'index-page': IndexPage,
+    'product-page': ProductPage,
+    'about-page': AboutPage,
+    'blog-page': BlogPage,
+    'blog-post': BlogPost,
+    'contact-page': ContactPage,
+    'thanks-page': ThanksPage,
+    'tags-page': TagsPage,
+}
+
+const { kind, page, tag, language, path } = Astro.props
+let title
+let description
+if (kind === 'tag') {
+    title = `${tag} | ${SITE_TITLE}`
+} else if (page.data.templateKey === 'blog-post') {
+    title = `${page.data.title} | Blog`
+    description = `${page.data.description}`
+} else if (page.data.templateKey === 'tags-page') {
+    title = `${page.data.title} - ${SITE_TITLE}`
+}
+const Template = kind === 'page' ? TEMPLATES[page.data.templateKey] : null
+---
+<Layout language={kind === 'tag' ? language : page.data.language} path={path} title={title} description={description}>
+    {kind === 'tag' ? <TagPage tag={tag} language={language} /> : <Template page={page} />}
+</Layout>

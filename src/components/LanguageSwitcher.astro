@@ -1,0 +1,12 @@
+---
+// Chaque lien mène à la page courante dans sa propre langue (français à la racine, anglais sous /en/).
+import navbar from '../data/navbar.js'
+import { languageOfPath, unprefixed, prefix } from '../utils/languages.mjs'
+
+const { path } = Astro.props
+const active = languageOfPath(path)
+const basePath = unprefixed(path)
+---
+{navbar.map((item) => (
+    <a class={`navbar-item${active === item.language ? ' is-active' : ''}`} href={prefix(item.language) + basePath} aria-current={active === item.language ? 'page' : undefined}>{item.language}</a>
+))}

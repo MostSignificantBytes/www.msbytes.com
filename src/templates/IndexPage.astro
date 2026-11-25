@@ -1,0 +1,52 @@
+---
+// Gabarit « index-page » : page d'accueil.
+import FullWidthImage from '../components/FullWidthImage.astro'
+import Features from '../components/Features.astro'
+import BlogRoll from '../components/BlogRoll.astro'
+import { media, prefix } from '../utils/site.js'
+
+const { page } = Astro.props
+const d = page.data
+---
+<div>
+    <FullWidthImage img={media(d.image)} title={d.title} subheading={d.heading} eager />
+    <section class="section section--gradient">
+        <div class="container">
+            <div class="section">
+                <div class="columns">
+                    <div class="column is-10 is-offset-1">
+                        <div class="content">
+                            <div class="content">
+                                <div class="tile">
+                                    <h1 class="title">{d.mainpitch.title}</h1>
+                                </div>
+                                <div class="tile">
+                                    <h2 class="subtitle">{d.mainpitch.description}</h2>
+                                </div>
+                            </div>
+                            <div class="columns">
+                                <div class="column is-12">
+                                    <h3 class="has-text-weight-semibold is-size-2">{d.intro.heading}</h3>
+                                    <p>{d.intro.description}</p>
+                                </div>
+                            </div>
+                            <Features gridItems={d.intro.blurbs} />
+                            <div class="columns">
+                                <div class="column is-12 has-text-centered">
+                                    <a class="btn" href={prefix(d.language) + '/activities/'}>{d.seeAllActivities}</a>
+                                </div>
+                            </div>
+                            <div class="column is-12">
+                                <h3 class="has-text-weight-semibold is-size-2">{d.latestStories}</h3>
+                                <BlogRoll language={d.language} keepReading={d.keepReading} />
+                                <div class="column is-12 has-text-centered">
+                                    <a class="btn" href={prefix(d.language) + '/blog/'}>{d.ourBlog}</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
