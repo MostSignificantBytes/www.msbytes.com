@@ -9,7 +9,8 @@ import '../styles/tokens.css'
 import '../styles/base.css'
 import '../styles/layout.css'
 
-const { language = 'fr', path = '/', title, description } = Astro.props
+// image / type : image de partage et type Open Graph propres à la page (articles du blog)
+const { language = 'fr', path = '/', title, description, image, type } = Astro.props
 
 const HREFLANG = {
     en: ['en', 'en-AU', 'en-BZ', 'en-CA', 'en-CB', 'en-GB', 'en-IE', 'en-JM', 'en-NZ', 'en-PH', 'en-TT', 'en-US', 'en-ZA', 'en-ZW'],
@@ -29,10 +30,13 @@ const basePath = unprefixed(path)
         <meta name="theme-color" content="#003399" />
         <meta name="description" content={pageDescription} />
         <meta name="theme-color" content="#fff" />
-        <meta property="og:type" content="business.business" />
-        <meta property="og:title" content={SITE_TITLE} />
-        <meta property="og:url" content="/" />
-        <meta property="og:image" content="/img/og-image.png" />
+        <meta property="og:type" content={type || 'business.business'} />
+        <meta property="og:site_name" content={SITE_TITLE} />
+        <meta property="og:title" content={pageTitle} />
+        <meta property="og:description" content={pageDescription} />
+        <meta property="og:url" content={SITE_URL + path} />
+        <meta property="og:image" content={SITE_URL + (image || '/img/og-image.png')} />
+        <meta name="twitter:card" content={image ? 'summary_large_image' : 'summary'} />
         <link rel="manifest" href="/manifest.webmanifest" crossorigin="anonymous" />
         {ICONS.map((size) => <link rel="apple-touch-icon" sizes={`${size}x${size}`} href={`/img/maskable_icon_x${size}.png`} />)}
         <title>{pageTitle}</title>
