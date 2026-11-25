@@ -1,8 +1,11 @@
-# Back-office Decap CMS (https://www.msbytes.com/admin/).
+# Back-office Sveltia CMS (https://www.msbytes.com/admin/).
 # Connexion par compte GitHub (fournisseur OAuth de Netlify), circuit de validation :
 # chaque modification est un brouillon (branche cms/… et pull request) publié par l'administrateur.
-# Fichier généré : voir documentation (corrections C02 à C10). Sur l'adresse de recette, public/admin/init.js
-# remplace la branche « master » par « recette ».
+# Collections multilingues (décision D2) : une entrée regroupe ses versions dans chaque langue,
+# enregistrées dans src/content/<langue>/ sous le même nom de fichier. Champs « i18n: duplicate » :
+# saisis une fois, recopiés dans chaque langue. Ajouter une langue : la déclarer dans i18n.locales
+# et dans src/utils/languages.mjs côté site.
+# Sur l'adresse de recette, public/admin/init.js remplace la branche « master » par « recette ».
 backend:
   name: github
   repo: MostSignificantBytes/www.msbytes.com
@@ -16,41 +19,58 @@ backend:
     deleteMedia: Suppression du média « {{path}} »
     openAuthoring: '{{message}}'
 publish_mode: editorial_workflow
-local_backend: true
 site_url: https://www.msbytes.com
 display_url: https://www.msbytes.com
-logo_url: https://www.msbytes.com/img/apple-touch-icon.png
+app_title: Back-office MSB
+logo:
+  src: /img/apple-touch-icon.png
+output:
+  omit_empty_optional_fields: true
 media_folder: src/assets/img
 public_folder: /img
+i18n:
+  structure: multiple_folders
+  locales:
+  - fr
+  - en
+  default_locale: fr
 collections:
-- name: pagesFR
-  label: Pages (français)
+- name: pages
+  label: Pages
+  i18n: true
   files:
-  - file: src/content/fr/index.md
+  - file: src/content/{{locale}}/index.md
     label: Accueil
-    name: indexFR
+    name: index
+    i18n: true
     fields:
     - label: Gabarit
       name: templateKey
       widget: hidden
       default: index-page
+      i18n: duplicate
     - label: Langue
       name: language
       widget: hidden
-      default: fr
+      default: '{{locale}}'
+      i18n: true
     - label: Chemin
       name: slug
       widget: hidden
+      i18n: true
     - label: Titre
       name: title
       widget: string
+      i18n: true
     - label: Image du bandeau
       name: image
       widget: image
+      i18n: true
     - label: Accroche
       name: heading
       widget: string
       required: false
+      i18n: true
     - label: Argumentaire
       name: mainpitch
       widget: object
@@ -58,9 +78,12 @@ collections:
       - label: Titre
         name: title
         widget: string
+        i18n: true
       - label: Texte
         name: description
         widget: text
+        i18n: true
+      i18n: true
     - label: Section « solutions »
       name: intro
       widget: object
@@ -68,9 +91,11 @@ collections:
       - label: Titre
         name: heading
         widget: string
+        i18n: true
       - label: Texte
         name: description
         widget: text
+        i18n: true
       - label: Blocs illustrés
         name: blurbs
         widget: list
@@ -80,42 +105,56 @@ collections:
           name: image
           widget: image
           required: false
+          i18n: true
         - label: Texte
           name: text
           widget: text
+          i18n: true
+        i18n: true
+      i18n: true
     - label: Bouton vers les activités
       name: seeAllActivities
       widget: string
+      i18n: true
     - label: Titre des derniers articles
       name: latestStories
       widget: string
+      i18n: true
     - label: Bouton « lire la suite »
       name: keepReading
       widget: string
+      i18n: true
     - label: Bouton vers le blog
       name: ourBlog
       widget: string
-  - file: src/content/fr/activities/index.md
+      i18n: true
+  - file: src/content/{{locale}}/activities/index.md
     label: Activités
-    name: activitiesFR
+    name: activities
+    i18n: true
     fields:
     - label: Gabarit
       name: templateKey
       widget: hidden
       default: product-page
+      i18n: duplicate
     - label: Langue
       name: language
       widget: hidden
-      default: fr
+      default: '{{locale}}'
+      i18n: true
     - label: Chemin
       name: slug
       widget: hidden
+      i18n: true
     - label: Titre
       name: title
       widget: string
+      i18n: true
     - label: Image du bandeau
       name: image
       widget: image
+      i18n: true
     - label: Introduction
       name: intro
       widget: object
@@ -123,9 +162,11 @@ collections:
       - label: Titre
         name: heading
         widget: string
+        i18n: true
       - label: Texte
         name: description
         widget: text
+        i18n: true
       - label: Blocs illustrés
         name: blurbs
         widget: list
@@ -135,9 +176,13 @@ collections:
           name: image
           widget: image
           required: false
+          i18n: true
         - label: Texte
           name: text
           widget: text
+          i18n: true
+        i18n: true
+      i18n: true
     - label: Section principale
       name: main
       widget: object
@@ -145,9 +190,11 @@ collections:
       - label: Titre
         name: heading
         widget: string
+        i18n: true
       - label: Texte
         name: description
         widget: text
+        i18n: true
       - label: Image 1
         name: image1
         widget: object
@@ -155,9 +202,12 @@ collections:
         - label: Image
           name: image
           widget: image
+          i18n: true
         - label: Texte alternatif (lu aux personnes malvoyantes)
           name: alt
           widget: string
+          i18n: true
+        i18n: true
       - label: Image 2
         name: image2
         widget: object
@@ -165,9 +215,12 @@ collections:
         - label: Image
           name: image
           widget: image
+          i18n: true
         - label: Texte alternatif (lu aux personnes malvoyantes)
           name: alt
           widget: string
+          i18n: true
+        i18n: true
       - label: Image 3 (pleine largeur)
         name: image3
         widget: object
@@ -175,9 +228,13 @@ collections:
         - label: Image
           name: image
           widget: image
+          i18n: true
         - label: Texte alternatif (lu aux personnes malvoyantes)
           name: alt
           widget: string
+          i18n: true
+        i18n: true
+      i18n: true
     - label: Témoignages
       name: testimonials
       widget: list
@@ -185,12 +242,16 @@ collections:
       - label: Citation
         name: quote
         widget: string
+        i18n: true
       - label: Auteur
         name: author
         widget: string
+        i18n: true
+      i18n: true
     - label: Image intercalaire pleine largeur
       name: full_image
       widget: image
+      i18n: true
     - label: Compétences
       name: skills
       widget: object
@@ -198,6 +259,7 @@ collections:
       - label: Titre
         name: heading
         widget: string
+        i18n: true
       - label: Visuel
         name: image
         widget: object
@@ -205,12 +267,16 @@ collections:
         - label: Image
           name: image
           widget: image
+          i18n: true
         - label: Texte alternatif (lu aux personnes malvoyantes)
           name: alt
           widget: string
+          i18n: true
+        i18n: true
       - label: Texte
         name: description
         widget: string
+        i18n: true
       - label: Domaines
         name: list
         widget: list
@@ -218,9 +284,11 @@ collections:
         - label: Nom
           name: name
           widget: string
+          i18n: true
         - label: Description
           name: description
           widget: string
+          i18n: true
         - label: Prestations
           name: items
           widget: list
@@ -228,166 +296,216 @@ collections:
             label: Prestation
             name: item
             widget: string
-  - file: src/content/fr/about/index.md
+            i18n: true
+          i18n: true
+        i18n: true
+      i18n: true
+  - file: src/content/{{locale}}/about/index.md
     label: À propos de nous
-    name: aboutFR
+    name: about
+    i18n: true
     fields:
     - label: Gabarit
       name: templateKey
       widget: hidden
       default: about-page
+      i18n: duplicate
     - label: Langue
       name: language
       widget: hidden
-      default: fr
+      default: '{{locale}}'
+      i18n: true
     - label: Chemin
       name: slug
       widget: hidden
+      i18n: true
     - label: Titre
       name: title
       widget: string
+      i18n: true
     - label: Corps du texte
       name: body
       widget: markdown
-  - file: src/content/fr/story/index.md
+      i18n: true
+  - file: src/content/{{locale}}/story/index.md
     label: Notre histoire
-    name: storyFR
+    name: story
+    i18n: true
     fields:
     - label: Gabarit
       name: templateKey
       widget: hidden
       default: about-page
+      i18n: duplicate
     - label: Langue
       name: language
       widget: hidden
-      default: fr
+      default: '{{locale}}'
+      i18n: true
     - label: Chemin
       name: slug
       widget: hidden
+      i18n: true
     - label: Titre
       name: title
       widget: string
+      i18n: true
     - label: Corps du texte
       name: body
       widget: markdown
-  - file: src/content/fr/blog/index.md
+      i18n: true
+  - file: src/content/{{locale}}/blog/index.md
     label: Blog (bandeau de la liste des articles)
-    name: blogpageFR
+    name: blogpage
+    i18n: true
     fields:
     - label: Gabarit
       name: templateKey
       widget: hidden
       default: blog-page
+      i18n: duplicate
     - label: Langue
       name: language
       widget: hidden
-      default: fr
+      default: '{{locale}}'
+      i18n: true
     - label: Chemin
       name: slug
       widget: hidden
+      i18n: true
     - label: Titre
       name: title
       widget: string
+      i18n: true
     - label: Image du bandeau
       name: image
       widget: image
+      i18n: true
     - label: Bouton « lire la suite »
       name: keepReading
       widget: string
-  - file: src/content/fr/contact/index.md
+      i18n: true
+  - file: src/content/{{locale}}/contact/index.md
     label: Contact
-    name: contactFR
+    name: contact
+    i18n: true
     fields:
     - label: Gabarit
       name: templateKey
       widget: hidden
       default: contact-page
+      i18n: duplicate
     - label: Langue
       name: language
       widget: hidden
-      default: fr
+      default: '{{locale}}'
+      i18n: true
     - label: Chemin
       name: slug
       widget: hidden
+      i18n: true
     - label: Titre
       name: title
       widget: string
+      i18n: true
     - label: Libellé du champ nom
       name: name
       widget: string
+      i18n: true
     - label: Libellé du champ e-mail
       name: email
       widget: string
+      i18n: true
     - label: Libellé du champ message
       name: message
       widget: string
+      i18n: true
     - label: Libellé du bouton
       name: send
       widget: string
+      i18n: true
     - label: Message en cas d'échec de l'envoi
       name: error
       widget: string
+      i18n: true
     - label: Mention d'information RGPD (sous le formulaire)
       name: privacy
       widget: text
       hint: 'Texte juridique : toute modification doit être validée.'
-  - file: src/content/fr/contact/thanks.md
+      i18n: true
+  - file: src/content/{{locale}}/contact/thanks.md
     label: Merci (après envoi du formulaire)
-    name: thanksFR
+    name: thanks
+    i18n: true
     fields:
     - label: Gabarit
       name: templateKey
       widget: hidden
       default: thanks-page
+      i18n: duplicate
     - label: Langue
       name: language
       widget: hidden
-      default: fr
+      default: '{{locale}}'
+      i18n: true
     - label: Chemin
       name: slug
       widget: hidden
+      i18n: true
     - label: Titre
       name: title
       widget: string
+      i18n: true
     - label: Texte
       name: text
       widget: string
-  - file: src/content/fr/tags/index.md
+      i18n: true
+  - file: src/content/{{locale}}/tags/index.md
     label: Liste des mots-clés
-    name: tagsFR
+    name: tags
+    i18n: true
     fields:
     - label: Gabarit
       name: templateKey
       widget: hidden
       default: tags-page
+      i18n: duplicate
     - label: Langue
       name: language
       widget: hidden
-      default: fr
+      default: '{{locale}}'
+      i18n: true
     - label: Chemin
       name: slug
       widget: hidden
+      i18n: true
     - label: Titre
       name: title
       widget: string
-  - file: src/content/fr/legal/index.md
+      i18n: true
+  - file: src/content/{{locale}}/legal/index.md
     label: Mentions légales et confidentialité
-    name: legalFR
+    name: legal
+    i18n: true
     fields:
     - label: Gabarit
       name: templateKey
       widget: hidden
       default: about-page
+      i18n: duplicate
     - label: Langue
       name: language
       widget: hidden
-      default: fr
+      default: '{{locale}}'
+      i18n: true
     - label: Chemin
       name: slug
       widget: hidden
+      i18n: true
     - label: Titre
       name: title
       widget: string
+      i18n: true
     - label: Corps du texte
       name: body
       widget: markdown
@@ -396,488 +514,72 @@ collections:
       modes:
       - raw
       - rich_text
-- name: blogFR
-  label: Blog (français)
+      i18n: true
+- name: blog
+  label: Blog
   label_singular: Article
-  folder: src/content/fr/blog
+  folder: src/content/{{locale}}/blog
+  i18n: true
   create: true
   slug: '{{year}}-{{month}}-{{day}}-{{fields.identifier}}'
   filter:
     field: templateKey
     value: blog-post
-  summary: '{{title}} ({{year}}-{{month}}-{{day}})'
+  summary: '{{title}} ({{date | date(''YYYY-MM-DD'')}})'
   fields:
   - label: Gabarit
     name: templateKey
     widget: hidden
     default: blog-post
+    i18n: duplicate
   - label: Langue
     name: language
     widget: hidden
-    default: fr
+    default: '{{locale}}'
+    i18n: true
   - label: Chemin
     name: slug
     widget: hidden
-  - label: Identifiant (adresse de l'article, identique en français et en anglais)
+    i18n: true
+  - label: Identifiant (adresse de l'article, commun à toutes les langues)
     name: identifier
     widget: string
     pattern:
     - ^[a-z0-9]+(-[a-z0-9]+)*$
     - Minuscules, chiffres et tirets uniquement (ex. audit-wifi)
-    hint: 'Utilisé à la création de l''article : il fixe son adresse (/blog/AAAA-MM-JJ-identifiant/). Saisir le
-      même identifiant et la même date pour la version française et la version anglaise.'
+    hint: Utilisé à la création de l'article, avec la date, pour fixer son adresse (/blog/AAAA-MM-JJ-identifiant/).
+    i18n: duplicate
   - label: Titre
     name: title
     widget: string
+    i18n: true
   - label: Date de publication
     name: date
     widget: datetime
+    output_utc: true
+    i18n: duplicate
   - label: Chapeau (affiché sous le titre et lu par les moteurs de recherche)
     name: description
     widget: text
+    i18n: true
   - label: Mettre en avant
     name: featuredpost
     widget: boolean
     default: false
     required: false
+    i18n: duplicate
   - label: Vignette
     name: featuredimage
     widget: image
     required: false
+    i18n: true
   - label: Corps du texte
     name: body
     widget: markdown
+    i18n: true
   - label: Mots-clés
     name: tags
     widget: list
     required: false
     hint: Réutiliser les mots-clés existants, en minuscules, séparés par des virgules.
-- name: pagesEN
-  label: Pages (english)
-  files:
-  - file: src/content/en/index.md
-    label: Accueil
-    name: indexEN
-    fields:
-    - label: Gabarit
-      name: templateKey
-      widget: hidden
-      default: index-page
-    - label: Langue
-      name: language
-      widget: hidden
-      default: en
-    - label: Chemin
-      name: slug
-      widget: hidden
-    - label: Titre
-      name: title
-      widget: string
-    - label: Image du bandeau
-      name: image
-      widget: image
-    - label: Accroche
-      name: heading
-      widget: string
-      required: false
-    - label: Argumentaire
-      name: mainpitch
-      widget: object
-      fields:
-      - label: Titre
-        name: title
-        widget: string
-      - label: Texte
-        name: description
-        widget: text
-    - label: Section « solutions »
-      name: intro
-      widget: object
-      fields:
-      - label: Titre
-        name: heading
-        widget: string
-      - label: Texte
-        name: description
-        widget: text
-      - label: Blocs illustrés
-        name: blurbs
-        widget: list
-        hint: Deux blocs ne doivent pas avoir exactement le même texte.
-        fields:
-        - label: Image
-          name: image
-          widget: image
-          required: false
-        - label: Texte
-          name: text
-          widget: text
-    - label: Bouton vers les activités
-      name: seeAllActivities
-      widget: string
-    - label: Titre des derniers articles
-      name: latestStories
-      widget: string
-    - label: Bouton « lire la suite »
-      name: keepReading
-      widget: string
-    - label: Bouton vers le blog
-      name: ourBlog
-      widget: string
-  - file: src/content/en/activities/index.md
-    label: Activités
-    name: activitiesEN
-    fields:
-    - label: Gabarit
-      name: templateKey
-      widget: hidden
-      default: product-page
-    - label: Langue
-      name: language
-      widget: hidden
-      default: en
-    - label: Chemin
-      name: slug
-      widget: hidden
-    - label: Titre
-      name: title
-      widget: string
-    - label: Image du bandeau
-      name: image
-      widget: image
-    - label: Introduction
-      name: intro
-      widget: object
-      fields:
-      - label: Titre
-        name: heading
-        widget: string
-      - label: Texte
-        name: description
-        widget: text
-      - label: Blocs illustrés
-        name: blurbs
-        widget: list
-        hint: Deux blocs ne doivent pas avoir exactement le même texte.
-        fields:
-        - label: Image
-          name: image
-          widget: image
-          required: false
-        - label: Texte
-          name: text
-          widget: text
-    - label: Section principale
-      name: main
-      widget: object
-      fields:
-      - label: Titre
-        name: heading
-        widget: string
-      - label: Texte
-        name: description
-        widget: text
-      - label: Image 1
-        name: image1
-        widget: object
-        fields:
-        - label: Image
-          name: image
-          widget: image
-        - label: Texte alternatif (lu aux personnes malvoyantes)
-          name: alt
-          widget: string
-      - label: Image 2
-        name: image2
-        widget: object
-        fields:
-        - label: Image
-          name: image
-          widget: image
-        - label: Texte alternatif (lu aux personnes malvoyantes)
-          name: alt
-          widget: string
-      - label: Image 3 (pleine largeur)
-        name: image3
-        widget: object
-        fields:
-        - label: Image
-          name: image
-          widget: image
-        - label: Texte alternatif (lu aux personnes malvoyantes)
-          name: alt
-          widget: string
-    - label: Témoignages
-      name: testimonials
-      widget: list
-      fields:
-      - label: Citation
-        name: quote
-        widget: string
-      - label: Auteur
-        name: author
-        widget: string
-    - label: Image intercalaire pleine largeur
-      name: full_image
-      widget: image
-    - label: Compétences
-      name: skills
-      widget: object
-      fields:
-      - label: Titre
-        name: heading
-        widget: string
-      - label: Visuel
-        name: image
-        widget: object
-        fields:
-        - label: Image
-          name: image
-          widget: image
-        - label: Texte alternatif (lu aux personnes malvoyantes)
-          name: alt
-          widget: string
-      - label: Texte
-        name: description
-        widget: string
-      - label: Domaines
-        name: list
-        widget: list
-        fields:
-        - label: Nom
-          name: name
-          widget: string
-        - label: Description
-          name: description
-          widget: string
-        - label: Prestations
-          name: items
-          widget: list
-          field:
-            label: Prestation
-            name: item
-            widget: string
-  - file: src/content/en/about/index.md
-    label: À propos de nous
-    name: aboutEN
-    fields:
-    - label: Gabarit
-      name: templateKey
-      widget: hidden
-      default: about-page
-    - label: Langue
-      name: language
-      widget: hidden
-      default: en
-    - label: Chemin
-      name: slug
-      widget: hidden
-    - label: Titre
-      name: title
-      widget: string
-    - label: Corps du texte
-      name: body
-      widget: markdown
-  - file: src/content/en/story/index.md
-    label: Notre histoire
-    name: storyEN
-    fields:
-    - label: Gabarit
-      name: templateKey
-      widget: hidden
-      default: about-page
-    - label: Langue
-      name: language
-      widget: hidden
-      default: en
-    - label: Chemin
-      name: slug
-      widget: hidden
-    - label: Titre
-      name: title
-      widget: string
-    - label: Corps du texte
-      name: body
-      widget: markdown
-  - file: src/content/en/blog/index.md
-    label: Blog (bandeau de la liste des articles)
-    name: blogpageEN
-    fields:
-    - label: Gabarit
-      name: templateKey
-      widget: hidden
-      default: blog-page
-    - label: Langue
-      name: language
-      widget: hidden
-      default: en
-    - label: Chemin
-      name: slug
-      widget: hidden
-    - label: Titre
-      name: title
-      widget: string
-    - label: Image du bandeau
-      name: image
-      widget: image
-    - label: Bouton « lire la suite »
-      name: keepReading
-      widget: string
-  - file: src/content/en/contact/index.md
-    label: Contact
-    name: contactEN
-    fields:
-    - label: Gabarit
-      name: templateKey
-      widget: hidden
-      default: contact-page
-    - label: Langue
-      name: language
-      widget: hidden
-      default: en
-    - label: Chemin
-      name: slug
-      widget: hidden
-    - label: Titre
-      name: title
-      widget: string
-    - label: Libellé du champ nom
-      name: name
-      widget: string
-    - label: Libellé du champ e-mail
-      name: email
-      widget: string
-    - label: Libellé du champ message
-      name: message
-      widget: string
-    - label: Libellé du bouton
-      name: send
-      widget: string
-    - label: Message en cas d'échec de l'envoi
-      name: error
-      widget: string
-    - label: Mention d'information RGPD (sous le formulaire)
-      name: privacy
-      widget: text
-      hint: 'Texte juridique : toute modification doit être validée.'
-  - file: src/content/en/contact/thanks.md
-    label: Merci (après envoi du formulaire)
-    name: thanksEN
-    fields:
-    - label: Gabarit
-      name: templateKey
-      widget: hidden
-      default: thanks-page
-    - label: Langue
-      name: language
-      widget: hidden
-      default: en
-    - label: Chemin
-      name: slug
-      widget: hidden
-    - label: Titre
-      name: title
-      widget: string
-    - label: Texte
-      name: text
-      widget: string
-  - file: src/content/en/tags/index.md
-    label: Liste des mots-clés
-    name: tagsEN
-    fields:
-    - label: Gabarit
-      name: templateKey
-      widget: hidden
-      default: tags-page
-    - label: Langue
-      name: language
-      widget: hidden
-      default: en
-    - label: Chemin
-      name: slug
-      widget: hidden
-    - label: Titre
-      name: title
-      widget: string
-  - file: src/content/en/legal/index.md
-    label: Mentions légales et confidentialité
-    name: legalEN
-    fields:
-    - label: Gabarit
-      name: templateKey
-      widget: hidden
-      default: about-page
-    - label: Langue
-      name: language
-      widget: hidden
-      default: en
-    - label: Chemin
-      name: slug
-      widget: hidden
-    - label: Titre
-      name: title
-      widget: string
-    - label: Corps du texte
-      name: body
-      widget: markdown
-      hint: 'Texte juridique : toute modification doit être validée. Rester en mode Markdown (les retours à la ligne
-        <br> seraient perdus en mode Rich Text).'
-      modes:
-      - raw
-      - rich_text
-- name: blogEN
-  label: Blog (english)
-  label_singular: Article
-  folder: src/content/en/blog
-  create: true
-  slug: '{{year}}-{{month}}-{{day}}-{{fields.identifier}}'
-  filter:
-    field: templateKey
-    value: blog-post
-  summary: '{{title}} ({{year}}-{{month}}-{{day}})'
-  fields:
-  - label: Gabarit
-    name: templateKey
-    widget: hidden
-    default: blog-post
-  - label: Langue
-    name: language
-    widget: hidden
-    default: en
-  - label: Chemin
-    name: slug
-    widget: hidden
-  - label: Identifiant (adresse de l'article, identique en français et en anglais)
-    name: identifier
-    widget: string
-    pattern:
-    - ^[a-z0-9]+(-[a-z0-9]+)*$
-    - Minuscules, chiffres et tirets uniquement (ex. audit-wifi)
-    hint: 'Utilisé à la création de l''article : il fixe son adresse (/blog/AAAA-MM-JJ-identifiant/). Saisir le
-      même identifiant et la même date pour la version française et la version anglaise.'
-  - label: Titre
-    name: title
-    widget: string
-  - label: Date de publication
-    name: date
-    widget: datetime
-  - label: Chapeau (affiché sous le titre et lu par les moteurs de recherche)
-    name: description
-    widget: text
-  - label: Mettre en avant
-    name: featuredpost
-    widget: boolean
-    default: false
-    required: false
-  - label: Vignette
-    name: featuredimage
-    widget: image
-    required: false
-  - label: Corps du texte
-    name: body
-    widget: markdown
-  - label: Mots-clés
-    name: tags
-    widget: list
-    required: false
-    hint: Réutiliser les mots-clés existants, en minuscules, séparés par des virgules.
+    i18n: true

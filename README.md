@@ -6,7 +6,7 @@ Site Web institutionnel de **Most Significant Bytes (MSB SAS)** : présentation 
 - Bilingue : français à la racine (`/`), anglais sous `/en/`.
 - Contenus en Markdown dans `src/content/{fr,en}/`, médias dans `src/assets/img/` (optimisés au build).
 - Hébergement **Netlify** : production sur `master`, recette sur `recette`, aperçus des pull requests.
-- Back-office **Decap CMS 3** sous `/admin/` : connexion par compte GitHub, chaque modification est un brouillon (pull request) publié par l'administrateur.
+- Back-office **Sveltia CMS** sous `/admin/` : connexion par compte GitHub, chaque modification est un brouillon (pull request) publié par l'administrateur.
 
 La documentation complète (spécifications, installation, exploitation, mise en production, recette) est tenue dans le projet « Site web MSB » (dossier `documentation/`, références MSB-WEB-xxx).
 
@@ -26,7 +26,7 @@ cd www.msbytes.com
 npm ci
 ```
 
-Toujours installer avec `npm ci` (versions exactes de `package-lock.json`). `npm audit` signale des vulnérabilités dans les dépendances de Decap CMS (analyseur Markdown de l'éditeur) : elles ne concernent que le back-office et disparaîtront avec Sveltia CMS.
+Toujours installer avec `npm ci` (versions exactes de `package-lock.json`). La version de Sveltia CMS est figée dans `package.json` : la changer est une évolution à recetter.
 
 ### Formulaire de contact en local (facultatif)
 
@@ -75,18 +75,19 @@ Vérification locale avant chaque push : `npm run build && npm run preview`. En 
 - Circuit : branche de travail → pull request vers `recette` (aperçu Netlify) → recette → fusion sur `master` (production).
 - Formulaire : Netlify Forms (formulaire `contact`), notifications par e-mail paramétrées dans la console Netlify.
 
-## Back-office (Decap CMS)
+## Back-office (Sveltia CMS)
 
 - Adresse : https://www.msbytes.com/admin/ (recette : `https://recette--<site>.netlify.app/admin/`).
-- Connexion « Login with GitHub » : le compte doit avoir un accès en écriture au dépôt. Authentification par le fournisseur OAuth GitHub de Netlify (application OAuth GitHub dont l'URL de rappel est `https://api.netlify.com/auth/done`, déclarée dans Netlify > Project configuration > Access & security > OAuth).
-- Circuit de validation (`publish_mode: editorial_workflow`) : un brouillon crée une branche `cms/…` et une pull request avec son aperçu Netlify ; l'administrateur publie depuis l'onglet Workflow.
+- Connexion « Se connecter avec GitHub » : le compte doit avoir un accès en écriture au dépôt. Authentification par le fournisseur OAuth GitHub de Netlify (application OAuth GitHub dont l'URL de rappel est `https://api.netlify.com/auth/done`, déclarée dans Netlify > Project configuration > Access & security > OAuth).
+- Circuit de validation (`publish_mode: editorial_workflow`) : un brouillon crée une branche `cms/…` et une pull request avec son aperçu Netlify ; l'administrateur publie depuis le back-office.
 - Branche visée : `master` en production ; `recette` lorsque le back-office est ouvert depuis l'adresse de recette (voir `public/admin/init.js`).
 - Articles : le nom du fichier est `AAAA-MM-JJ-<identifiant>.md` ; l'adresse de l'article en est déduite (`/blog/AAAA-MM-JJ-<identifiant>/`). Utiliser le même identifiant et la même date pour les versions française et anglaise.
 - Accès : tout compte GitHub ayant le droit d'écriture (rôle « Write ») sur le dépôt peut se connecter. Ajouter ou retirer un rédacteur dans GitHub > dépôt > Settings > Collaborators and teams.
-- Publication : la branche `master` est protégée par une règle GitHub (Settings > Rules > Rulesets, « Protection de master ») : fusion uniquement par pull request approuvée, suppression et réécriture d'historique interdites. Les administrateurs du dépôt peuvent passer outre (publication depuis le back-office, push direct des contenus). Un rédacteur peut préparer et soumettre un brouillon (« Ready ») mais pas le publier : l'administrateur publie depuis l'onglet Workflow.
+- Publication : la branche `master` est protégée par une règle GitHub (Settings > Rules > Rulesets, « Protection de master ») : fusion uniquement par pull request approuvée, suppression et réécriture d'historique interdites. Les administrateurs du dépôt peuvent passer outre (publication depuis le back-office, push direct des contenus). Un rédacteur peut préparer et soumettre un brouillon (« Ready ») mais pas le publier : l'administrateur publie depuis le back-office.
 - Coût : chaque publication déclenche un déploiement de production Netlify (15 crédits sur les 300 crédits mensuels de l'offre gratuite) ; les brouillons (aperçus) et la branche `recette` ne consomment pas de crédits de déploiement. Regrouper les modifications avant de publier.
 - Médias : téléversés dans `src/assets/img/` et notés `/img/<fichier>` dans les contenus ; les pages utilisent des versions optimisées (WebP, tailles adaptées).
-- Test en local sans authentification : `npx decap-server` dans le dossier du dépôt, puis `npm run build && npm run preview` et http://localhost:4321/admin/ (les modifications sont écrites directement dans les fichiers locaux).
+- Script : `sveltia-cms.js` et ses modules (`chunks/`) sont copiés depuis le paquet npm `@sveltia/cms` au build (`scripts/postbuild.mjs`), avec la traduction française de l'interface et les polices (paquets `@fontsource…`, mêmes versions que celles attendues par Sveltia CMS) : le back-office ne charge aucune ressource depuis un CDN. Le build échoue si une mise à jour de Sveltia CMS change ces adresses : aligner alors les versions des paquets de polices.
+- Test en local sans authentification : `npm run build && npm run preview`, ouvrir http://localhost:4321/admin/ dans Chrome ou Edge et choisir « Travailler avec un dépôt local », puis sélectionner le dossier du dépôt (les modifications sont écrites directement dans les fichiers locaux, sans circuit de validation).
 
 ## Licence
 
