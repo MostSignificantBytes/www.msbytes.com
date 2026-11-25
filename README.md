@@ -2,7 +2,7 @@
 
 Site Web institutionnel de **Most Significant Bytes (MSB SAS)** : présentation de la société, de ses activités et de son histoire, blog et formulaire de contact.
 
-- Site statique généré par **Astro 7** (pages HTML, très peu de JavaScript), styles **Bulma 0.9.4** + Sass.
+- Site statique généré par **Astro 7** (pages HTML, très peu de JavaScript), styles en **CSS natif**, sans framework (variables de la charte MSB, styles rangés par composant).
 - Bilingue : français à la racine (`/`), anglais sous `/en/`.
 - Contenus en Markdown dans `src/content/{fr,en}/`, médias dans `src/assets/img/` (optimisés au build).
 - Hébergement **Netlify** : production sur `master`, recette sur `recette`, aperçus des pull requests.
@@ -43,7 +43,7 @@ et ajouter `localhost` aux domaines de la clé. L'envoi réel ne fonctionne que 
 | Commande | Usage |
 |---|---|
 | `npm run dev` | Serveur de développement : http://localhost:4321 (FR), /en/ (EN) |
-| `npm run build` | Génération de production dans `dist/` (puis `scripts/postbuild.mjs` : purge CSS, sitemap.xml, médias sous /img/, back-office) |
+| `npm run build` | Génération de production dans `dist/` (puis `scripts/postbuild.mjs` : sitemap.xml, médias sous /img/, back-office) |
 | `npm run preview` | Sert `dist/` : http://localhost:4321 |
 | `npm run format` | Formatage du code avec Prettier |
 
@@ -53,14 +53,14 @@ Vérification locale avant chaque push : `npm run build && npm run preview`. En 
 
 | Chemin | Rôle |
 |---|---|
-| `astro.config.mjs` | Configuration : site statique, langues, sitemap, rendu Markdown (remark), Sass |
+| `astro.config.mjs` | Configuration : site statique, langues, sitemap, rendu Markdown (remark) |
 | `src/content.config.js` | Collection des contenus et schéma vérifié au build (templateKey, language…) |
 | `src/content/{fr,en}/` | Contenus Markdown (un dossier par langue, mêmes noms de fichiers) |
 | `src/pages/[...path].astro` | Génération de toutes les pages (adresse calculée par slugHandler) et des pages de tag ; `404.astro` : page d'erreur |
 | `src/layouts/Layout.astro` | En-tête HTML (titre, canonical, hreflang, OpenGraph), navigation, pied de page |
 | `src/templates/` | Gabarits de page (un par `templateKey`) |
 | `src/components/` | Composants (navigation, pied de page, bandeau, images, liste des articles…) |
-| `src/styles/all.sass` | Styles du site (Bulma 0.9.4 personnalisé) |
+| `src/styles/` | Styles communs : `tokens.css` (couleurs, police, rayons), `base.css` (typographie, contenus `.prose`, boutons), `layout.css` (conteneur, sections, grille `.cols` / `.col-…`) ; chaque composant `.astro` porte ses propres styles |
 | `src/utils/` | Langues (`languages.mjs`), chemins (`slugHandler.js`), extrait et médias Markdown (`remark.mjs`), libellés, fonctions communes |
 | `src/data/navbar.js` | Menus FR / EN et lien des mentions légales |
 | `src/assets/` | Médias des contenus (`img/`), logos et icônes |

@@ -3,17 +3,21 @@
 import PreviewImage from './PreviewImage.astro'
 const { gridItems = [] } = Astro.props
 ---
-<div class="columns is-multiline">
+<div class="cols cols-wrap">
     {gridItems.map((item) => (
-        <div class="column is-6">
-            <section class="section">
-                <div class="has-text-centered">
-                    <div style="width:240px;display:inline-block">
-                        <PreviewImage image={item.image} alt={item.alt || ''} width={240} quality={64} />
-                    </div>
+        <div class="col col-6">
+            <div class="section">
+                <div class="feature-image">
+                    <PreviewImage image={item.image} alt={item.alt || ''} width={240} quality={64} />
                 </div>
                 <p>{item.text}</p>
-            </section>
+            </div>
         </div>
     ))}
 </div>
+<style>
+    .feature-image {
+        margin: 0 auto;
+        width: 240px;
+    }
+</style>

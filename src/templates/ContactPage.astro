@@ -8,7 +8,7 @@ const RECAPTCHA_SITE_KEY = import.meta.env.GATSBY_SITE_RECAPTCHA_KEY || process.
 ---
 <section class="section">
     <div class="container">
-        <div class="content">
+        <div class="prose">
             <h1>{d.title}</h1>
             <form
                 id="contact-form"
@@ -25,29 +25,23 @@ const RECAPTCHA_SITE_KEY = import.meta.env.GATSBY_SITE_RECAPTCHA_KEY || process.
                 </div>
                 <div class="field">
                     <label class="label" for="name">{d.name}</label>
-                    <div class="control">
-                        <input class="input" type="text" name="name" id="name" required />
-                    </div>
+                    <input class="input" type="text" name="name" id="name" autocomplete="name" required />
                 </div>
                 <div class="field">
                     <label class="label" for="email">{d.email}</label>
-                    <div class="control">
-                        <input class="input" type="email" name="email" id="email" required />
-                    </div>
+                    <input class="input" type="email" name="email" id="email" autocomplete="email" required />
                 </div>
                 <div class="field">
                     <label class="label" for="message">{d.message}</label>
-                    <div class="control">
-                        <textarea class="textarea" name="message" id="message" required></textarea>
-                    </div>
+                    <textarea class="input textarea" name="message" id="message" required></textarea>
                 </div>
                 {RECAPTCHA_SITE_KEY && (
                     <div class="g-recaptcha" data-sitekey={RECAPTCHA_SITE_KEY} data-callback="msbRecaptchaOk" data-expired-callback="msbRecaptchaExpired"></div>
                 )}
-                <p class="help is-danger" role="alert" id="contact-error" style="display:none">{d.error}</p>
+                <p class="help help-error" role="alert" id="contact-error" hidden>{d.error}</p>
                 <p class="help">{d.privacy}</p>
                 <div class="field">
-                    <button class="button is-link" type="submit" disabled>{d.send}</button>
+                    <button class="button button-primary" type="submit" disabled>{d.send}</button>
                 </div>
             </form>
         </div>
@@ -64,7 +58,7 @@ const RECAPTCHA_SITE_KEY = import.meta.env.GATSBY_SITE_RECAPTCHA_KEY || process.
     window.msbRecaptchaExpired = () => { button.disabled = true }
     form.addEventListener('submit', (event) => {
         event.preventDefault()
-        error.style.display = 'none'
+        error.hidden = true
         fetch('/', {
             method: 'POST',
             headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
@@ -74,6 +68,71 @@ const RECAPTCHA_SITE_KEY = import.meta.env.GATSBY_SITE_RECAPTCHA_KEY || process.
                 if (!response.ok) throw new Error(String(response.status))
                 window.location.href = form.getAttribute('action')
             })
-            .catch(() => { error.style.display = '' })
+            .catch(() => { error.hidden = false })
     })
 </script>
+<style>
+    .field:not(:last-child) {
+        margin-bottom: 0.75rem;
+    }
+
+    .label {
+        color: var(--text-strong);
+        display: block;
+        font-size: 1rem;
+        font-weight: 700;
+    }
+
+    .label:not(:last-child) {
+        margin-bottom: 0.5em;
+    }
+
+    .input {
+        appearance: none;
+        background-color: #fff;
+        border: 1px solid var(--border);
+        border-radius: var(--radius);
+        box-shadow: inset 0 0.0625em 0.125em rgb(16 24 32 / 5%);
+        color: var(--text-strong);
+        display: block;
+        font-size: 1rem;
+        height: 2.5em;
+        line-height: 1.5;
+        max-width: 100%;
+        padding: calc(0.5em - 1px) calc(0.75em - 1px);
+        width: 100%;
+    }
+
+    .input:hover {
+        border-color: var(--border-hover);
+    }
+
+    .input:focus,
+    .input:active {
+        border-color: var(--link);
+        box-shadow: 0 0 0 0.125em var(--link-shadow);
+        outline: none;
+    }
+
+    .textarea {
+        height: auto;
+        max-height: 40em;
+        min-height: 8em;
+        padding: calc(0.75em - 1px);
+        resize: vertical;
+    }
+
+    .help {
+        display: block;
+        font-size: 0.75rem;
+        margin-top: 0.25rem;
+    }
+
+    .help[hidden] {
+        display: none;
+    }
+
+    .help-error {
+        color: var(--danger);
+    }
+</style>

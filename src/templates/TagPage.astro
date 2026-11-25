@@ -9,13 +9,13 @@ const posts = (await getPages())
 const text = labels[language] || labels.fr
 ---
 <section class="section">
-    <div class="container content">
-        <div class="columns">
-            <div class="column is-10 is-offset-1" style="margin-bottom:6rem">
-                <h3 class="title is-size-4 is-bold-light">{text.tagHeader(posts.length, tag)}</h3>
+    <div class="container prose">
+        <div class="cols">
+            <div class="col col-10 offset-1 tag-body">
+                <h1 class="tag-title">{text.tagHeader(posts.length, tag)}</h1>
                 <ul class="taglist">
                     {posts.map((post) => (
-                        <li><a href={post.path}><h2 class="is-size-2">{post.data.title}</h2></a></li>
+                        <li><a href={post.path}><h2>{post.data.title}</h2></a></li>
                     ))}
                 </ul>
                 <p><a href={prefix(language) + '/tags/'}>{text.allTags}</a></p>
@@ -23,3 +23,19 @@ const text = labels[language] || labels.fr
         </div>
     </div>
 </section>
+<style>
+    .tag-body {
+        margin-bottom: 6rem;
+    }
+
+    /* Titre : présentation d'un intertitre de troisième niveau, en 1,5rem */
+    .tag-title {
+        font-size: 1.5rem;
+        margin-bottom: 1.5rem;
+        word-break: break-word;
+    }
+
+    .tag-body h2 {
+        font-size: 2.5rem;
+    }
+</style>
