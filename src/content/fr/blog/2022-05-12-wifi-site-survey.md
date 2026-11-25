@@ -3,7 +3,7 @@ templateKey: blog-post
 language: fr
 slug: +blog+2022-05-12-wifi-site-survey
 identifier: wifi-site-survey
-title: Audits Wi-Fi test
+title: Audits Wi-Fi
 date: 2022-05-12T21:17:26.537Z
 description: Mesurer, planifier, déployer et mesurer à nouveau. C'est comme ça qu'on installe des infrastructures Wi-Fi robustes.
 featuredpost: false
