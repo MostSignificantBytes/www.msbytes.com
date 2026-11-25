@@ -81,6 +81,9 @@ Vérification locale avant chaque push : `npm run build && npm run serve`.
 - Circuit de validation (`publish_mode: editorial_workflow`) : un brouillon crée une branche `cms/…` et une pull request avec son aperçu Netlify ; l'administrateur publie depuis l'onglet Workflow.
 - Branche visée : `master` en production ; `recette` lorsque le back-office est ouvert depuis l'adresse de recette (voir `src/cms/cms.js`).
 - Articles : le nom du fichier est `AAAA-MM-JJ-<identifiant>.md` ; l'adresse de l'article en est déduite (`/blog/AAAA-MM-JJ-<identifiant>/`). Utiliser le même identifiant et la même date pour les versions française et anglaise.
+- Accès : tout compte GitHub ayant le droit d'écriture (rôle « Write ») sur le dépôt peut se connecter. Ajouter ou retirer un rédacteur dans GitHub > dépôt > Settings > Collaborators and teams.
+- Publication : la branche `master` est protégée par une règle GitHub (Settings > Rules > Rulesets, « Protection de master ») : fusion uniquement par pull request approuvée, suppression et réécriture d'historique interdites. Les administrateurs du dépôt peuvent passer outre (publication depuis le back-office, push direct des contenus). Un rédacteur peut préparer et soumettre un brouillon (« Ready ») mais pas le publier : l'administrateur publie depuis l'onglet Workflow.
+- Coût : chaque publication déclenche un déploiement de production Netlify (15 crédits sur les 300 crédits mensuels de l'offre gratuite) ; les brouillons (aperçus) et la branche `recette` ne consomment pas de crédits de déploiement. Regrouper les modifications avant de publier.
 - Test en local sans authentification : `npx decap-server` dans le dossier du dépôt, puis `npm run develop` et http://localhost:8000/admin/ (les modifications sont écrites directement dans les fichiers locaux).
 
 ## Licence
