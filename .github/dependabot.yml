@@ -9,3 +9,12 @@ updates:
     schedule:
       interval: "weekly"
     open-pull-requests-limit: 0
+  # Versions des actions utilisées par les vérifications automatiques (.github/workflows) :
+  # une pull request groupée par mois au plus.
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "monthly"
+    groups:
+      actions:
+        patterns: ["*"]
