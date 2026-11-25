@@ -4,9 +4,8 @@ import { Picture } from 'astro:assets'
 
 const { img, title, subheading, height = 400, imgPosition = 'top left', eager = false } = Astro.props
 const widths = [750, 1080, 1366, 1920].filter((w) => w < img.width).concat(Math.min(img.width, 1920))
-const titleStyle = 'box-shadow:rgb(0, 51, 153) 0.5rem 0px 0px, rgb(0, 51, 153) -0.5rem 0px 0px;background-color:rgb(0, 51, 153);color:white;line-height:1'
 ---
-<div class="margin-top-0" style="display:grid;align-items:center">
+<div class="hero">
     <Picture
         src={img}
         alt=""
@@ -16,17 +15,73 @@ const titleStyle = 'box-shadow:rgb(0, 51, 153) 0.5rem 0px 0px, rgb(0, 51, 153) -
         quality={80}
         loading={eager ? 'eager' : 'lazy'}
         fetchpriority={eager ? 'high' : undefined}
-        pictureAttributes={{ style: 'grid-area:1/1' }}
-        style={`display:block;width:100%;height:auto;max-height:${height}px;object-fit:cover;object-position:${imgPosition}`}
+        style={`max-height:${height}px;object-position:${imgPosition}`}
     />
     {(title || subheading) && (
-        <div style="grid-area:1/1;position:relative;place-items:center;display:grid">
-            {title && (
-                <h1 class="has-text-weight-bold is-size-3-mobile is-size-2-tablet is-size-1-widescreen" style={`${titleStyle};padding:0.25em`}>{title}</h1>
-            )}
-            {subheading && (
-                <h2 class="has-text-weight-bold is-size-5-mobile is-size-5-tablet is-size-4-widescreen" style={`${titleStyle};padding:0.25rem;margin-top:0.5rem`}>{subheading}</h2>
-            )}
+        <div class="hero-text">
+            {title && <h1 class="hero-title">{title}</h1>}
+            {subheading && <p class="hero-subtitle">{subheading}</p>}
         </div>
     )}
 </div>
+<style>
+    .hero {
+        align-items: center;
+        display: grid;
+    }
+
+    .hero :global(picture) {
+        grid-area: 1 / 1;
+    }
+
+    .hero :global(img) {
+        display: block;
+        height: auto;
+        object-fit: cover;
+        width: 100%;
+    }
+
+    .hero-text {
+        display: grid;
+        grid-area: 1 / 1;
+        place-items: center;
+        position: relative;
+    }
+
+    /* Texte blanc sur bandeau bleu, prolongé de part et d'autre par une ombre de la même couleur */
+    .hero-title,
+    .hero-subtitle {
+        background-color: var(--msb-blue);
+        box-shadow: var(--msb-blue) 0.5rem 0 0, var(--msb-blue) -0.5rem 0 0;
+        color: #fff;
+        font-weight: 700;
+        line-height: 1;
+    }
+
+    .hero-title {
+        font-size: 2rem;
+        padding: 0.25em;
+    }
+
+    .hero-subtitle {
+        font-size: 1.25rem;
+        margin-top: 0.5rem;
+        padding: 0.25rem;
+    }
+
+    @media (min-width: 769px) {
+        .hero-title {
+            font-size: 2.5rem;
+        }
+    }
+
+    @media (min-width: 1216px) {
+        .hero-title {
+            font-size: 3rem;
+        }
+
+        .hero-subtitle {
+            font-size: 1.5rem;
+        }
+    }
+</style>

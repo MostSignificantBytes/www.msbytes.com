@@ -1,15 +1,36 @@
 ---
-// Témoignages.
+// Témoignages : citation et auteur.
 const { testimonials = [] } = Astro.props
 ---
 <div>
     {testimonials.map((testimonial) => (
-        <article class="message">
-            <div class="message-body">
+        <div class="testimonial">
+            <blockquote>
                 {testimonial.quote}
                 <br />
                 <cite> – {testimonial.author}</cite>
-            </div>
-        </article>
+            </blockquote>
+        </div>
     ))}
 </div>
+<style>
+    .testimonial {
+        background-color: var(--background-light);
+        border-radius: var(--radius);
+        font-size: 1rem;
+    }
+
+    .testimonial:not(:last-child) {
+        margin-bottom: 1.5rem;
+    }
+
+    .testimonial blockquote {
+        background: none;
+        border: 0 solid var(--border);
+        border-left-width: 4px;
+        border-radius: var(--radius);
+        color: var(--text-dark);
+        margin: 0;
+        padding: 1.25em 1.5em;
+    }
+</style>

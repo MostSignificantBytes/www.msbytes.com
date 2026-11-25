@@ -7,39 +7,219 @@ import logo from '../assets/logoMSB.png?url'
 const { language, path } = Astro.props
 const data = navbar.find((item) => item.language === language)
 const items = data.nav.slice(1)
+const text = language === 'fr' ? { nav: 'Navigation principale', menu: 'Menu' } : { nav: 'Main navigation', menu: 'Menu' }
 ---
-<nav class="navbar is-transparent" role="navigation" aria-label="main-navigation">
-    <div class="container">
-        <div class="navbar-brand">
-            <a class="navbar-item" title={data.logo} href={data.path} aria-current={path === data.path ? 'page' : undefined}>
-                <img width="776px" height="280px" src={logo} alt="MSB" style="width:auto" />
-            </a>
-            <div id="burger-menu" class="navbar-burger burger" data-target="navMenu" role="navigation" tabindex="0">
-                <span></span>
-                <span></span>
-                <span></span>
+<header>
+    <nav class="navbar" aria-label={text.nav}>
+        <div class="container navbar-inner">
+            <div class="navbar-brand">
+                <a class="navbar-item navbar-logo" title={data.logo} href={data.path} aria-current={path === data.path ? 'page' : undefined}>
+                    <img width="776" height="280" src={logo} alt="MSB" />
+                </a>
+                <button type="button" class="navbar-burger" id="burger-menu" aria-label={text.menu} aria-controls="navMenu" aria-expanded="false">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+            </div>
+            <div id="navMenu" class="navbar-menu">
+                <div class="navbar-start">
+                    {items.map((item) => (
+                        <a class={`navbar-item${path === item.href ? ' is-active' : ''}`} href={item.href} aria-current={path === item.href ? 'page' : undefined}>{item.title}</a>
+                    ))}
+                </div>
+                <div class="navbar-end">
+                    <LanguageSwitcher path={path} />
+                </div>
             </div>
         </div>
-        <div id="navMenu" class="navbar-menu">
-            <div class="navbar-start has-text-centered">
-                {items.map((item) => (
-                    <a class={`navbar-item${path === item.href ? ' is-active' : ''}`} href={item.href} aria-current={path === item.href ? 'page' : undefined}>{item.title}</a>
-                ))}
-            </div>
-            <div class="navbar-end has-text-centered">
-                <LanguageSwitcher path={path} />
-            </div>
-        </div>
-    </div>
-</nav>
+    </nav>
+</header>
 <script>
-    // Menu mobile : ouverture et fermeture au clic ou au clavier
+    // Menu mobile : le bouton ouvre et ferme le menu (clic, Entrée ou Espace)
     const burger = document.getElementById('burger-menu')
     const menu = document.getElementById('navMenu')
-    const toggle = () => {
-        burger.classList.toggle('is-active')
-        menu.classList.toggle('is-active')
-    }
-    burger.addEventListener('click', toggle)
-    burger.addEventListener('keypress', toggle)
+    burger.addEventListener('click', () => {
+        const open = menu.classList.toggle('is-active')
+        burger.classList.toggle('is-active', open)
+        burger.setAttribute('aria-expanded', String(open))
+    })
 </script>
+<style is:global>
+    /* Styles globaux : les liens du sélecteur de langue (composant LanguageSwitcher) les partagent. */
+    .navbar {
+        background-color: #fff;
+        min-height: 3.25rem;
+        position: relative;
+        z-index: 30;
+    }
+
+    .navbar-inner {
+        align-items: stretch;
+        display: flex;
+        min-height: 3.25rem;
+        width: 100%;
+    }
+
+    .navbar-brand {
+        align-items: stretch;
+        display: flex;
+        flex-shrink: 0;
+        min-height: 3.25rem;
+    }
+
+    .navbar-item {
+        color: var(--text-dark);
+        display: block;
+        flex: 0 0 auto;
+        line-height: 1.5;
+        padding: 0.5rem 0.75rem;
+        position: relative;
+    }
+
+    .navbar-item:hover,
+    .navbar-item:focus-visible {
+        color: var(--link);
+    }
+
+    .navbar-item.is-active {
+        color: var(--msb-blue);
+        font-weight: 700;
+    }
+
+    .navbar-logo {
+        align-items: center;
+        display: flex;
+    }
+
+    .navbar-logo img {
+        max-height: 1.75rem;
+        width: auto;
+    }
+
+    .navbar-burger {
+        appearance: none;
+        background: none;
+        border: none;
+        color: var(--text-dark);
+        cursor: pointer;
+        display: block;
+        font: inherit;
+        height: 3.25rem;
+        margin: 0 0 0 auto;
+        padding: 0;
+        position: relative;
+        width: 3.25rem;
+    }
+
+    .navbar-burger:hover {
+        background-color: rgb(0 0 0 / 5%);
+    }
+
+    .navbar-burger span {
+        background-color: currentColor;
+        display: block;
+        height: 1px;
+        left: calc(50% - 8px);
+        position: absolute;
+        transform-origin: center;
+        transition: background-color 86ms ease-out, opacity 86ms ease-out, transform 86ms ease-out;
+        width: 16px;
+    }
+
+    .navbar-burger span:nth-child(1) {
+        top: calc(50% - 6px);
+    }
+
+    .navbar-burger span:nth-child(2) {
+        top: calc(50% - 1px);
+    }
+
+    .navbar-burger span:nth-child(3) {
+        top: calc(50% + 4px);
+    }
+
+    .navbar-burger.is-active span:nth-child(1) {
+        transform: translateY(5px) rotate(45deg);
+    }
+
+    .navbar-burger.is-active span:nth-child(2) {
+        opacity: 0;
+    }
+
+    .navbar-burger.is-active span:nth-child(3) {
+        transform: translateY(-5px) rotate(-45deg);
+    }
+
+    .navbar-menu {
+        display: none;
+    }
+
+    .navbar-start,
+    .navbar-end {
+        text-align: center;
+    }
+
+    @media (max-width: 1023px) {
+        .navbar-inner {
+            display: block;
+        }
+
+        .navbar-menu {
+            background-color: #fff;
+            padding: 0.5rem 0;
+        }
+
+        .navbar-menu.is-active {
+            display: block;
+        }
+
+        .navbar-menu .navbar-item:hover,
+        .navbar-menu .navbar-item:focus-visible,
+        .navbar-menu .navbar-item.is-active {
+            background-color: var(--background-lighter);
+        }
+    }
+
+    @media (min-width: 1024px) {
+        .navbar {
+            align-items: stretch;
+            display: flex;
+        }
+
+        .navbar-brand {
+            margin-left: -0.75rem;
+        }
+
+        .navbar-burger {
+            display: none;
+        }
+
+        .navbar-item {
+            align-items: center;
+            display: flex;
+        }
+
+        .navbar-menu {
+            align-items: stretch;
+            display: flex;
+            flex-grow: 1;
+            flex-shrink: 0;
+            margin-right: -0.75rem;
+        }
+
+        .navbar-start {
+            align-items: stretch;
+            display: flex;
+            justify-content: flex-start;
+            margin-right: auto;
+        }
+
+        .navbar-end {
+            align-items: stretch;
+            display: flex;
+            justify-content: flex-end;
+            margin-left: auto;
+        }
+    }
+</style>

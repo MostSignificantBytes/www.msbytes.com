@@ -8,45 +8,69 @@ import { media, prefix } from '../utils/site.js'
 const { page } = Astro.props
 const d = page.data
 ---
-<div>
-    <FullWidthImage img={media(d.image)} title={d.title} subheading={d.heading} eager />
-    <section class="section section--gradient">
-        <div class="container">
-            <div class="section">
-                <div class="columns">
-                    <div class="column is-10 is-offset-1">
-                        <div class="content">
-                            <div class="content">
-                                <div class="tile">
-                                    <h1 class="title">{d.mainpitch.title}</h1>
-                                </div>
-                                <div class="tile">
-                                    <h2 class="subtitle">{d.mainpitch.description}</h2>
-                                </div>
-                            </div>
-                            <div class="columns">
-                                <div class="column is-12">
-                                    <h3 class="has-text-weight-semibold is-size-2">{d.intro.heading}</h3>
-                                    <p>{d.intro.description}</p>
-                                </div>
-                            </div>
-                            <Features gridItems={d.intro.blurbs} />
-                            <div class="columns">
-                                <div class="column is-12 has-text-centered">
-                                    <a class="btn" href={prefix(d.language) + '/activities/'}>{d.seeAllActivities}</a>
-                                </div>
-                            </div>
-                            <div class="column is-12">
-                                <h3 class="has-text-weight-semibold is-size-2">{d.latestStories}</h3>
-                                <BlogRoll language={d.language} keepReading={d.keepReading} />
-                                <div class="column is-12 has-text-centered">
-                                    <a class="btn" href={prefix(d.language) + '/blog/'}>{d.ourBlog}</a>
-                                </div>
-                            </div>
+<FullWidthImage img={media(d.image)} title={d.title} subheading={d.heading} eager />
+<section class="section">
+    <div class="container">
+        <div class="section">
+            <div class="cols">
+                <div class="col col-10 offset-1 prose">
+                    <div class="prose">
+                        <div class="pitch-row">
+                            <h2 class="pitch-title">{d.mainpitch.title}</h2>
+                        </div>
+                        <div class="pitch-row">
+                            <p class="pitch-text">{d.mainpitch.description}</p>
+                        </div>
+                    </div>
+                    <div class="cols">
+                        <div class="col col-12">
+                            <h2 class="home-heading">{d.intro.heading}</h2>
+                            <p>{d.intro.description}</p>
+                        </div>
+                    </div>
+                    <Features gridItems={d.intro.blurbs} />
+                    <div class="cols">
+                        <div class="col col-12 text-center">
+                            <a class="btn" href={prefix(d.language) + '/activities/'}>{d.seeAllActivities}</a>
+                        </div>
+                    </div>
+                    <div class="col col-12">
+                        <h2 class="home-heading">{d.latestStories}</h2>
+                        <BlogRoll language={d.language} keepReading={d.keepReading} />
+                        <div class="col col-12 text-center">
+                            <a class="btn" href={prefix(d.language) + '/blog/'}>{d.ourBlog}</a>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-    </section>
-</div>
+    </div>
+</section>
+<style>
+    /* Argumentaire : titre de 2em et texte en intertitre de 1,75em */
+    .pitch-title {
+        font-size: 2em;
+        margin-bottom: 0.5em;
+    }
+
+    .pitch-text {
+        color: var(--text-strong);
+        font-size: 1.75em;
+        font-weight: 600;
+        line-height: 1.125;
+        margin-bottom: 0.5714em;
+    }
+
+    @media (min-width: 769px) {
+        .pitch-row {
+            display: flex;
+        }
+    }
+
+    /* Intertitres de section : présentation d'un titre de troisième niveau, en 2,5rem */
+    .home-heading {
+        font-size: 2.5rem;
+        margin-bottom: 0.6666em;
+        margin-top: 0;
+    }
+</style>
