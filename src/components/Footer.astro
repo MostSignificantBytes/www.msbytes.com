@@ -1,5 +1,5 @@
 ---
-// Pied de page : logo, liens du menu (trois colonnes sur ordinateur, deux sur téléphone), réseaux sociaux, mentions légales.
+// Pied de page : logo, liens du menu (trois colonnes sur ordinateur, deux sur téléphone), réseaux sociaux sur une ligne, mentions légales.
 import navbar from '../data/navbar.js'
 import logo from '../assets/logoMSBclair.png?url'
 import linkedin from '../assets/social/linkedin.svg?url'
@@ -10,17 +10,12 @@ import github from '../assets/social/github.svg?url'
 
 const { language } = Astro.props
 const data = navbar.find((item) => item.language === language)
-// Icônes réparties sur deux rangées de cinq cases (null : case vide)
-const social = {
-    linkedin: { href: 'https://fr.linkedin.com/company/msbytes', src: linkedin, alt: 'Linkedin' },
-    github: { href: 'https://github.com/MostSignificantBytes', src: github, alt: 'Github' },
-    twitter: { href: 'https://twitter.com/msbcompany', src: twitter, alt: 'Twitter' },
-    instagram: { href: 'https://www.instagram.com/mostsignificantbytes', src: instagram, alt: 'Instagram' },
-    facebook: { href: 'https://www.facebook.com/msbytes', src: facebook, alt: 'Facebook' },
-}
-const rows = [
-    [social.linkedin, null, social.github, null, social.twitter],
-    [null, social.instagram, null, social.facebook, null],
+const social = [
+    { href: 'https://fr.linkedin.com/company/msbytes', src: linkedin, alt: 'Linkedin' },
+    { href: 'https://github.com/MostSignificantBytes', src: github, alt: 'Github' },
+    { href: 'https://twitter.com/msbcompany', src: twitter, alt: 'Twitter' },
+    { href: 'https://www.instagram.com/mostsignificantbytes', src: instagram, alt: 'Instagram' },
+    { href: 'https://www.facebook.com/msbytes', src: facebook, alt: 'Facebook' },
 ]
 ---
 <footer class="site-footer">
@@ -37,19 +32,13 @@ const rows = [
                         ))}
                     </ul>
                 </nav>
-                <div class="col col-3 footer-socials">
-                    {rows.map((row) => (
-                        <div class="cols footer-social-row">
-                            {row.map((item) => (
-                                <div class={item ? 'col' : 'col is-empty'}>
-                                    {item && (
-                                        <a class="footer-social" title={item.alt.toLowerCase()} href={item.href}><img src={item.src} alt={item.alt} /></a>
-                                    )}
-                                </div>
-                            ))}
-                        </div>
+                <ul class="col col-3 footer-socials">
+                    {social.map((item) => (
+                        <li>
+                            <a class="footer-social" title={item.alt.toLowerCase()} href={item.href}><img src={item.src} alt={item.alt} /></a>
+                        </li>
                     ))}
-                </div>
+                </ul>
             </div>
         </div>
     </div>
@@ -121,15 +110,24 @@ const rows = [
         color: var(--msb-black);
     }
 
+    /* Réseaux sociaux : une ligne d'icônes centrée dans la quatrième colonne (sous les liens sur téléphone) */
+    .footer-socials {
+        align-content: center;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+
     .footer-social {
         background-color: var(--background-light);
-        border-radius: 1em;
+        border-radius: 50%;
+        display: block;
         margin: 0.5em;
-        padding: 0.5em 0.5em 0.3em;
-        vertical-align: middle;
+        padding: 0.5em;
     }
 
     .footer-social img {
+        display: block;
         height: 1em;
         width: 1em;
     }
@@ -163,23 +161,7 @@ const rows = [
         }
 
         .footer-socials {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
             margin-top: 1rem;
-        }
-
-        .footer-social-row {
-            display: contents;
-        }
-
-        .footer-socials .col {
-            flex: none;
-            padding: 0;
-        }
-
-        .footer-socials .is-empty {
-            display: none;
         }
     }
 
