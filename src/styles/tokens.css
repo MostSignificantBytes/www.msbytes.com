@@ -1,4 +1,4 @@
-/* Variables du site : couleurs de la charte MSB, couleurs d'interface, police, rayons, ombres.
+/* Variables du site : couleurs de la charte MSB, couleurs d'interface, police (Source Sans 3 hébergée, repli sur la police du système), rayons, ombres.
    Points de rupture utilisés dans les requêtes média (les variables CSS n'y sont pas utilisables) :
    769 px (tablette), 1024 px (ordinateur), 1216 px (grand écran), 1408 px (très grand écran). */
 :root {
@@ -25,7 +25,7 @@
     --danger: #cc0f35;
 
     /* Typographie et formes */
-    --font: BlinkMacSystemFont, -apple-system, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Fira Sans', 'Droid Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    --font: 'Source Sans 3 Variable', BlinkMacSystemFont, -apple-system, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Fira Sans', 'Droid Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
     --font-mono: ui-monospace, SFMono-Regular, Menlo, Consolas, 'Liberation Mono', monospace;
     --radius: 4px;
     --gap: 0.75rem;
