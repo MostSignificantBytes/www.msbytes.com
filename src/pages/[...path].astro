@@ -11,7 +11,8 @@ import ContactPage from '../templates/ContactPage.astro'
 import ThanksPage from '../templates/ThanksPage.astro'
 import TagsPage from '../templates/TagsPage.astro'
 import TagPage from '../templates/TagPage.astro'
-import { getPages, tagPath, SITE_TITLE } from '../utils/site.js'
+import { getImage } from 'astro:assets'
+import { getPages, tagPath, media, SITE_TITLE } from '../utils/site.js'
 
 export async function getStaticPaths() {
     const pages = await getPages()
@@ -51,16 +52,24 @@ const TEMPLATES = {
 const { kind, page, tag, language, path } = Astro.props
 let title
 let description
+let shareImage
+let shareType
 if (kind === 'tag') {
     title = `${tag} | ${SITE_TITLE}`
 } else if (page.data.templateKey === 'blog-post') {
     title = `${page.data.title} | Blog`
     description = `${page.data.description}`
+    // Image de partage (réseaux sociaux) : vignette de l'article, en JPEG 1 200 px de large
+    if (page.data.featuredimage) {
+        const og = await getImage({ src: media(page.data.featuredimage), width: 1200, format: 'jpg', quality: 85 })
+        shareImage = og.src
+        shareType = 'article'
+    }
 } else if (page.data.templateKey === 'tags-page') {
     title = `${page.data.title} - ${SITE_TITLE}`
 }
 const Template = kind === 'page' ? TEMPLATES[page.data.templateKey] : null
 ---
-<Layout language={kind === 'tag' ? language : page.data.language} path={path} title={title} description={description}>
+<Layout language={kind === 'tag' ? language : page.data.language} path={path} title={title} description={description} image={shareImage} type={shareType}>
     {kind === 'tag' ? <TagPage tag={tag} language={language} /> : <Template page={page} />}
 </Layout>
