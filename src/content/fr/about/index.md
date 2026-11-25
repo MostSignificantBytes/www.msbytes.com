@@ -44,3 +44,5 @@ Kévin Duguet - Architecte Systèmes
 Johan Gobaly - Technicien d'Assitance Informatique
 
 L’équipe MSB est jeune, dynamique et capable de s’adapter rapidement à toutes les situations. Nos clients actuels et passés pourront temoigner de leurs expériences à nos cotés.
+
+![Logo alérion fond jaune](/img/logomsbalerionfondjaunelarge.png "Image de test")
