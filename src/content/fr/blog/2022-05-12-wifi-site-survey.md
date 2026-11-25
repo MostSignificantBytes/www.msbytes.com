@@ -1,8 +1,8 @@
 ---
 templateKey: blog-post
 language: fr
-identifier: wifi-site-survey
 slug: +blog+2022-05-12-wifi-site-survey
+identifier: wifi-site-survey
 title: Audits Wi-Fi
 date: 2022-05-12T21:17:26.537Z
 description: Mesurer, planifier, déployer et mesurer à nouveau. C'est comme ça qu'on installe des infrastructures Wi-Fi robustes.
@@ -12,6 +12,7 @@ tags:
   - wi-fi
   - audit
 ---
+
 ![Audit Wi-Fi](/img/audit_wi-fi.png)
 
 Pour déployer du Wi-Fi, acheter une borne au magasin d'à côté et la poser sur une table au milieu de la pièce fonctionne seulement pour de petits espaces, et encore, il n'y a aucune garantie que cela fonctionnera parfaitement.
