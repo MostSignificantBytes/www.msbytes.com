@@ -36,7 +36,7 @@ const d = page.data
                     </div>
                     <div class="col col-12">
                         <h2 class="home-heading">{d.latestStories}</h2>
-                        <BlogRoll language={d.language} keepReading={d.keepReading} />
+                        <BlogRoll language={d.language} keepReading={d.keepReading} headingLevel={3} />
                         <div class="col col-12 text-center">
                             <a class="btn" href={prefix(d.language) + '/blog/'}>{d.ourBlog}</a>
                         </div>
