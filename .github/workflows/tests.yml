@@ -3,6 +3,9 @@
 #   accessibilité, navigation et formulaire de contact (tests/site.spec.mjs).
 # - « captures » (informatif, pull requests uniquement) : comparaison visuelle des pages
 #   entre la branche cible et la pull request (tests/visual.mjs), résumé dans l'onglet de l'exécution.
+# - Vérification mensuelle (le 1er du mois, sur master) : mêmes contrôles, avec une marge de 60 jours
+#   pour la date d'expiration de security.txt ; en cas d'échec, « signalement » ouvre (ou complète)
+#   une issue « Vérification mensuelle en échec », notifiée par e-mail aux personnes qui suivent le dépôt.
 name: Vérifications
 
 on:
@@ -10,6 +13,9 @@ on:
     branches: [recette, master]
   push:
     branches: [recette]
+  schedule:
+    - cron: '17 6 1 * *'
+  workflow_dispatch:
 
 permissions:
   contents: read
@@ -33,6 +39,8 @@ jobs:
       - run: npm run build
       - name: Contrôle des fichiers produits
         run: node scripts/check-dist.mjs
+        env:
+          SECURITY_TXT_MARGE: ${{ github.event_name == 'schedule' && '60' || '30' }}
       - run: npx playwright install --with-deps chromium
       - name: Accessibilité, navigation, formulaire
         run: npx playwright test
@@ -77,3 +85,30 @@ jobs:
           name: rapport-visuel
           path: rapport-visuel/
           retention-days: 14
+
+  signalement:
+    name: Signalement de la vérification mensuelle
+    needs: verifs
+    if: failure() && (github.event_name == 'schedule' || github.event_name == 'workflow_dispatch')
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      issues: write
+    steps:
+      - name: Ouvrir ou compléter l'issue
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        run: |
+          TITRE="Vérification mensuelle en échec"
+          CORPS="La vérification mensuelle de master a échoué le $(date -u +%d/%m/%Y) : $RUN_URL
+
+          Causes probables : date « Expires » de public/.well-known/security.txt à moins de 60 jours (la repousser d'un an, par une branche evol/… et le circuit habituel), ou site qui ne se construit plus.
+          Le détail est dans le journal de l'exécution (étape « Contrôle des fichiers produits »)."
+          NUM=$(gh issue list --state open --search "\"$TITRE\" in:title" --json number --jq '.[0].number')
+          if [ -n "$NUM" ]; then
+            gh issue comment "$NUM" --body "$CORPS"
+          else
+            gh issue create --title "$TITRE" --body "$CORPS"
+          fi
