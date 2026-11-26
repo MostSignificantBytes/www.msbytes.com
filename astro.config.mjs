@@ -30,7 +30,8 @@ export default defineConfig({
                 "img-src 'self' data:",
                 "font-src 'self'",
                 "connect-src 'self'",
-                'frame-src https://www.google.com/recaptcha/ https://recaptcha.google.com/recaptcha/',
+                // reCAPTCHA ; app.netlify.com : barre d'outils ajoutée par Netlify aux aperçus et à la recette
+                'frame-src https://www.google.com/recaptcha/ https://recaptcha.google.com/recaptcha/ https://app.netlify.com',
                 "form-action 'self'",
                 "base-uri 'self'",
                 "object-src 'none'",
