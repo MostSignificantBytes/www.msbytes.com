@@ -1,18 +1,25 @@
-# Dependabot (format v2) : alertes et mises à jour de sécurité npm uniquement.
-# open-pull-requests-limit: 0 désactive les mises à jour de version courantes ;
-# les pull requests de sécurité restent créées si « Dependabot security updates »
-# est activé dans GitHub (Settings > Code security).
+# Dependabot (format v2).
+# Les pull requests de Dependabot visent la branche « recette » (target-branch),
+# comme les évolutions : vérifications automatiques, recette, puis recette → master.
+# Ce fichier n'est lu par GitHub que sur la branche par défaut (master) : il prend
+# effet une fois fusionné dans master.
 version: 2
 updates:
+  # npm : open-pull-requests-limit: 0 désactive les mises à jour de version courantes.
+  # Limite de GitHub : les pull requests de SÉCURITÉ (si « Dependabot security updates »
+  # est activé dans Settings > Code security) visent toujours la branche par défaut
+  # (master), quel que soit target-branch.
   - package-ecosystem: "npm"
     directory: "/"
+    target-branch: "recette"
     schedule:
       interval: "weekly"
     open-pull-requests-limit: 0
   # Versions des actions utilisées par les vérifications automatiques (.github/workflows) :
-  # une pull request groupée par mois au plus.
+  # une pull request groupée par mois au plus, vers recette.
   - package-ecosystem: "github-actions"
     directory: "/"
+    target-branch: "recette"
     schedule:
       interval: "monthly"
     groups:
