@@ -1,0 +1,17 @@
+{
+    "_commentaire": "Dates de dernière modification du texte des contenus (plan du site, <lastmod>), vérifiées dans l'historique Git le 26/11/2026. Les fichiers absents n'ont pas de date connue (contenu inchangé depuis la reprise du code du 28/08/2026, historique antérieur perdu) : leurs pages n'ont pas de <lastmod>. Les commits postérieurs au commit « depuis_commit » (master du 26/11/2026) qui modifient un contenu sont lus dans Git au build (scripts/postbuild.mjs).",
+    "depuis_commit": "86d70bf",
+    "fichiers": {
+        "fr/about/index": "2026-11-25",
+        "fr/story/index": "2026-11-25",
+        "fr/blog/2022-05-12-wifi-site-survey": "2026-11-25",
+        "en/blog/2022-05-12-wifi-site-survey": "2026-11-25",
+        "fr/blog/2026-11-25-new-engine": "2026-11-25",
+        "en/blog/2026-11-25-new-engine": "2026-11-25",
+        "fr/contact/index": "2026-11-24",
+        "en/contact/index": "2026-11-24",
+        "fr/legal/index": "2026-11-24",
+        "en/legal/index": "2026-11-24"
+    },
+    "commits_ignores": []
+}

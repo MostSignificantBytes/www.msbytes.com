@@ -69,6 +69,12 @@ if (fs.existsSync(securityTxt)) {
 // Plan du site : toutes les pages publiées (hors 404) et seulement elles
 const listed = [...fs.readFileSync(path.join(DIST, 'sitemap-0.xml'), 'utf8').matchAll(/<loc>([^<]+)<\/loc>/g)].map((m) => m[1].replace(SITE, ''))
 const published = pages.map(pageUrl).filter((u) => !u.startsWith('/404'))
+// Dates de modification du plan du site : format W3C et jamais dans le futur
+for (const [, loc, date] of fs.readFileSync(path.join(DIST, 'sitemap-0.xml'), 'utf8').matchAll(/<loc>([^<]+)<\/loc><lastmod>([^<]+)<\/lastmod>/g)) {
+    if (!/^\d{4}-\d{2}-\d{2}(T[\d:.]+([+-]\d{2}:\d{2}|Z))?$/.test(date) || isNaN(new Date(date)) || new Date(date) > Date.now())
+        fail(`plan du site : date de modification invalide pour ${loc} (${date})`)
+}
+if (fs.existsSync(path.join(DIST, 'lastmod-sources.json'))) fail('fichier technique lastmod-sources.json publié')
 for (const u of published) if (!listed.includes(u)) fail(`plan du site : ${u} absent`)
 for (const u of listed) if (!published.includes(u)) fail(`plan du site : ${u} ne correspond à aucune page`)
 
