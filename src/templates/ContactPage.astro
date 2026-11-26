@@ -1,10 +1,11 @@
 ---
 // Gabarit « contact-page » : formulaire Netlify Forms protégé par reCAPTCHA v2 (« case à cocher »).
-// Clé de site lue au build dans GATSBY_SITE_RECAPTCHA_KEY (Netlify, ou fichier .env non versionné en local).
+// Clé de site lue au build dans SITE_RECAPTCHA_KEY, la variable que Netlify Forms utilise déjà pour vérifier
+// le captcha (console Netlify, portée Builds et Runtime ; en local : fichier .env non versionné).
 import { prefix } from '../utils/site.js'
 const { page } = Astro.props
 const d = page.data
-const RECAPTCHA_SITE_KEY = import.meta.env.GATSBY_SITE_RECAPTCHA_KEY || process.env.GATSBY_SITE_RECAPTCHA_KEY
+const RECAPTCHA_SITE_KEY = import.meta.env.SITE_RECAPTCHA_KEY || process.env.SITE_RECAPTCHA_KEY
 ---
 <section class="section">
     <div class="container">

@@ -1,6 +1,6 @@
 // Fonctions communes aux gabarits.
 import { getCollection } from 'astro:content'
-import kebabCase from 'lodash/kebabCase.js'
+import kebabCase from './kebabCase.js'
 import slugHandler, { slugFromFile } from './slugHandler.js'
 import { prefix } from './languages.mjs'
 
