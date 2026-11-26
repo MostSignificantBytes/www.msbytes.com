@@ -44,8 +44,16 @@ for (const file of pages) {
 }
 
 for (const f of ['sitemap.xml', 'sitemap-0.xml', 'robots.txt', 'manifest.webmanifest', '404.html',
-    'admin/index.html', 'admin/config.yml', 'admin/init.js', 'admin/sveltia-cms.js']) {
+    '.well-known/security.txt', 'admin/index.html', 'admin/config.yml', 'admin/init.js', 'admin/sveltia-cms.js']) {
     if (!fs.existsSync(path.join(DIST, f))) fail(`fichier absent : ${f}`)
+}
+
+// security.txt (RFC 9116) : date d'expiration à renouveler, au plus tard un mois avant l'échéance
+const securityTxt = path.join(DIST, '.well-known', 'security.txt')
+if (fs.existsSync(securityTxt)) {
+    const expires = /^Expires: (.+)$/m.exec(fs.readFileSync(securityTxt, 'utf8'))
+    const delay = expires ? (new Date(expires[1]) - Date.now()) / 86400000 : NaN
+    if (!(delay > 30)) fail(`security.txt : date « Expires » absente ou à moins de 30 jours (${expires?.[1]}) : la repousser d'un an`)
 }
 
 // Plan du site : toutes les pages publiées (hors 404) et seulement elles
