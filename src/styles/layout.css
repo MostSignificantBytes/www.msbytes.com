@@ -97,9 +97,9 @@
     }
 }
 
-/* Colonne de lecture (articles, pages de texte) : lignes d'environ 70 caractères, centrée */
+/* Colonne de lecture (articles, pages de texte) : centrée, 960 px au plus (lignes d'une centaine de caractères) */
 .reading {
     margin-left: auto;
     margin-right: auto;
-    max-width: 70ch;
+    max-width: 60rem;
 }
