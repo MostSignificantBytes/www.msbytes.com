@@ -22,6 +22,11 @@ const { language = 'fr', path = '/', title, description, image, type, alternates
 const HREFLANG = { fr: ['fr', 'x-default'], en: ['en'] }
 const ICONS = [48, 72, 96, 128, 192, 384, 512]
 
+// Hors production (recette, aperçus de pull request, poste de travail) : pages exclues des moteurs de recherche.
+// Netlify indique le contexte du build dans la variable CONTEXT (production, branch-deploy, deploy-preview) ;
+// sans CONTEXT (vérifications GitHub, poste), le site est construit comme en production.
+const NOINDEX = Boolean(process.env.CONTEXT) && process.env.CONTEXT !== 'production'
+
 const pageTitle = title || SITE_TITLE
 const pageDescription = description || SITE_DESCRIPTION
 const basePath = unprefixed(path)
@@ -35,6 +40,7 @@ const alternate = (lang) => (alternates ? alternates[lang] : prefix(lang) + base
         <link rel="preload" href={fontLatin} as="font" type="font/woff2" crossorigin />
         <meta name="theme-color" content="#003399" />
         <meta name="description" content={pageDescription} />
+        {NOINDEX && <meta name="robots" content="noindex, nofollow" />}
         <meta property="og:type" content={type || 'business.business'} />
         <meta property="og:site_name" content={SITE_TITLE} />
         <meta property="og:title" content={pageTitle} />
