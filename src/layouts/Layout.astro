@@ -20,7 +20,6 @@ const { language = 'fr', path = '/', title, description, image, type, alternates
 // Versions linguistiques : un code par langue (valable pour tous les pays), plus x-default (version
 // proposée aux autres langues : le français, langue par défaut du site)
 const HREFLANG = { fr: ['fr', 'x-default'], en: ['en'] }
-const ICONS = [48, 72, 96, 128, 192, 384, 512]
 
 // Hors production (recette, aperçus de pull request, poste de travail) : pages exclues des moteurs de recherche.
 // Netlify indique le contexte du build dans la variable CONTEXT (production, branch-deploy, deploy-preview) ;
@@ -55,7 +54,6 @@ const ogAlternates = Object.keys(OG_LOCALE).filter((lang) => lang !== language &
         <meta property="og:image" content={SITE_URL + (image || '/img/og-image.png')} />
         <meta name="twitter:card" content={image ? 'summary_large_image' : 'summary'} />
         <link rel="manifest" href="/manifest.webmanifest" crossorigin="anonymous" />
-        {ICONS.map((size) => <link rel="apple-touch-icon" sizes={`${size}x${size}`} href={`/img/maskable_icon_x${size}.png`} />)}
         <title>{pageTitle}</title>
         <link rel="canonical" href={SITE_URL + path} />
         {Object.entries(HREFLANG).map(([lang, codes]) =>

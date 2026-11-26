@@ -66,6 +66,13 @@ if (fs.existsSync(securityTxt)) {
     if (!(delay > marge)) fail(`security.txt : date « Expires » absente ou à moins de ${marge} jours (${expires?.[1]}) : la repousser d'un an`)
 }
 
+// Manifeste : chaque icône déclarée existe, et les usages « any » et « maskable » sont déclarés séparément
+const manifest = JSON.parse(fs.readFileSync(path.join(DIST, 'manifest.webmanifest'), 'utf8'))
+for (const icon of manifest.icons) {
+    if (!fs.existsSync(path.join(DIST, icon.src))) fail(`manifeste : icône absente ${icon.src}`)
+    if (/\s/.test(icon.purpose || '')) fail(`manifeste : usages combinés « ${icon.purpose} » pour ${icon.src}`)
+}
+
 // Plan du site : toutes les pages publiées (hors 404) et seulement elles
 const listed = [...fs.readFileSync(path.join(DIST, 'sitemap-0.xml'), 'utf8').matchAll(/<loc>([^<]+)<\/loc>/g)].map((m) => m[1].replace(SITE, ''))
 const published = pages.map(pageUrl).filter((u) => !u.startsWith('/404'))
