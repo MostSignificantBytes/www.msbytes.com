@@ -101,3 +101,21 @@ test.describe('Formulaire de contact', () => {
         })
     }
 })
+
+test.describe('Sécurité', () => {
+    test('politique de sécurité du contenu (CSP) : présente et sans violation', async ({ page }) => {
+        // Les violations sont relevées par l'événement « securitypolicyviolation » du navigateur
+        await page.addInitScript(() => {
+            window.__cspViolations = []
+            document.addEventListener('securitypolicyviolation', (e) => {
+                window.__cspViolations.push(`${e.violatedDirective} : ${e.blockedURI || 'inline'}`)
+            })
+        })
+        for (const url of PAGES) {
+            await page.goto(url)
+            await expect(page.locator('meta[http-equiv="content-security-policy"]'), url).toHaveCount(1)
+            await page.waitForLoadState('load')
+            expect(await page.evaluate(() => window.__cspViolations), url).toEqual([])
+        }
+    })
+})

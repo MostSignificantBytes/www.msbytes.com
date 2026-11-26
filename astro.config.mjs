@@ -19,6 +19,30 @@ export default defineConfig({
         defaultLocale: DEFAULT_LANGUAGE,
         routing: { prefixDefaultLocale: false },
     },
+    // Politique de sécurité du contenu (CSP) : balise <meta> ajoutée à chaque page par Astro, avec les
+    // empreintes (sha256) des scripts et styles qu'il produit. Seul service extérieur autorisé : Google
+    // reCAPTCHA (page Contact). Styles en attribut (images) autorisés. Le back-office (public/admin/)
+    // n'est pas une page Astro : il n'est pas concerné.
+    security: {
+        csp: {
+            directives: [
+                "default-src 'self'",
+                "img-src 'self' data:",
+                "font-src 'self'",
+                "connect-src 'self'",
+                'frame-src https://www.google.com/recaptcha/ https://recaptcha.google.com/recaptcha/',
+                "form-action 'self'",
+                "base-uri 'self'",
+                "object-src 'none'",
+            ],
+            scriptDirective: {
+                resources: ["'self'", 'https://www.google.com/recaptcha/', 'https://www.gstatic.com/recaptcha/'],
+            },
+            styleDirective: {
+                resources: ["'self'", { resource: "'unsafe-inline'", kind: 'attribute' }],
+            },
+        },
+    },
     integrations: [
         sitemap({
             // Pages techniques exclues, comme avec @netlify/plugin-sitemap
