@@ -2,7 +2,8 @@
 // Barre de navigation : logo (accueil), menu (sans l'accueil), sélecteur de langue, menu mobile.
 import navbar from '../data/navbar.js'
 import LanguageSwitcher from './LanguageSwitcher.astro'
-import logo from '../assets/logoMSB.png?url'
+import { Image } from 'astro:assets'
+import logo from '../assets/logoMSB.png'
 
 const { language, path, alternates } = Astro.props
 const data = navbar.find((item) => item.language === language)
@@ -14,7 +15,7 @@ const text = language === 'fr' ? { nav: 'Navigation principale', menu: 'Menu' } 
         <div class="container navbar-inner">
             <div class="navbar-brand">
                 <a class="navbar-item navbar-logo" title={data.logo} href={data.path} aria-current={path === data.path ? 'page' : undefined}>
-                    <img width="776" height="280" src={logo} alt="MSB" />
+                    <Image src={logo} width={78} densities={[1, 2, 3]} format="webp" alt="MSB" loading="eager" />
                 </a>
                 <button type="button" class="navbar-burger" id="burger-menu" aria-label={text.menu} aria-controls="navMenu" aria-expanded="false">
                     <span></span>
