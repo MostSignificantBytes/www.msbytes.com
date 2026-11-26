@@ -14,8 +14,8 @@ La documentation complète (spécifications, installation, exploitation, mise en
 
 | Outil | Version |
 |---|---|
-| Node.js | 24.x LTS (`nvm install 24 && nvm use 24`) |
-| npm | fourni avec Node 24 |
+| Node.js | 26.x LTS (`nvm install 26 && nvm use 26`), supporté jusqu'au 30/04/2029 |
+| npm | fourni avec Node 26 |
 | Git | 2.x |
 
 ## Installation
@@ -75,7 +75,7 @@ Vérification locale avant chaque push : `npm run build && npm run preview`. En 
 
 ## Déploiement (Netlify)
 
-- Build : `npm run build`, dossier publié `dist`, Node 24 (`netlify.toml`).
+- Build : `npm run build`, dossier publié `dist`, Node 26 (`netlify.toml`).
 - Variables d'environnement (console Netlify) : `SITE_RECAPTCHA_KEY` (clé de site, portée Builds et Runtime : lue au build par le formulaire et par Netlify Forms), `SITE_RECAPTCHA_SECRET` (secrète, portée Runtime).
 - Circuit : branche de travail → pull request vers `recette` (aperçu Netlify) → recette → fusion sur `master` (production).
 - Vérifications GitHub à chaque pull request vers `recette` ou `master` : « Construction, accessibilité et navigation » (bloquante) et « Comparaison visuelle » (informative : résumé dans l'onglet Checks, captures en artefact).
