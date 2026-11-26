@@ -28,6 +28,7 @@ const ICONS = [48, 72, 96, 128, 192, 384, 512]
 const NOINDEX = Boolean(process.env.CONTEXT) && process.env.CONTEXT !== 'production'
 
 const pageTitle = title || SITE_TITLE
+const skipLabel = language === 'fr' ? 'Aller au contenu' : 'Skip to content'
 const pageDescription = description || SITE_DESCRIPTION
 const basePath = unprefixed(path)
 const alternate = (lang) => (alternates ? alternates[lang] : prefix(lang) + basePath)
@@ -62,8 +63,9 @@ const alternate = (lang) => (alternates ? alternates[lang] : prefix(lang) + base
         <link rel="mask-icon" href="/img/safari-pinned-tab.svg" color="#003399" />
     </head>
     <body>
+        <a class="skip-link" href="#contenu">{skipLabel}</a>
         <Navbar language={language} path={path} alternates={alternates} />
-        <main><slot /></main>
+        <main id="contenu" tabindex="-1"><slot /></main>
         <Footer language={language} />
     </body>
 </html>

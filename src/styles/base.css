@@ -89,6 +89,27 @@ code, pre {
     outline-offset: 2px;
 }
 
+/* Lien d'évitement « Aller au contenu » : premier élément atteint à la touche Tab, invisible sinon */
+.skip-link {
+    background: var(--msb-blue);
+    color: #fff;
+    font-weight: 600;
+    left: 0.5rem;
+    padding: 0.5rem 1rem;
+    position: absolute;
+    top: -10rem;
+    z-index: 100;
+}
+
+.skip-link:focus {
+    color: #fff;
+    top: 0.5rem;
+}
+
+main:focus {
+    outline: none;
+}
+
 @media (prefers-reduced-motion: reduce) {
     *,
     *::before,

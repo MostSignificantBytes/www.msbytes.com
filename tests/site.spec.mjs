@@ -119,3 +119,18 @@ test.describe('Sécurité', () => {
         }
     })
 })
+
+test.describe('Lien d\'évitement', () => {
+    test('premier élément au clavier, mène à la zone principale', async ({ page }) => {
+        await page.goto('/about/')
+        await page.keyboard.press('Tab')
+        const skip = page.locator('a.skip-link')
+        await expect(skip).toBeFocused()
+        await expect(skip).toHaveText('Aller au contenu')
+        await expect(skip).toBeInViewport()
+        await page.keyboard.press('Enter')
+        await expect(page.locator('main#contenu')).toBeFocused()
+        await page.goto('/en/about/')
+        await expect(page.locator('a.skip-link')).toHaveText('Skip to content')
+    })
+})
