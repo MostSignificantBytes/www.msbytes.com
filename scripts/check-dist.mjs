@@ -28,6 +28,7 @@ for (const file of pages) {
     const html = fs.readFileSync(file, 'utf8')
     if (!/<html lang="(fr|en)"/.test(html)) fail(`${url} : attribut lang absent ou inattendu`)
     if (!/<title>[^<]+<\/title>/.test(html)) fail(`${url} : titre absent`)
+    if (/chrome-extension:|moz-extension:/.test(html)) fail(`${url} : référence à une extension de navigateur (fichier enregistré depuis un navigateur ?)`)
     if (!/<main[\s>]/.test(html)) fail(`${url} : zone principale <main> absente`)
     const h1 = (html.match(/<h1[\s>]/g) || []).length
     if (h1 !== 1) fail(`${url} : ${h1} titres h1 (1 attendu)`)
