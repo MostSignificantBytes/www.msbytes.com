@@ -31,11 +31,10 @@ const alternate = (lang) => (alternates ? alternates[lang] : prefix(lang) + base
 <html lang={language}>
     <head>
         <meta charset="utf-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="preload" href={fontLatin} as="font" type="font/woff2" crossorigin />
         <meta name="theme-color" content="#003399" />
         <meta name="description" content={pageDescription} />
-        <meta name="theme-color" content="#fff" />
         <meta property="og:type" content={type || 'business.business'} />
         <meta property="og:site_name" content={SITE_TITLE} />
         <meta property="og:title" content={pageTitle} />
@@ -50,10 +49,11 @@ const alternate = (lang) => (alternates ? alternates[lang] : prefix(lang) + base
         {Object.entries(HREFLANG).map(([lang, codes]) =>
             alternate(lang) && codes.map((code) => <link rel="alternate" href={SITE_URL + alternate(lang)} hreflang={code} />)
         )}
+        <link rel="icon" href="/favicon.ico" sizes="48x48" />
         <link rel="apple-touch-icon" sizes="180x180" href="/img/apple-touch-icon.png" />
         <link rel="icon" type="image/png" href="/img/favicon-32x32.png" sizes="32x32" />
         <link rel="icon" type="image/png" href="/img/favicon-16x16.png" sizes="16x16" />
-        <link rel="mask-icon" href="/img/safari-pinned-tab.svg" color="#ff4400" />
+        <link rel="mask-icon" href="/img/safari-pinned-tab.svg" color="#003399" />
     </head>
     <body>
         <Navbar language={language} path={path} alternates={alternates} />

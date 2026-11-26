@@ -44,7 +44,7 @@ for (const file of pages) {
     }
 }
 
-for (const f of ['sitemap.xml', 'sitemap-0.xml', 'robots.txt', 'manifest.webmanifest', '404.html',
+for (const f of ['sitemap.xml', 'sitemap-0.xml', 'robots.txt', 'manifest.webmanifest', '404.html', 'favicon.ico',
     '.well-known/security.txt', 'admin/index.html', 'admin/config.yml', 'admin/init.js', 'admin/sveltia-cms.js']) {
     if (!fs.existsSync(path.join(DIST, f))) fail(`fichier absent : ${f}`)
 }
