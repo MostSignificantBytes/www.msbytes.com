@@ -10,7 +10,8 @@ import '../styles/base.css'
 import '../styles/layout.css'
 
 // image / type : image de partage et type Open Graph propres à la page (articles du blog)
-const { language = 'fr', path = '/', title, description, image, type } = Astro.props
+// alternates : adresse de la page dans chaque langue (null si elle n'existe pas) ; à défaut, même adresse sans préfixe
+const { language = 'fr', path = '/', title, description, image, type, alternates } = Astro.props
 
 const HREFLANG = {
     en: ['en', 'en-AU', 'en-BZ', 'en-CA', 'en-CB', 'en-GB', 'en-IE', 'en-JM', 'en-NZ', 'en-PH', 'en-TT', 'en-US', 'en-ZA', 'en-ZW'],
@@ -21,6 +22,7 @@ const ICONS = [48, 72, 96, 128, 192, 384, 512]
 const pageTitle = title || SITE_TITLE
 const pageDescription = description || SITE_DESCRIPTION
 const basePath = unprefixed(path)
+const alternate = (lang) => (alternates ? alternates[lang] : prefix(lang) + basePath)
 ---
 <!DOCTYPE html>
 <html lang={language}>
@@ -42,7 +44,7 @@ const basePath = unprefixed(path)
         <title>{pageTitle}</title>
         <link rel="canonical" href={SITE_URL + path} />
         {Object.entries(HREFLANG).map(([lang, codes]) =>
-            codes.map((code) => <link rel="alternate" href={SITE_URL + prefix(lang) + basePath} hreflang={code} />)
+            alternate(lang) && codes.map((code) => <link rel="alternate" href={SITE_URL + alternate(lang)} hreflang={code} />)
         )}
         <link rel="apple-touch-icon" sizes="180x180" href="/img/apple-touch-icon.png" />
         <link rel="icon" type="image/png" href="/img/favicon-32x32.png" sizes="32x32" />
@@ -50,7 +52,7 @@ const basePath = unprefixed(path)
         <link rel="mask-icon" href="/img/safari-pinned-tab.svg" color="#ff4400" />
     </head>
     <body>
-        <Navbar language={language} path={path} />
+        <Navbar language={language} path={path} alternates={alternates} />
         <main><slot /></main>
         <Footer language={language} />
     </body>

@@ -1,0 +1,79 @@
+# Vérifications automatiques à chaque pull request vers recette ou master, et à chaque mise à jour de recette.
+# - « verifs » (bloquant) : construction, contrôle des fichiers produits (scripts/check-dist.mjs),
+#   accessibilité, navigation et formulaire de contact (tests/site.spec.mjs).
+# - « captures » (informatif, pull requests uniquement) : comparaison visuelle des pages
+#   entre la branche cible et la pull request (tests/visual.mjs), résumé dans l'onglet de l'exécution.
+name: Vérifications
+
+on:
+  pull_request:
+    branches: [recette, master]
+  push:
+    branches: [recette]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: tests-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  verifs:
+    name: Construction, accessibilité et navigation
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - run: npm run build
+      - name: Contrôle des fichiers produits
+        run: node scripts/check-dist.mjs
+      - run: npx playwright install --with-deps chromium
+      - name: Accessibilité, navigation, formulaire
+        run: npx playwright test
+      - if: failure()
+        uses: actions/upload-artifact@v7
+        with:
+          name: rapport-tests
+          path: |
+            playwright-report/
+            test-results/
+          retention-days: 14
+
+  captures:
+    name: Comparaison visuelle (informative)
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    continue-on-error: true
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/checkout@v6
+        with:
+          ref: ${{ github.base_ref }}
+          path: base
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - run: npm run build
+      - name: Construction de la branche cible
+        working-directory: base
+        run: npm ci && npm run build
+      - run: npx playwright install --with-deps chromium
+      - name: Captures et comparaison
+        run: |
+          node tests/visual.mjs base/dist dist rapport-visuel
+          cat rapport-visuel/rapport.md >> "$GITHUB_STEP_SUMMARY"
+      - if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: rapport-visuel
+          path: rapport-visuel/
+          retention-days: 14

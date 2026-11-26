@@ -46,6 +46,8 @@ et ajouter `localhost` aux domaines de la clé. L'envoi réel ne fonctionne que 
 | `npm run build` | Génération de production dans `dist/` (puis `scripts/postbuild.mjs` : sitemap.xml, médias sous /img/, back-office) |
 | `npm run preview` | Sert `dist/` : http://localhost:4321 |
 | `npm run format` | Formatage du code avec Prettier |
+| `npm test` | Après un build : contrôle des fichiers de `dist/` puis tests d'accessibilité, de navigation et du formulaire (Chromium : `npx playwright install chromium` la première fois) |
+| `npm run test:visual -- <dist-avant> <dist-après>` | Compare au pixel les pages de deux builds (375, 800, 1 280 px) ; rapport et captures dans `rapport-visuel/` |
 
 Vérification locale avant chaque push : `npm run build && npm run preview`. En cas de résultat incohérent après un changement de configuration Markdown, supprimer le cache `.astro/` et `node_modules/.astro/`.
 
@@ -66,6 +68,9 @@ Vérification locale avant chaque push : `npm run build && npm run preview`. En 
 | `src/assets/` | Médias des contenus (`img/`), logos et icônes |
 | `public/` | Fichiers publiés tels quels : back-office (`admin/`), icônes (`img/`), manifeste, robots.txt, service worker de remplacement, vérification Google |
 | `scripts/postbuild.mjs` | Étapes après le build |
+| `scripts/check-dist.mjs` | Contrôle des pages produites : langue, titre, un seul h1, canonical, liens internes, sitemap, back-office |
+| `tests/` | Tests Playwright (`site.spec.mjs` : accessibilité axe WCAG 2.1 AA, navigation, formulaire), comparaison visuelle (`visual.mjs`), serveur statique de test (`serve.mjs`) |
+| `.github/` | Vérifications automatiques des pull requests (`workflows/tests.yml`), Dependabot |
 | `netlify.toml` | Build et en-têtes HTTP Netlify |
 
 ## Déploiement (Netlify)
@@ -73,6 +78,7 @@ Vérification locale avant chaque push : `npm run build && npm run preview`. En 
 - Build : `npm run build`, dossier publié `dist`, Node 24 (`netlify.toml`).
 - Variables d'environnement (console Netlify) : `SITE_RECAPTCHA_KEY`, `SITE_RECAPTCHA_SECRET` (secrète, portée Runtime), `GATSBY_SITE_RECAPTCHA_KEY` (portée Builds).
 - Circuit : branche de travail → pull request vers `recette` (aperçu Netlify) → recette → fusion sur `master` (production).
+- Vérifications GitHub à chaque pull request vers `recette` ou `master` : « Construction, accessibilité et navigation » (bloquante) et « Comparaison visuelle » (informative : résumé dans l'onglet Checks, captures en artefact).
 - Formulaire : Netlify Forms (formulaire `contact`), notifications par e-mail paramétrées dans la console Netlify.
 
 ## Back-office (Sveltia CMS)
