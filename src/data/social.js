@@ -2,7 +2,6 @@
 export default [
     { name: 'Linkedin', href: 'https://fr.linkedin.com/company/msbytes' },
     { name: 'Github', href: 'https://github.com/MostSignificantBytes' },
-    { name: 'Twitter', href: 'https://twitter.com/msbcompany' },
     { name: 'Instagram', href: 'https://www.instagram.com/mostsignificantbytes' },
     { name: 'Facebook', href: 'https://www.facebook.com/msbytes' },
 ]

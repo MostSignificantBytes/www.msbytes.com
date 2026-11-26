@@ -7,12 +7,11 @@ import logo from '../assets/logoMSBclair.png'
 import linkedin from '../assets/social/linkedin.svg?url'
 import facebook from '../assets/social/facebook.svg?url'
 import instagram from '../assets/social/instagram.svg?url'
-import twitter from '../assets/social/twitter.svg?url'
 import github from '../assets/social/github.svg?url'
 
 const { language } = Astro.props
 const data = navbar.find((item) => item.language === language)
-const ICONS = { Linkedin: linkedin, Github: github, Twitter: twitter, Instagram: instagram, Facebook: facebook }
+const ICONS = { Linkedin: linkedin, Github: github, Instagram: instagram, Facebook: facebook }
 const social = accounts.map((account) => ({ href: account.href, src: ICONS[account.name], alt: account.name }))
 ---
 <footer class="site-footer">
