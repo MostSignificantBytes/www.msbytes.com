@@ -15,7 +15,9 @@
 [[headers]]
   for = "/*"
   [headers.values]
-    Strict-Transport-Security = "max-age=31536000"
+    # HSTS : HTTPS imposé pendant deux ans, pour le domaine et tous ses sous-domaines (includeSubDomains).
+    # Prérequis : tous les sous-domaines de msbytes.com accessibles en HTTPS.
+    Strict-Transport-Security = "max-age=63072000; includeSubDomains"
     X-Content-Type-Options = "nosniff"
     Referrer-Policy = "strict-origin-when-cross-origin"
     X-Frame-Options = "DENY"
