@@ -22,9 +22,8 @@
   "dependencies": {
     "@astrojs/markdown-remark": "^7.3.0",
     "@astrojs/sitemap": "^3.7.6",
-    "@sveltia/cms": "0.272.0",
-    "astro": "^7.4.13",
-    "lodash": "^4.17.21"
+    "@sveltia/cms": "0.273.1",
+    "astro": "^7.4.13"
   },
   "engines": {
     "node": ">=24"

@@ -30,10 +30,10 @@ Toujours installer avec `npm ci` (versions exactes de `package-lock.json`). La v
 
 ### Formulaire de contact en local (facultatif)
 
-Le widget reCAPTCHA lit la clé de site au build dans `GATSBY_SITE_RECAPTCHA_KEY` (nom conservé de l'ancien site). Pour l'afficher en local, créer un fichier `.env` (jamais versionné) :
+Le widget reCAPTCHA lit la clé de site au build dans `SITE_RECAPTCHA_KEY`, la variable que Netlify Forms utilise aussi pour vérifier le captcha. Pour l'afficher en local, créer un fichier `.env` (jamais versionné) :
 
 ```
-GATSBY_SITE_RECAPTCHA_KEY=<clé de site reCAPTCHA v2>
+SITE_RECAPTCHA_KEY=<clé de site reCAPTCHA v2>
 ```
 
 et ajouter `localhost` aux domaines de la clé. L'envoi réel ne fonctionne que sur Netlify.
@@ -76,7 +76,7 @@ Vérification locale avant chaque push : `npm run build && npm run preview`. En 
 ## Déploiement (Netlify)
 
 - Build : `npm run build`, dossier publié `dist`, Node 24 (`netlify.toml`).
-- Variables d'environnement (console Netlify) : `SITE_RECAPTCHA_KEY`, `SITE_RECAPTCHA_SECRET` (secrète, portée Runtime), `GATSBY_SITE_RECAPTCHA_KEY` (portée Builds).
+- Variables d'environnement (console Netlify) : `SITE_RECAPTCHA_KEY` (clé de site, portée Builds et Runtime : lue au build par le formulaire et par Netlify Forms), `SITE_RECAPTCHA_SECRET` (secrète, portée Runtime).
 - Circuit : branche de travail → pull request vers `recette` (aperçu Netlify) → recette → fusion sur `master` (production).
 - Vérifications GitHub à chaque pull request vers `recette` ou `master` : « Construction, accessibilité et navigation » (bloquante) et « Comparaison visuelle » (informative : résumé dans l'onglet Checks, captures en artefact).
 - Formulaire : Netlify Forms (formulaire `contact`), notifications par e-mail paramétrées dans la console Netlify.
