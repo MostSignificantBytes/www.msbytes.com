@@ -1,6 +1,6 @@
 /* Mise en page : conteneur centré, sections, grille à colonnes.
    Grille : .cols contient des .col ; à partir de 769 px les colonnes sont côte à côte,
-   en dessous elles s'empilent. Largeurs sur 12 : .col-3, .col-6, .col-7, .col-10, .col-12 ;
+   en dessous elles s'empilent. Largeurs sur 12 : .col-3, .col-6, .col-7, .col-10, .col-12 ; .reading limite la largeur des textes ;
    .offset-1 décale d'un douzième. */
 
 .container {
@@ -95,4 +95,11 @@
     .offset-1 {
         margin-left: 8.3333%;
     }
+}
+
+/* Colonne de lecture (articles, pages de texte) : centrée, 960 px au plus (lignes d'une centaine de caractères) */
+.reading {
+    margin-left: auto;
+    margin-right: auto;
+    max-width: 60rem;
 }

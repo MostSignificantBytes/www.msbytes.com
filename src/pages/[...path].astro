@@ -13,6 +13,7 @@ import TagsPage from '../templates/TagsPage.astro'
 import TagPage from '../templates/TagPage.astro'
 import { getImage } from 'astro:assets'
 import { getPages, tagPath, media, SITE_TITLE } from '../utils/site.js'
+import { LANGUAGES, prefix, unprefixed } from '../utils/languages.mjs'
 
 export async function getStaticPaths() {
     const pages = await getPages()
@@ -35,6 +36,14 @@ export async function getStaticPaths() {
     for (const [path, { tag, language }] of tags) {
         add(path, { kind: 'tag', tag, language, source: `tag « ${tag} »` })
     }
+    // Adresse de la page dans chaque langue, si elle existe (un tag n'a pas toujours d'équivalent dans l'autre langue,
+    // les mots-clés étant traduits) : sélecteur de langue et liens hreflang.
+    for (const route of routes) {
+        const base = unprefixed(route.props.path)
+        route.props.alternates = Object.fromEntries(
+            LANGUAGES.map((lang) => [lang, seen.has(prefix(lang) + base) ? prefix(lang) + base : null])
+        )
+    }
     return routes
 }
 
@@ -49,7 +58,7 @@ const TEMPLATES = {
     'tags-page': TagsPage,
 }
 
-const { kind, page, tag, language, path } = Astro.props
+const { kind, page, tag, language, path, alternates } = Astro.props
 let title
 let description
 let shareImage
@@ -70,6 +79,6 @@ if (kind === 'tag') {
 }
 const Template = kind === 'page' ? TEMPLATES[page.data.templateKey] : null
 ---
-<Layout language={kind === 'tag' ? language : page.data.language} path={path} title={title} description={description} image={shareImage} type={shareType}>
+<Layout language={kind === 'tag' ? language : page.data.language} path={path} alternates={alternates} title={title} description={description} image={shareImage} type={shareType}>
     {kind === 'tag' ? <TagPage tag={tag} language={language} /> : <Template page={page} />}
 </Layout>

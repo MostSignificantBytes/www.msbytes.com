@@ -10,3 +10,8 @@ yarn-error.log
 # Environment variables (never commit secrets)
 .env*
 !.env.example
+
+# Tests
+test-results/
+playwright-report/
+rapport-visuel/

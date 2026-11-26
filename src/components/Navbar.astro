@@ -4,7 +4,7 @@ import navbar from '../data/navbar.js'
 import LanguageSwitcher from './LanguageSwitcher.astro'
 import logo from '../assets/logoMSB.png?url'
 
-const { language, path } = Astro.props
+const { language, path, alternates } = Astro.props
 const data = navbar.find((item) => item.language === language)
 const items = data.nav.slice(1)
 const text = language === 'fr' ? { nav: 'Navigation principale', menu: 'Menu' } : { nav: 'Main navigation', menu: 'Menu' }
@@ -29,7 +29,7 @@ const text = language === 'fr' ? { nav: 'Navigation principale', menu: 'Menu' } 
                     ))}
                 </div>
                 <div class="navbar-end">
-                    <LanguageSwitcher path={path} />
+                    <LanguageSwitcher path={path} alternates={alternates} />
                 </div>
             </div>
         </div>

@@ -11,7 +11,7 @@ const d = page.data
 <FullWidthImage img={media(d.image)} title={d.title} subheading={d.heading} eager />
 <section class="section">
     <div class="container">
-        <div class="section">
+        <div class="section home-inner">
             <div class="cols">
                 <div class="col col-10 offset-1 prose">
                     <div class="prose">
@@ -36,7 +36,7 @@ const d = page.data
                     </div>
                     <div class="col col-12">
                         <h2 class="home-heading">{d.latestStories}</h2>
-                        <BlogRoll language={d.language} keepReading={d.keepReading} />
+                        <BlogRoll language={d.language} keepReading={d.keepReading} headingLevel={3} />
                         <div class="col col-12 text-center">
                             <a class="btn" href={prefix(d.language) + '/blog/'}>{d.ourBlog}</a>
                         </div>
@@ -72,5 +72,27 @@ const d = page.data
         font-size: 2.5rem;
         margin-bottom: 0.6666em;
         margin-top: 0;
+    }
+
+    /* Téléphone : texte d'argumentaire en taille de sous-titre, intertitres réduits,
+       pas de seconde marge intérieure (le texte occupe toute la largeur disponible) */
+    @media (max-width: 768px) {
+        .home-inner {
+            padding: 0;
+        }
+
+        .pitch-title {
+            font-size: 1.75em;
+        }
+
+        .pitch-text {
+            font-size: 1.25em;
+            font-weight: 500;
+            line-height: 1.4;
+        }
+
+        .home-heading {
+            font-size: 1.75rem;
+        }
     }
 </style>

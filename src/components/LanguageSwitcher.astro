@@ -1,12 +1,18 @@
 ---
 // Chaque lien mène à la page courante dans sa propre langue (français à la racine, anglais sous /en/).
+// Si la page n'existe pas dans une langue (page d'un mot-clé non traduit), le lien mène à la liste des mots-clés
+// de cette langue.
 import navbar from '../data/navbar.js'
 import { languageOfPath, unprefixed, prefix } from '../utils/languages.mjs'
 
-const { path } = Astro.props
+const { path, alternates } = Astro.props
 const active = languageOfPath(path)
 const basePath = unprefixed(path)
+const target = (language) => {
+    if (!alternates) return prefix(language) + basePath
+    return alternates[language] || prefix(language) + '/tags/'
+}
 ---
 {navbar.map((item) => (
-    <a class={`navbar-item${active === item.language ? ' is-active' : ''}`} href={prefix(item.language) + basePath} aria-current={active === item.language ? 'page' : undefined}>{item.language}</a>
+    <a class={`navbar-item${active === item.language ? ' is-active' : ''}`} href={target(item.language)} aria-current={active === item.language ? 'page' : undefined}>{item.language}</a>
 ))}
