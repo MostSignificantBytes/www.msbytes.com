@@ -12,7 +12,8 @@ import github from '../assets/social/github.svg?url'
 const { language } = Astro.props
 const data = navbar.find((item) => item.language === language)
 const ICONS = { Linkedin: linkedin, Github: github, Instagram: instagram, Facebook: facebook }
-const social = accounts.map((account) => ({ href: account.href, src: ICONS[account.name], alt: account.name }))
+const on = language === 'fr' ? 'MSB sur' : 'MSB on'
+const social = accounts.map((account) => ({ href: account.href, src: ICONS[account.name], alt: `${on} ${account.label}` }))
 ---
 <footer class="site-footer">
     <div class="footer-logo">
@@ -31,7 +32,7 @@ const social = accounts.map((account) => ({ href: account.href, src: ICONS[accou
                 <ul class="col col-3 footer-reseaux">
                     {social.map((item) => (
                         <li>
-                            <a class="footer-reseau" title={item.alt.toLowerCase()} href={item.href}><img src={item.src} alt={item.alt} /></a>
+                            <a class="footer-reseau" title={item.alt} href={item.href}><img src={item.src} alt={item.alt} /></a>
                         </li>
                     ))}
                 </ul>

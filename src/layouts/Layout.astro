@@ -22,10 +22,19 @@ const { language = 'fr', path = '/', title, description, image, type, alternates
 const HREFLANG = { fr: ['fr', 'x-default'], en: ['en'] }
 const ICONS = [48, 72, 96, 128, 192, 384, 512]
 
+// Hors production (recette, aperçus de pull request, poste de travail) : pages exclues des moteurs de recherche.
+// Netlify indique le contexte du build dans la variable CONTEXT (production, branch-deploy, deploy-preview) ;
+// sans CONTEXT (vérifications GitHub, poste), le site est construit comme en production.
+const NOINDEX = Boolean(process.env.CONTEXT) && process.env.CONTEXT !== 'production'
+
 const pageTitle = title || SITE_TITLE
+const skipLabel = language === 'fr' ? 'Aller au contenu' : 'Skip to content'
 const pageDescription = description || SITE_DESCRIPTION
 const basePath = unprefixed(path)
 const alternate = (lang) => (alternates ? alternates[lang] : prefix(lang) + basePath)
+// Langue de la page pour les aperçus de liens (Open Graph), et versions existantes dans les autres langues
+const OG_LOCALE = { fr: 'fr_FR', en: 'en_US' }
+const ogAlternates = Object.keys(OG_LOCALE).filter((lang) => lang !== language && alternate(lang))
 ---
 <!DOCTYPE html>
 <html lang={language}>
@@ -35,8 +44,11 @@ const alternate = (lang) => (alternates ? alternates[lang] : prefix(lang) + base
         <link rel="preload" href={fontLatin} as="font" type="font/woff2" crossorigin />
         <meta name="theme-color" content="#003399" />
         <meta name="description" content={pageDescription} />
+        {NOINDEX && <meta name="robots" content="noindex, nofollow" />}
         <meta property="og:type" content={type || 'business.business'} />
         <meta property="og:site_name" content={SITE_TITLE} />
+        <meta property="og:locale" content={OG_LOCALE[language]} />
+        {ogAlternates.map((lang) => <meta property="og:locale:alternate" content={OG_LOCALE[lang]} />)}
         <meta property="og:title" content={pageTitle} />
         <meta property="og:description" content={pageDescription} />
         <meta property="og:url" content={SITE_URL + path} />
@@ -56,8 +68,9 @@ const alternate = (lang) => (alternates ? alternates[lang] : prefix(lang) + base
         <link rel="mask-icon" href="/img/safari-pinned-tab.svg" color="#003399" />
     </head>
     <body>
+        <a class="skip-link" href="#contenu">{skipLabel}</a>
         <Navbar language={language} path={path} alternates={alternates} />
-        <main><slot /></main>
+        <main id="contenu" tabindex="-1"><slot /></main>
         <Footer language={language} />
     </body>
 </html>

@@ -15,9 +15,18 @@
 [[headers]]
   for = "/*"
   [headers.values]
-    Strict-Transport-Security = "max-age=31536000"
+    # HSTS : HTTPS imposé pendant deux ans, pour le domaine et tous ses sous-domaines (includeSubDomains),
+    # et accord pour l'inscription de msbytes.com sur la liste de préchargement des navigateurs (preload,
+    # https://hstspreload.org). Prérequis : tous les sous-domaines de msbytes.com accessibles en HTTPS.
+    Strict-Transport-Security = "max-age=63072000; includeSubDomains; preload"
     X-Content-Type-Options = "nosniff"
     Referrer-Policy = "strict-origin-when-cross-origin"
     X-Frame-Options = "DENY"
     # Fonctions du navigateur inutiles au site désactivées (caméra, micro, localisation, paiement…)
     Permissions-Policy = "camera=(), microphone=(), geolocation=(), payment=(), usb=(), browsing-topics=()"
+
+# Manifeste de l'application : type MIME attendu par les navigateurs (servi sinon en application/octet-stream)
+[[headers]]
+  for = "/manifest.webmanifest"
+  [headers.values]
+    Content-Type = "application/manifest+json; charset=utf-8"

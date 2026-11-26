@@ -5,16 +5,23 @@
 # effet une fois fusionné dans master.
 version: 2
 updates:
-  # npm : open-pull-requests-limit: 0 désactive les mises à jour de version courantes.
-  # Limite de GitHub : les pull requests de SÉCURITÉ (si « Dependabot security updates »
-  # est activé dans Settings > Code security) visent toujours la branche par défaut
-  # (master), quel que soit target-branch.
+  # npm : une pull request groupée par mois au plus, vers recette (Astro, intégrations, outils de test).
+  # Sveltia CMS est figé (décision de MSB) : ses mises à jour, et celles des trois polices dont il impose
+  # les versions (dont Source Sans 3, aussi utilisée par le site), restent des évolutions faites à la main. Limite de GitHub : les pull requests de
+  # SÉCURITÉ visent toujours la branche par défaut (master), quel que soit target-branch.
   - package-ecosystem: "npm"
     directory: "/"
     target-branch: "recette"
     schedule:
-      interval: "weekly"
-    open-pull-requests-limit: 0
+      interval: "monthly"
+    ignore:
+      - dependency-name: "@sveltia/cms"
+      - dependency-name: "@fontsource-variable/material-symbols-outlined"
+      - dependency-name: "@fontsource-variable/source-sans-3"
+      - dependency-name: "@fontsource/noto-mono"
+    groups:
+      npm:
+        patterns: ["*"]
   # Versions des actions utilisées par les vérifications automatiques (.github/workflows) :
   # une pull request groupée par mois au plus, vers recette.
   - package-ecosystem: "github-actions"
