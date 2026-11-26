@@ -1,10 +1,12 @@
 ---
 // Liste des articles d'une langue (du plus récent au plus ancien) : vignette, titre, date, extrait.
+// headingLevel : niveau du titre des cartes (2 sous le titre de la page du blog, 3 sous l'intertitre de l'accueil).
 import { render } from 'astro:content'
 import PreviewImage from './PreviewImage.astro'
 import { getPosts, formatDate } from '../utils/site.js'
 
-const { language, keepReading } = Astro.props
+const { language, keepReading, headingLevel = 2 } = Astro.props
+const Heading = `h${headingLevel}`
 const posts = await Promise.all(
     (await getPosts(language)).map(async (post) => ({
         post,
@@ -22,11 +24,10 @@ const posts = await Promise.all(
                             <PreviewImage image={post.data.featuredimage} alt={`featured image thumbnail for post ${post.data.title}`} width={120} quality={90} />
                         </div>
                     )}
-                    <p>
-                        <a class="post-card-title" href={post.path}>{post.data.title}</a>
-                        <span> &bull; </span>
+                    <div>
+                        <Heading class="post-card-heading"><a class="post-card-title" href={post.path}>{post.data.title}</a></Heading>
                         <time class="post-card-date" datetime={post.data.date?.toISOString().slice(0, 10)}>{formatDate(post.data.date, language)}</time>
-                    </p>
+                    </div>
                 </header>
                 <p>
                     {excerpt}
@@ -59,36 +60,36 @@ const posts = await Promise.all(
         margin-bottom: 1em;
     }
 
+    /* Vignette de largeur fixe : les titres commencent tous au même endroit */
     .post-card-thumbnail {
-        flex-basis: 35%;
-        margin: 0 1.5em 0 0;
+        flex: none;
+        margin: 0 1.25em 0 0;
+        width: 120px;
+    }
+
+    .post-card-heading {
+        font-size: 1.5rem;
+        font-weight: 600;
+        line-height: 1.125;
+        margin-bottom: 0.25em;
     }
 
     .post-card-title {
         color: var(--msb-blue);
-        font-size: 1.5rem;
-        font-weight: 600;
-        line-height: 1.125;
-        text-decoration: underline;
         word-break: break-word;
     }
 
     .post-card-title:hover,
     .post-card-title:focus {
         color: var(--msb-blue-dark);
+        text-decoration: underline;
     }
 
     .post-card-date {
+        color: var(--text);
         display: block;
-        font-size: 1.25rem;
+        font-size: 1rem;
         line-height: 1.25;
-        word-break: break-word;
-    }
-
-    @media (min-width: 769px) and (max-width: 1023px) {
-        .post-card-thumbnail {
-            flex-basis: 50%;
-        }
     }
 
     @media (max-width: 768px) {
@@ -98,8 +99,6 @@ const posts = await Promise.all(
 
         .post-card-thumbnail {
             margin: 0 0 1em;
-            max-width: 70%;
-            text-align: center;
         }
     }
 </style>

@@ -5,6 +5,10 @@ import Navbar from '../components/Navbar.astro'
 import Footer from '../components/Footer.astro'
 import { SITE_URL, SITE_TITLE, SITE_DESCRIPTION } from '../utils/site.js'
 import { unprefixed, prefix } from '../utils/languages.mjs'
+// Police Source Sans 3 (licence OFL), hébergée sur le site : seul le jeu latin est téléchargé par les navigateurs
+import '@fontsource-variable/source-sans-3/wght.css'
+import '@fontsource-variable/source-sans-3/wght-italic.css'
+import fontLatin from '@fontsource-variable/source-sans-3/files/source-sans-3-latin-wght-normal.woff2?url'
 import '../styles/tokens.css'
 import '../styles/base.css'
 import '../styles/layout.css'
@@ -29,6 +33,7 @@ const alternate = (lang) => (alternates ? alternates[lang] : prefix(lang) + base
     <head>
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+        <link rel="preload" href={fontLatin} as="font" type="font/woff2" crossorigin />
         <meta name="theme-color" content="#003399" />
         <meta name="description" content={pageDescription} />
         <meta name="theme-color" content="#fff" />
