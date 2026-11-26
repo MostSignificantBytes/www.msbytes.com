@@ -32,6 +32,9 @@ const skipLabel = language === 'fr' ? 'Aller au contenu' : 'Skip to content'
 const pageDescription = description || SITE_DESCRIPTION
 const basePath = unprefixed(path)
 const alternate = (lang) => (alternates ? alternates[lang] : prefix(lang) + basePath)
+// Langue de la page pour les aperçus de liens (Open Graph), et versions existantes dans les autres langues
+const OG_LOCALE = { fr: 'fr_FR', en: 'en_US' }
+const ogAlternates = Object.keys(OG_LOCALE).filter((lang) => lang !== language && alternate(lang))
 ---
 <!DOCTYPE html>
 <html lang={language}>
@@ -44,6 +47,8 @@ const alternate = (lang) => (alternates ? alternates[lang] : prefix(lang) + base
         {NOINDEX && <meta name="robots" content="noindex, nofollow" />}
         <meta property="og:type" content={type || 'business.business'} />
         <meta property="og:site_name" content={SITE_TITLE} />
+        <meta property="og:locale" content={OG_LOCALE[language]} />
+        {ogAlternates.map((lang) => <meta property="og:locale:alternate" content={OG_LOCALE[lang]} />)}
         <meta property="og:title" content={pageTitle} />
         <meta property="og:description" content={pageDescription} />
         <meta property="og:url" content={SITE_URL + path} />
