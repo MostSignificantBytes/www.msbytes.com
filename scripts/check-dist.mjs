@@ -31,6 +31,10 @@ for (const file of pages) {
     for (const m of html.matchAll(/<script type="application\/ld\+json">([^<]*)<\/script>/g)) {
         try { JSON.parse(m[1]) } catch { fail(`${url} : données structurées (JSON-LD) invalides`) }
     }
+    // Le site de production ne doit jamais être exclu des moteurs de recherche (noindex réservé à la recette et aux aperçus)
+    const production = !process.env.CONTEXT || process.env.CONTEXT === 'production'
+    if (production && /<meta name="robots" content="[^"]*noindex/.test(html)) fail(`${url} : balise noindex dans un build de production`)
+    if (!production && !/<meta name="robots" content="[^"]*noindex/.test(html)) fail(`${url} : balise noindex absente hors production`)
     if (/chrome-extension:|moz-extension:/.test(html)) fail(`${url} : référence à une extension de navigateur (fichier enregistré depuis un navigateur ?)`)
     if (!/<main[\s>]/.test(html)) fail(`${url} : zone principale <main> absente`)
     const h1 = (html.match(/<h1[\s>]/g) || []).length
