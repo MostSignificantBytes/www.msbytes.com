@@ -17,10 +17,9 @@ import '../styles/layout.css'
 // alternates : adresse de la page dans chaque langue (null si elle n'existe pas) ; à défaut, même adresse sans préfixe
 const { language = 'fr', path = '/', title, description, image, type, alternates } = Astro.props
 
-const HREFLANG = {
-    en: ['en', 'en-AU', 'en-BZ', 'en-CA', 'en-CB', 'en-GB', 'en-IE', 'en-JM', 'en-NZ', 'en-PH', 'en-TT', 'en-US', 'en-ZA', 'en-ZW'],
-    fr: ['fr', 'fr-BE', 'fr-CA', 'fr-CH', 'fr-FR', 'fr-LU', 'fr-MC'],
-}
+// Versions linguistiques : un code par langue (valable pour tous les pays), plus x-default (version
+// proposée aux autres langues : le français, langue par défaut du site)
+const HREFLANG = { fr: ['fr', 'x-default'], en: ['en'] }
 const ICONS = [48, 72, 96, 128, 192, 384, 512]
 
 const pageTitle = title || SITE_TITLE
