@@ -2,9 +2,11 @@
 // 1. plan du site publié aussi sous /sitemap.xml ;
 // 2. médias publiés aussi sous /img/ ;
 // 3. copie du back-office Sveltia CMS (paquet npm @sveltia/cms, version figée) dans dist/admin, avec sa traduction
-//    et ses polices : aucune ressource extérieure au chargement (décision D3).
+//    et ses polices : aucune ressource extérieure au chargement (décision D3) ;
+// 4. date de dernière modification (<lastmod>) dans le plan du site.
 import fs from 'node:fs'
 import path from 'node:path'
+import { execFileSync } from 'node:child_process'
 
 const DIST = 'dist'
 
@@ -64,3 +66,36 @@ for (const [from, to] of replacements) {
 }
 fs.writeFileSync(script, code)
 console.log(`Back-office : Sveltia CMS ${version} copié dans ${admin} (traductions ${LOCALES.join(', ')} et ${FONTS.length} polices hébergées)`)
+
+// 4. Plan du site : <lastmod> = date de la dernière modification du texte des contenus dont dépend chaque page
+//    (dist/lastmod-sources.json, produit par src/pages/lastmod-sources.json.js). Date d'un contenu : celle du
+//    dernier commit qui le modifie après le commit « depuis_commit » de src/data/lastmod.json (hors commits ignorés),
+//    sinon la date vérifiée enregistrée dans ce fichier, sinon aucune. Page : la plus récente de ses contenus.
+//    Sans historique Git complet (clone superficiel), seules les dates enregistrées sont utilisées.
+const LASTMOD = JSON.parse(fs.readFileSync(path.join('src', 'data', 'lastmod.json'), 'utf8'))
+const sourcesFile = path.join(DIST, 'lastmod-sources.json')
+const sources = JSON.parse(fs.readFileSync(sourcesFile, 'utf8'))
+fs.rmSync(sourcesFile)
+const git = (...args) => {
+    try { return execFileSync('git', args, { encoding: 'utf8', stdio: ['ignore', 'pipe', 'ignore'] }).trim() } catch { return '' }
+}
+const fullHistory = git('rev-parse', '--is-shallow-repository') === 'false'
+const fileDate = (id) => {
+    if (fullHistory) {
+        const log = git('log', '--format=%H %cI', `${LASTMOD.depuis_commit}..HEAD`, '--', path.join('src', 'content', id + '.md'))
+        const commit = log.split('\n').filter(Boolean).map((line) => line.split(' ')).find(([hash]) => !LASTMOD.commits_ignores.some((c) => hash.startsWith(c)))
+        if (commit) return commit[1]
+    }
+    return LASTMOD.fichiers[id] || null
+}
+const dateOf = (url) => (sources[url] || []).map(fileDate).filter(Boolean).sort((a, b) => new Date(b) - new Date(a))[0] || null
+const SITEMAP = path.join(DIST, 'sitemap-0.xml')
+let dated = 0
+const xml = fs.readFileSync(SITEMAP, 'utf8').replace(/<url><loc>([^<]+)<\/loc>/g, (match, loc) => {
+    const date = dateOf(new URL(loc).pathname)
+    if (!date) return match
+    dated++
+    return `<url><loc>${loc}</loc><lastmod>${date}</lastmod>`
+})
+fs.writeFileSync(SITEMAP, xml)
+console.log(`Plan du site : date de modification pour ${dated} adresses sur ${Object.keys(sources).length}${fullHistory ? '' : ' (historique Git incomplet : dates enregistrées seulement)'}`)
