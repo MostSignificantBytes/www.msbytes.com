@@ -1,5 +1,7 @@
 ---
 // Bandeau image pleine largeur (hauteur maximale 400 px), avec titre et sous-titre superposés.
+// AVIF (navigateurs récents) puis WebP ; qualité 55 : en AVIF, rendu équivalent au WebP de qualité 80
+// pour environ deux fois moins de poids.
 import { Picture } from 'astro:assets'
 
 const { img, title, subheading, height = 400, imgPosition = 'top left', eager = false } = Astro.props
@@ -9,10 +11,10 @@ const widths = [750, 1080, 1366, 1920].filter((w) => w < img.width).concat(Math.
     <Picture
         src={img}
         alt=""
-        formats={['webp']}
+        formats={['avif', 'webp']}
         widths={widths}
         sizes="100vw"
-        quality={80}
+        quality={55}
         loading={eager ? 'eager' : 'lazy'}
         fetchpriority={eager ? 'high' : undefined}
         style={`max-height:${height}px;object-position:${imgPosition}`}

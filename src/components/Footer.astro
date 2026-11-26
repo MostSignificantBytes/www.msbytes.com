@@ -1,26 +1,22 @@
 ---
 // Pied de page : logo, liens du menu (trois colonnes sur ordinateur, deux sur téléphone), réseaux sociaux sur une ligne, mentions légales.
 import navbar from '../data/navbar.js'
-import logo from '../assets/logoMSBclair.png?url'
+import accounts from '../data/social.js'
+import { Image } from 'astro:assets'
+import logo from '../assets/logoMSBclair.png'
 import linkedin from '../assets/social/linkedin.svg?url'
 import facebook from '../assets/social/facebook.svg?url'
 import instagram from '../assets/social/instagram.svg?url'
-import twitter from '../assets/social/twitter.svg?url'
 import github from '../assets/social/github.svg?url'
 
 const { language } = Astro.props
 const data = navbar.find((item) => item.language === language)
-const social = [
-    { href: 'https://fr.linkedin.com/company/msbytes', src: linkedin, alt: 'Linkedin' },
-    { href: 'https://github.com/MostSignificantBytes', src: github, alt: 'Github' },
-    { href: 'https://twitter.com/msbcompany', src: twitter, alt: 'Twitter' },
-    { href: 'https://www.instagram.com/mostsignificantbytes', src: instagram, alt: 'Instagram' },
-    { href: 'https://www.facebook.com/msbytes', src: facebook, alt: 'Facebook' },
-]
+const ICONS = { Linkedin: linkedin, Github: github, Instagram: instagram, Facebook: facebook }
+const social = accounts.map((account) => ({ href: account.href, src: ICONS[account.name], alt: account.name }))
 ---
 <footer class="site-footer">
     <div class="footer-logo">
-        <img width="724" height="309" src={logo} alt="MSB" />
+        <Image src={logo} format="webp" alt="MSB" />
     </div>
     <div class="footer-main">
         <div class="container">
