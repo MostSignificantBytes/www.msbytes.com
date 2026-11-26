@@ -21,7 +21,8 @@ const posts = await Promise.all(
                 <header class="post-card-header">
                     {post.data.featuredimage && (
                         <div class="post-card-thumbnail">
-                            <PreviewImage image={post.data.featuredimage} alt={`featured image thumbnail for post ${post.data.title}`} width={120} quality={90} />
+                            {/* Vignette décorative : le titre de l'article est juste à côté */}
+                            <PreviewImage image={post.data.featuredimage} alt="" width={120} quality={90} />
                         </div>
                     )}
                     <div>

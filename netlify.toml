@@ -3,7 +3,7 @@
   command = "npm run build"
 
 [build.environment]
-  NODE_VERSION = "24"
+  NODE_VERSION = "26"
 
 # Fichiers produits par Astro (noms avec empreinte) : cache de longue durée
 [[headers]]
@@ -19,3 +19,5 @@
     X-Content-Type-Options = "nosniff"
     Referrer-Policy = "strict-origin-when-cross-origin"
     X-Frame-Options = "DENY"
+    # Fonctions du navigateur inutiles au site désactivées (caméra, micro, localisation, paiement…)
+    Permissions-Policy = "camera=(), microphone=(), geolocation=(), payment=(), usb=(), browsing-topics=()"

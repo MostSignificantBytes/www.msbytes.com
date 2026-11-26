@@ -3,11 +3,36 @@
 import FullWidthImage from '../components/FullWidthImage.astro'
 import Features from '../components/Features.astro'
 import BlogRoll from '../components/BlogRoll.astro'
-import { media, prefix } from '../utils/site.js'
+import { media, prefix, SITE_URL } from '../utils/site.js'
+import accounts from '../data/social.js'
 
 const { page } = Astro.props
 const d = page.data
+
+// Données structurées (schema.org) : fiche de la société pour les moteurs de recherche
+const organization = {
+    '@context': 'https://schema.org',
+    '@type': 'Organization',
+    '@id': SITE_URL + '/#organization',
+    name: 'Most Significant Bytes',
+    alternateName: 'MSB',
+    legalName: 'Most Significant Bytes SAS',
+    url: SITE_URL + '/',
+    logo: SITE_URL + '/img/maskable_icon_x512.png',
+    email: 'contact@msbytes.com',
+    address: {
+        '@type': 'PostalAddress',
+        streetAddress: '10 rue de Penthièvre',
+        postalCode: '75008',
+        addressLocality: 'Paris',
+        addressCountry: 'FR',
+    },
+    identifier: { '@type': 'PropertyValue', propertyID: 'SIRET', value: '83465164800018' },
+    vatID: 'FR60834651648',
+    sameAs: accounts.map((account) => account.href),
+}
 ---
+<script type="application/ld+json" set:html={JSON.stringify(organization)} />
 <FullWidthImage img={media(d.image)} title={d.title} subheading={d.heading} eager />
 <section class="section">
     <div class="container">
